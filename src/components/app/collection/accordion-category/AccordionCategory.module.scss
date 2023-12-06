@@ -1,0 +1,107 @@
+.filter-collection-item {
+  &:not(:last-child) {
+    border-bottom: 0.1rem solid #f7f8f9;
+  }
+  padding: 2rem 0;
+  &.gender-filter {
+    transition: height 0.4s linear;
+    height: calc(2.1rem + 4rem);
+    &.open {
+      height: 11rem;
+    }
+  }
+  &.brand-filter {
+    transition: height 0.4s linear;
+    height: calc(2.1rem + 4rem);
+  }
+  &.type-filter {
+    transition: height 0.4s linear;
+    height: calc(2.1rem + 4rem);
+    &.open {
+      // height: 350px;
+      // height: 100%;
+    }
+  }
+}
+
+.content-filter {
+  height: 0;
+  transition: all 0.4s linear;
+  overflow: hidden;
+  transform: translateY(-20px);
+  &.open {
+    transform: translateY(0);
+    height: 100%;
+  }
+  .filter-container {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    margin: 1.5rem 0;
+    gap: 1rem;
+  }
+  .gender {
+    padding: 0.5rem;
+    height: 100%;
+    &-sw {
+      min-width: 6rem;
+      background-color: #f7f8f9;
+      color: var(--primary);
+      padding: 1rem 1.6rem;
+      border-radius: 0.4rem;
+      text-transform: capitalize;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.4s ease-in-out;
+    }
+    input[type='radio']:checked ~ .gender-sw {
+      color: #fff;
+      background-color: var(--primary);
+    }
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    &-label {
+      min-width: 6rem;
+      background-color: #f7f8f9;
+      color: var(--primary);
+      padding: 1rem 1.6rem;
+      border-radius: 0.4rem;
+      text-transform: capitalize;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.4s ease-in-out;
+    }
+    input[type='checkbox']:checked ~ .brand-label {
+      color: #fff;
+      background-color: var(--primary);
+    }
+  }
+  .type-filter-item {
+    display: flex;
+    align-items: center;
+    text-transform: none;
+    font-weight: normal;
+    & ~ .content-filter > .type-filter-item {
+      margin-left: 20px;
+      position: relative;
+      &::after {
+        position: absolute;
+        content: "";
+        width: 1px;
+        height: 100%;
+        left: -20px;
+        top: 0;
+        bottom: 0;
+        background-color: #F0F0F0;
+      }
+    }
+    label {
+      padding: 1.4rem;
+      flex: 1;
+      cursor: pointer;
+    }
+  }
+}

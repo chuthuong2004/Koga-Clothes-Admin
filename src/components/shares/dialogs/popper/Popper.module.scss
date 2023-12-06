@@ -1,0 +1,51 @@
+.wrapper {
+  width: 100%;
+  min-width: 26.5rem;
+  max-height: min((100vh - 9.6rem) - 6rem, 73.4rem);
+  background: rgba(255, 255, 255);
+  box-shadow: rgb(0 0 0 / 12%) 0 0.2rem 1.2rem;
+  border-radius: 0.4rem;
+  border: 0.2rem solid rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+    border: 0.2rem solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255);
+    transform: rotate(45deg) translateX(50%);
+    z-index: -1;
+    border-radius: 0.2rem;
+  }
+  &::after {
+    background-color: rgba(255, 255, 255);
+    border: none;
+    border-radius: 0px;
+    z-index: 1;
+    top: -0.6rem;
+    transform: rotate(45deg) translateX(5.2px);
+  }
+}
+.popper-search {
+  &::before,
+  &::after {
+    right: 50%;
+  }
+}
+.popper-user {
+  &::before,
+  &::after {
+    right: calc(50% - 0.2rem);
+  }
+}
+.popper-cart {
+  min-width: 30rem;
+  &::before,
+  &::after {
+    right: 2rem;
+  }
+}

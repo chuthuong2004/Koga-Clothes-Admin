@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { useAppDispatch } from '../app/hooks';
-import { RootState } from '../app/store';
 import { IToken, IUser } from '../models/user.model';
 import { clearCart } from './cartSlice';
+import { RootState } from '@/store/store';
 
 export interface AuthState {
   user: IUser | null;
@@ -38,7 +37,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const selectAuth = (state: RootState) => state.auth;
+export const selectAuth = (state: RootState) => state.authKoga;
 
 export const { setCredentials, logout } = authSlice.actions;
 

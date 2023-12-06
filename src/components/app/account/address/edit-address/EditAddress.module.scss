@@ -1,0 +1,41 @@
+.toggle-switch {
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  label {
+    cursor: pointer;
+  }
+  &-checkbox {
+    display: none;
+  }
+  &-label {
+    width: 5rem;
+    height: 2.5rem;
+    cursor: pointer;
+    border: 0.1rem solid #2e2e2e;
+    border-radius: 1.5rem;
+    transition: all 0.5s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  }
+  &-label:before {
+    content: ' ';
+    width: 2.5rem;
+    position: absolute;
+    height: 2.5rem;
+    border-radius: 50%;
+    top: 50%;
+    left: 0;
+    background-color: #2e2e2e;
+    transition: all 0.5s ease-in-out;
+    transform: translate(0, -50%);
+  }
+  &-checkbox:checked + &-label {
+    background-color: #2e2e2e;
+  }
+  &-checkbox:checked + &-label:before {
+    background-color: #f7f8f9;
+    transform: translate(100%, -50%);
+  }
+}

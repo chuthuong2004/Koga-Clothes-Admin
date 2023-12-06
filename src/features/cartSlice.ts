@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
-import { useAppSelector } from '../app/hooks';
-import { RootState } from '../app/store';
 import { ICart, ICartItem } from '../models/cart.model';
 import { IUser } from '../models/user.model';
 import { selectAuth } from './authSlice';
 import { v4 as uuidv4 } from 'uuid';
+import { RootState } from '@/store/store';
 const initialState: { cartItems: ICartItem[] } = {
   cartItems: [],
 };
@@ -80,7 +79,7 @@ export const cartSlice = createSlice({
   },
 });
 
-export const selectCart = (state: RootState) => state.cart;
+export const selectCart = (state: RootState) => state.cartKoga;
 
 export const { setCart, addToCart, removeFromCart, decreaseCart, increaseCart, clearCart } =
   cartSlice.actions;

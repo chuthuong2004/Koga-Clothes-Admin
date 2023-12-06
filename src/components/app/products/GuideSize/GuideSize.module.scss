@@ -1,0 +1,104 @@
+.size-popup {
+  box-shadow: 0 0.4rem 5rem rgb(0 0 0 / 10%);
+  border-radius: 0.4rem;
+  background-color: #fff;
+  position: absolute;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 40vw;
+  border-color: #2e2e2e;
+
+  transition: all 0.6s ease-in-out;
+  animation: fadeIn 0.6s ease-in-out;
+  &.closed {
+    animation: fadeOut 0.6s ease-in-out;
+  }
+  &--close {
+    cursor: pointer;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    border-radius: 0.4rem;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+  }
+  &__body {
+    padding: 0 6rem 6rem 6rem;
+    max-height: 80vh;
+    overflow-y: scroll;
+    display: flex;
+    justify-content: center;
+  }
+  &__note {
+    padding: 1.2rem;
+    font-style: italic;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: flex-end;
+    border-top: 0.1rem solid #dee2e6;
+  }
+  table {
+    width: 100%;
+    display: table;
+    border-color: grey;
+    border-collapse: collapse;
+  }
+  tbody,
+  td,
+  tfoot,
+  th,
+  thead,
+  tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+  }
+  tbody {
+    border-left: 0.1rem solid #2e2e2e;
+    border-top: 0.1rem solid #2e2e2e;
+    border-bottom: 0.1rem solid #2e2e2e;
+  }
+  td {
+    width: auto !important;
+    height: 4rem !important;
+    text-align: center !important;
+    border: none;
+    border-bottom: 0.1rem dashed rgba(46, 46, 46, 0.5) !important;
+    border-right: 0.1rem solid !important;
+    text-align: center;
+    text-transform: uppercase !important;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+
+    transform: translate(-50%, calc(-50% - 8rem));
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, calc(-50% - 8rem));
+    opacity: 0;
+  }
+}

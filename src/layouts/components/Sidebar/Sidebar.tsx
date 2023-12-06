@@ -3,16 +3,16 @@ import classNames from 'classnames/bind';
 import styles from './Sidebar.module.scss';
 import { LogoIcon, TruckIcon } from '../../../components/Icons';
 import { NavLink, useNavigate } from 'react-router-dom';
-import config from '../../../config';
+import * as config from '@/config';
 import { useLogoutUserMutation } from '../../../services/authApi';
 import { logout, selectAuth } from '../../../features/authSlice';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { toast } from 'react-toastify';
 import { BsBarChart, BsChatSquare, BsPersonBadge, BsReceipt, BsTruck } from 'react-icons/bs';
 import { BiCategory } from 'react-icons/bi';
 import { MdLogout, MdOutlineCategory, MdOutlineReviews } from 'react-icons/md';
 import { GrCatalog } from 'react-icons/gr';
 import { FaTrademark } from 'react-icons/fa';
+import { useAppDispatch, useAppSelector } from '@/types/commons';
 const cx = classNames.bind(styles);
 const links = [
   {

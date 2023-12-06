@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../app/store';
 import { IAddressUser, IToken, IUser } from '../models/user.model';
-import { IProduct } from '../models/product.model';
-import { ICart } from '../models/cart.model';
+import { RootState } from '@/store/store';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
@@ -11,7 +9,7 @@ export const authApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       // getState() giúp lấy ra toàn bộ state trong store
       // getState().user lấy ra state trong userSlice
-      const token = (getState() as RootState).auth.token;
+      const token = (getState() as RootState).authKoga.token;
       // Nếu có token thì thêm vào headers
       if (token?.accessToken && token.refreshToken) {
         headers.set('Authorization', `Bearer ${token.accessToken}`);

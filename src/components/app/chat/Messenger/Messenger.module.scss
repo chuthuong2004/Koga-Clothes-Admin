@@ -1,0 +1,285 @@
+@import '../../../../components/shares/GlobalStyles/variables';
+$height-header: 7rem;
+$height-bottom: 6rem;
+.container {
+  z-index: 9995;
+  position: fixed;
+  right: 2rem;
+  bottom: 2rem;
+  .icon-wrapper {
+    background-color: #2e2e2e;
+    align-items: center;
+    border-radius: 3.4rem 0.8rem 3.4rem 3.4rem;
+    box-shadow: 0 0.5rem 0.4rem 0 rgb(0 0 0 / 26%);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    height: 6rem;
+    width: 6rem;
+    position: relative;
+    margin-left: auto;
+    margin-top: 1rem;
+    .icon {
+      background-color: #fff;
+      border-radius: 0.8rem 0.8rem 0.8rem 1px;
+      width: 2rem;
+      height: 1.5rem;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .c {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+      }
+      span {
+        width: 1.2rem;
+        height: 0.2rem;
+        border-radius: 0.2rem;
+        background-color: #2e2e2e;
+      }
+      .line-short {
+        width: 0.6rem;
+        height: 0.1rem;
+        text-align: left;
+      }
+    }
+  }
+  .messenger {
+    width: 0;
+    height: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 0.4rem 0 rgb(0 0 0 / 26%);
+    background-color: #f7f8f9;
+    font-size: 1.4rem;
+    transition: all 0.3s ease-out;
+    // transition: height 0.3s ease-in-out;
+    // transition: width 0.3s ease-in-out 0.5s;
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    &.active {
+      width: 20vw;
+      height: 55vh;
+      opacity: 1;
+    }
+    .loading-message {
+      width: 100%;
+      position: absolute;
+      top: calc($height-header + 2rem);
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      animation: loadingMessage 0.3s ease-out;
+    }
+    &__header {
+      height: $height-header;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      border-top-left-radius: 1rem;
+      border-top-right-radius: 1rem;
+      -webkit-box-shadow: 0 0.1rem 1rem 0 rgba(46, 46, 46, 0.51);
+      box-shadow: 0 0.1rem 0.2rem 0 rgba(46, 46, 46, 0.51);
+      &-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        .avatar {
+          display: flex;
+          img {
+            border-radius: 50%;
+            width: 5rem;
+            height: 5rem;
+          }
+        }
+        .name {
+          font-weight: 500;
+        }
+        .active-text {
+          font-size: 1.2rem;
+          font-weight: 400;
+        }
+      }
+      &-actions {
+        color: #2e2e2e;
+        display: flex;
+        gap: 1rem;
+        .icon {
+          cursor: pointer;
+          font-size: 2rem;
+        }
+      }
+    }
+    &__body {
+      padding: 0 1rem 1rem 1rem;
+      margin-top: 0.5rem;
+      height: calc(100% - $height-header - $height-bottom);
+      overflow-y: scroll;
+      background-color: #f7f8f9;
+    }
+    &__footer {
+      display: flex;
+      align-items: center;
+      height: 6rem;
+      gap: 0.5rem;
+      padding: 1rem;
+      .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        font-size: 2rem;
+        color: $primary;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.5s ease-in-out;
+        &:hover {
+          background-color: rgb(221, 217, 217);
+        }
+      }
+      .emoji {
+        position: absolute;
+        top: 50%;
+        right: 2rem;
+        transform: translateY(-50%);
+        font-size: 2rem;
+        color: $primary;
+        &:hover {
+          background-color: none;
+        }
+      }
+      .chat-input {
+        flex: 1;
+        position: relative;
+        .emoji {
+          position: absolute;
+          right: 0;
+        }
+        .input {
+          width: 100%;
+          padding: 1.2rem 2rem;
+          padding-right: 4rem;
+          border-radius: 0.8rem;
+          font-size: 1.4rem;
+          letter-spacing: 0.1rem;
+          transition: all 0.2s ease-in-out;
+          border: 0.1rem solid transparent;
+          &:focus {
+            border-color: $primary;
+          }
+        }
+        .prev-image-container {
+          display: flex;
+          gap: 1rem;
+          border-radius: 0.1rem;
+          position: absolute;
+          bottom: 100%;
+          width: 100%;
+          padding: 1rem;
+          z-index: 10;
+          .chat-image-input {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 1rem;
+            position: relative;
+            img {
+              width: 100%;
+              height: 100%;
+              border-radius: 1rem;
+            }
+            .close-icon {
+              position: absolute;
+              background-color: #f7f8f9;
+              border: 0.1rem solid #dfd6d6;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              right: -0.5rem;
+              top: -0.5rem;
+              padding: 0.5rem;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+      .chat-submit {
+        background-color: $primary;
+        padding: 1rem 2rem;
+        border-radius: 0.8rem;
+        color: $white;
+        font-size: 1.8rem;
+        position: relative;
+      }
+    }
+    .new-conversation {
+      width: 100%;
+      height: 100%;
+      .header {
+        background-color: $primary;
+        display: flex;
+        color: $white;
+        padding: 1rem;
+        justify-content: space-between;
+        font-weight: 500;
+        .title {
+          font-size: 1.4rem;
+          text-transform: uppercase;
+        }
+        .btn-close {
+          cursor: pointer;
+        }
+      }
+      .content {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        .btn-start {
+          width: max-content;
+          border-radius: 10rem !important;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1380px) {
+  .container {
+    .messenger {
+      &.active {
+        width: 32rem;
+        height: 40rem;
+      }
+    }
+  }
+}
+@keyframes changeSize {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    // min-width: 32rem;
+    width: 20vw;
+    // min-height: 40rem;
+    height: 55vh;
+    opacity: 1;
+  }
+}
+@keyframes loadingMessage {
+  from {
+    top: calc($height-header - 2rem);
+    opacity: 0;
+  }
+  to {
+    top: calc($height-header + 2rem);
+    opacity: 1;
+  }
+}

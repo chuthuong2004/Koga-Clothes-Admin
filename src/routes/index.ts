@@ -1,7 +1,7 @@
 // Layouts
 
 // Pages
-import config from '../config';
+import * as config from '@/config';
 import Product from '../pages/Product';
 import Login from '../pages/Login/Login';
 import React, { ReactNode } from 'react';

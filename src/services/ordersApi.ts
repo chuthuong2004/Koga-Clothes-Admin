@@ -1,9 +1,9 @@
 import { BaseQueryResult } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { RootState } from '../app/store';
 import { ICart } from '../models/cart.model';
 import { EOrderStatus, IOrder } from '../models/order.model';
 import { IAddress, IUser } from './../models/user.model';
+import { RootState } from '@/store/store';
 export const ordersApi = createApi({
   reducerPath: 'ordersApi',
   baseQuery: fetchBaseQuery({
@@ -12,7 +12,7 @@ export const ordersApi = createApi({
     prepareHeaders: (headers, { getState }) => {
       // getState() giúp lấy ra toàn bộ state trong store
       // getState().user lấy ra state trong userSlice
-      const token = (getState() as RootState).auth.token;
+      const token = (getState() as RootState).authKoga.token;
       // Nếu có token thì thêm vào headers
       if (token?.accessToken && token.refreshToken) {
         headers.set('Authorization', `Bearer ${token.accessToken}`);

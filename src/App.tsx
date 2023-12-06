@@ -8,25 +8,21 @@ import {
   Outlet,
   useLocation,
 } from 'react-router-dom';
-import { useAppSelector } from './app/hooks';
-import config from './config';
 import { selectAuth } from './features/authSlice';
 import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
+import * as config from '@/config';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import routes from './routes';
-import { useSockets } from './context/socket.context';
+import { useAppSelector } from './types/commons';
 const App: React.FC = () => {
-  const { socket } = useSockets();
-  console.log(socket.id);
-
   return (
     <Router>
       <ToastContainer autoClose={3000} />
       <Routes>
         <Route path="/" element={<Navigate to={config.routes.dashboard} replace />} />
-        {routes.map((route, index) => {
+        {routes.map((route, index: number) => {
           const Page = route.component;
           let Layout: any = DefaultLayout;
           let PrivateRoute = RequireAuth;

@@ -1,0 +1,44 @@
+@import '@/components/shares/GlobalStyles/variables';
+.container {
+  display: flex;
+  flex-direction: column;
+  // margin-top: 1.6rem;
+  .label {
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
+    line-height: 1.45rem;
+    margin: 0 0 0.8rem;
+    text-transform: uppercase;
+  }
+  .wrapper {
+    display: flex;
+    position: relative;
+    margin-bottom: 0.2rem;
+  }
+  .stored-addresses {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    line-height: 2rem;
+    -moz-appearance: none; /* Firefox */
+    -webkit-appearance: none; /* Safari and Chrome */
+    appearance: none;
+    max-width: 80rem;
+    &:focus + .arrow-down {
+      transform: rotate(0);
+    }
+    &.error {
+      transition: all 0.2s ease-in-out;
+      border-color: $error;
+      box-shadow: 0 0 0.4rem 0 $error;
+    }
+  }
+  .arrow-down {
+    position: absolute;
+    top: 30%;
+    right: 1rem;
+    display: flex;
+    padding: 0.5rem;
+    transform: rotate(90deg);
+    transition: all 0.5s ease;
+  }
+}

@@ -1,0 +1,1 @@
+export type CartAction = 'add' | 'remove' | 'increase' | 'decrease'; 

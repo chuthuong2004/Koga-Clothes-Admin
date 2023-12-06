@@ -5,15 +5,13 @@ import styles from './Conversation.module.scss';
 import { ImageIcon } from '../Icons';
 import { FaImage, FaEllipsisH } from 'react-icons/fa';
 import { IConversation } from '../../models/conversation.model';
-import { useAppSelector } from '../../app/hooks';
 import { selectAuth } from '../../features/authSlice';
 import { IMessage } from '../../models/message.model';
 import { IUser } from '../../models/user.model';
 import axiosClient from '../../api/axiosClient';
-import { useSockets } from '../../context/socket.context';
-import config from '../../config';
 import messageApi from '../../api/messageApi';
 import moment from 'moment';
+import { useAppSelector } from '@/types/commons';
 require('moment/locale/vi');
 const cx = classNames.bind(styles);
 
@@ -25,7 +23,6 @@ type Props = {
 };
 const Conversation: React.FC<Props> = ({ conversation, active, latestMessageChanged }) => {
   // console.log(conversation);
-  const { socket } = useSockets();
   const { user } = useAppSelector(selectAuth);
   const [receiver, setReceiver] = useState(
     conversation.members.find((member: IUser) => member._id !== user?._id),
@@ -42,9 +39,9 @@ const Conversation: React.FC<Props> = ({ conversation, active, latestMessageChan
       }
     };
     getLatestMessage();
-    socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
-      if (conversation._id === message.conversation) setLatestMessage(message);
-    });
+    // socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
+    //   if (conversation._id === message.conversation) setLatestMessage(message);
+    // });
   }, []);
   useEffect(() => {
     latestMessageChanged &&
