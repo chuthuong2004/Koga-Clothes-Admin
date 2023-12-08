@@ -1,10 +1,9 @@
-import React from 'react'
-import DataTable, { TableColumn } from 'react-data-table-component';
+import DataTable, { Alignment, Direction } from 'react-data-table-component';
 import { usePagination } from '@/hooks/helpers';
 import { productService } from '@/services';
-import { StoreProduct } from '@/types/entities';
-import { Button, Card, Image, Typography } from 'antd';
 import { columns } from './columns';
+
+import { CustomHeader } from './components';
 const ProductTable = () => {
     const { data } = usePagination('ListProducts', {
         page: 1,
@@ -49,34 +48,40 @@ const ProductTable = () => {
     //         }
     //     },
     // ];
+
     return (
-        <div className='flex flex-col gap-4'>
-            <Card className='flex justify-between items-center'>
-                
-                <Typography.Title level={3} >Danh sách sản phẩm</Typography.Title>
-                <Button type="primary"  size='large'>Thêm mới sản phẩm</Button>
-            </Card>
+        <div className='flex flex-col'>
             <DataTable
-            title="Danh sách sản phẩm"
                 columns={columns}
                 selectableRows
                 data={data?.docs || []}
                 pagination
-                actions={
-                    <div>
-                    </div>
-                }
                 responsive
-                subHeader={
-                    <Card>
-                        <Button type="primary">Hi</Button>
-                        <Button type="primary">Hi</Button>
-                        <Button type="primary">Hi</Button>
-                        <Button type="primary">Hi</Button>
-                    </Card>
+                noHeader
+                subHeaderWrap
+                subHeaderAlign={Alignment.CENTER}
+                subHeader
+                subHeaderComponent={<CustomHeader />
                 }
-                className='rounded-l-full'
+                direction={Direction.LTR}
+                customStyles={{
+                    cells: {
+                        style: {
+                            paddingTop: 10,
+                            paddingBottom: 10
+                        },
+
+
+                    },
+                    subHeader: {
+                        style: {
+                            // borderRadius: 20,
+                        }
+                    },
+
+                }}
                 paginationComponentOptions={paginationComponentOptions}
+
             />
         </div>
     )
