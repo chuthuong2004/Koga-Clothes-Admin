@@ -8,12 +8,13 @@ import React, { ReactNode } from 'react';
 import Dashboard from '../pages/Dashboard';
 import Order from '../pages/Order';
 import Customer from '../pages/Customer';
-import Catalog from '../pages/Catalog';
 import Category from '../pages/Category';
 import Brand from '../pages/Brand';
 import Chat from '../pages/Chat';
 import Review from '../pages/Review';
-// import NotPageFound from '../pages/NotPageFound';
+import ProductDetails from '@/pages/product-details/ProductDetails';
+import FormProduct from '@/pages/form-product/FormProduct';
+import NotPageFound from '../pages/NotPageFound';
 
 type routeType = {
   path: string;
@@ -28,6 +29,14 @@ const routes: Array<routeType> = [
   {
     path: config.routes.product,
     component: Product,
+  },
+  {
+    path: `${config.routes.product}/:productId`,
+    component: ProductDetails,
+  },
+  {
+    path: config.routes.createProduct,
+    component: FormProduct,
   },
   {
     path: config.routes.login,
@@ -48,10 +57,6 @@ const routes: Array<routeType> = [
     component: Customer,
   },
   {
-    path: config.routes.catalog,
-    component: Catalog,
-  },
-  {
     path: config.routes.category,
     component: Category,
   },
@@ -67,9 +72,9 @@ const routes: Array<routeType> = [
     path: config.routes.review,
     component: Review,
   },
-  //   {
-  //     path: '*',
-  //     component: NotPageFound,
-  //   },
+    {
+      path: '*',
+      component: NotPageFound,
+    },
 ];
 export default routes;

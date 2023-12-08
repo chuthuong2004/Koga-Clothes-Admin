@@ -5,13 +5,13 @@ import { Controller, useForm } from 'react-hook-form'
 import classNames from 'classnames/bind';
 import styles from './FormLogin.module.scss';
 import { PATTERN_EMAIL, PATTERN_PASSWORD, PATTERN_PHONE } from '@/utils';
-import { Button, Input } from '@/components/shares';
 import ReactLoading from 'react-loading';
 import { useAuth } from '@/hooks/services';
 import { useLocation } from 'react-router-dom';
 import { routes } from '@/config';
 import { useAppSelector } from '@/types/commons';
 import { selectAuth } from '@/store/selectors';
+import { Button, Input } from '@/components/shares';
 const cx = classNames.bind(styles)
 type FormInputLogin = {
     email: string;
