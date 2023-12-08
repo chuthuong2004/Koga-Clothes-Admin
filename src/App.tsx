@@ -14,8 +14,10 @@ import routes from './routes';
 import { useAppSelector } from './types/commons';
 import DefaultLayout from './layouts';
 import { selectAuth } from './store/selectors';
+import { ConfigProvider } from 'antd';
 const App: React.FC = () => {
   return (
+    <ConfigProvider theme={{ token: { colorPrimary: '#eb3d63' }, }}>
     <Router>
       <ToastContainer autoClose={3000} />
       <Routes>
@@ -48,6 +50,8 @@ const App: React.FC = () => {
         })}
       </Routes>
     </Router>
+  </ConfigProvider>
+   
   );
 };
 function RequireAuth({ children }: { children: any }): JSX.Element {

@@ -30,17 +30,15 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
     // socket.emit(config.socketEvents.CLIENT.ADD_USER, user?._id);
   }, []);
   return (
-    <div className={cx('container')}>
+    <div className='flex bg-background'>
       {/* Header */}
       {/* <ScrollToTop /> */}
       {/* <Header /> */}
       {/* Container */}
-      <div className={cx('sidebar')}>
-        <Sidebar />
-      </div>
-      <div className={cx('right')}>
+      <Sidebar />
+      <div className='flex flex-col flex-1 mx-20 mt-12 gap-12'>
         <HeaderContent />
-        <div className={cx('content')}> {children} </div>
+        <div > {children} </div>
         {/* 
         {pathname !== config.routes.chat && <FooterContent />} */}
       </div>

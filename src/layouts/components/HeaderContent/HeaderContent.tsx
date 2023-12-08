@@ -1,27 +1,30 @@
-import classNames from 'classnames/bind';
-import styles from './HeaderContent.module.scss';
-import { CameraIcon, MessageIcon, PlusStrongIcon } from '../../../components/Icons';
-import { Button, SearchInput } from '../../../components';
-const cx = classNames.bind(styles);
+import { Avatar, Card, Input } from 'antd';
+import { BiSearch } from 'react-icons/bi';
+import { MdOutlineLightMode } from 'react-icons/md';
+import { IoLanguageOutline } from 'react-icons/io5';
+import { BiCategory } from 'react-icons/bi';
+import { FaBell } from 'react-icons/fa';
+
 const HeaderContent = () => {
   return (
-    <div className={cx('container')}>
-      <h3 className={cx('title')}>Tin nhắn</h3>
-      <div className={cx('search')}>
-        <SearchInput loading={false} value="" onChange={() => {}} handleClearInput={() => {}} />
-      </div>
-      <div className={cx('actions')}>
-        <div className={cx('notify')}>
-          <CameraIcon />
+    <Card bordered={false} >
+      <div className="flex justify-between">
+        <div className="flex items-center gap-4">
+          <BiSearch size={25} />
+          <Input placeholder="Search" className="outline-none border-none" />
         </div>
-        <div className={cx('notify')}>
-          <MessageIcon color="#2e2e2e" width="34" height="34" />
+        <div className="flex gap-4 items-center">
+          <IoLanguageOutline size={25} />
+          <MdOutlineLightMode size={25} />
+          <BiCategory size={25} />
+          <FaBell size={25} />
+          <Avatar
+            size={35}
+            src="https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-1/images/avatars/avatar-1.png"
+          />
         </div>
-        <Button primary small rounded leftIcon={<PlusStrongIcon color="#ffffff" />}>
-          Thêm sản phẩm
-        </Button>
       </div>
-    </div>
+    </Card>
   );
 };
 
