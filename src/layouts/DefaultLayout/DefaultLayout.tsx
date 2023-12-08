@@ -41,7 +41,8 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
       </div>
       <div className={cx('right')}>
         <HeaderContent />
-        {/* <div className={cx('content')}> {children} </div>
+        <div className={cx('content')}> {children} </div>
+        {/* 
         {pathname !== config.routes.chat && <FooterContent />} */}
       </div>
     </div>
