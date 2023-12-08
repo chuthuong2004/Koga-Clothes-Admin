@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Sidebar.module.scss';
-import { LogoIcon, TruckIcon } from '../../../components/Icons';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import * as config from '@/config';
-import { useLogoutUserMutation } from '../../../services/authApi';
-import { logout, selectAuth } from '../../../features/authSlice';
-import { toast } from 'react-toastify';
 import { BsBarChart, BsChatSquare, BsPersonBadge, BsReceipt, BsTruck } from 'react-icons/bs';
 import { BiCategory } from 'react-icons/bi';
 import { MdLogout, MdOutlineCategory, MdOutlineReviews } from 'react-icons/md';
-import { GrCatalog } from 'react-icons/gr';
 import { FaTrademark } from 'react-icons/fa';
-import { useAppDispatch, useAppSelector } from '@/types/commons';
+import { useAppSelector } from '@/types/commons';
+import { useAuth } from '@/hooks/services';
+import { selectAuth } from '@/store/selectors';
 const cx = classNames.bind(styles);
 const links = [
   {
@@ -69,34 +65,11 @@ const links = [
 ];
 
 const Sidebar = () => {
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector(selectAuth);
-  const navigate = useNavigate();
-  const [
-    logoutUser,
-    {
-      data: logoutData,
-      isLoading: isLoadingLogout,
-      isSuccess: isLogoutSuccess,
-      isError: isLogoutError,
-      error: logoutError,
-    },
-  ] = useLogoutUserMutation();
-
-  useEffect(() => {
-    if (isLogoutSuccess) {
-      dispatch(logout());
-      navigate(config.routes.login);
-      toast.success((logoutData as any).message);
-    }
-    if (isLogoutError) {
-      console.log(logoutError);
-      toast.error((logoutError as any).data.message);
-    }
-  }, [isLoadingLogout]);
+  const {handleLogout: onLogout} = useAuth()
   const handleLogout = async (link: any) => {
     if (link.to === '#') {
-      await logoutUser({});
+      await onLogout()
     }
   };
   return (

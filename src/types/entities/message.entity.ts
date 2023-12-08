@@ -5,4 +5,7 @@ export type StoreMessage = {
   images: string[];
   text: string;
   sender: StoreUser;
+  createdAt: string;
+  updatedAt: string;
+  seen: boolean
 };

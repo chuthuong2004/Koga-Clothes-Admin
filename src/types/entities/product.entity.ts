@@ -6,6 +6,7 @@ export type StoreProduct = {
     name: string;
     description: string;
     price: number;
+    code: string;
     discount: number;
     category: StoreCategory;
     likeCount: number;

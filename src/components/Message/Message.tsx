@@ -4,15 +4,15 @@ import styles from './Message.module.scss';
 import classNames from 'classnames/bind';
 // import it first.
 import vi from 'timeago.js/lib/lang/vi';
-import { IMessage } from '../../models/message.model';
 import moment from 'moment';
 import { useState } from 'react';
 import PopUp from '../PopUp';
+import { StoreMessage } from '@/types/entities';
 
 require('moment/locale/vi');
 const cx = classNames.bind(styles);
 type Props = {
-  message: IMessage;
+  message: StoreMessage;
   own: boolean;
 };
 // register it.
@@ -68,7 +68,7 @@ const Message: React.FC<Props> = ({ message, own }) => {
           </div>
           {message.text && (
             <div className={cx('message-text')}>
-              {message?.isLoading ? (
+              {true ? (
                 <div className={cx('loading')}>
                   <span></span>
                   <span></span>

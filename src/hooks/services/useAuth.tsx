@@ -5,7 +5,7 @@ import { ErrCallbackType } from '../types';
 import { authService } from '@/services';
 import { logout, saveAccount, setCredentials, setToken } from '@/store/actions';
 import { handleErrorHooks } from '@/utils';
-import { selectAuth, selectCart } from '@/store/selectors';
+import { selectAuth } from '@/store/selectors';
 import { ForgotPasswordParams } from './types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { routes } from '@/config';
@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 export function useAuth() {
   // ** Selectors
   const { user } = useAppSelector(selectAuth);
-  const cart = useAppSelector(selectCart);
   // ** Dispatch
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -52,17 +51,11 @@ export function useAuth() {
           }),
         );
       }
+      navigate(
+        locationState?.from.pathname
 
-      if (cart.cartItems.length > 0) {
-        for (const cartItem of cart.cartItems) {
-          // await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
-        }
-      }
-      // navigate(
-      //   locationState?.from.pathname === routes.payment
-      //     ? routes.cart
-      //     : locationState?.from.pathname || '/',
-      // );
+          ? locationState?.from.pathname : routes.dashboard
+      );
       successCallback();
       toast.success('Đăng nhập thành công !');
     } catch (err) {

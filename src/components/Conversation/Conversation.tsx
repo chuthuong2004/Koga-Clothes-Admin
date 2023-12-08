@@ -1,45 +1,39 @@
 import React, { useEffect, useState, memo } from 'react';
 import classNames from 'classnames/bind';
 import styles from './Conversation.module.scss';
-// import { faImage } from '@fortawesome/free-solid-svg-icons/faImage';
-import { ImageIcon } from '../Icons';
-import { FaImage, FaEllipsisH } from 'react-icons/fa';
-import { IConversation } from '../../models/conversation.model';
-import { selectAuth } from '../../features/authSlice';
-import { IMessage } from '../../models/message.model';
-import { IUser } from '../../models/user.model';
-import axiosClient from '../../api/axiosClient';
-import messageApi from '../../api/messageApi';
+import { FaEllipsisH } from 'react-icons/fa';
 import moment from 'moment';
 import { useAppSelector } from '@/types/commons';
+import { StoreConversation, StoreMessage, StoreUser } from '@/types/entities';
+import { selectAuth } from '@/store/selectors';
 require('moment/locale/vi');
 const cx = classNames.bind(styles);
 
 // moment.locale('vi');
 type Props = {
-  conversation: IConversation;
+  conversation: StoreConversation;
   active: boolean;
-  latestMessageChanged?: IMessage;
+  latestMessageChanged?: StoreMessage;
 };
 const Conversation: React.FC<Props> = ({ conversation, active, latestMessageChanged }) => {
   // console.log(conversation);
   const { user } = useAppSelector(selectAuth);
   const [receiver, setReceiver] = useState(
-    conversation.members.find((member: IUser) => member._id !== user?._id),
+    conversation.members.find((member: StoreUser) => member._id !== user?._id),
   );
-  const [latestMessage, setLatestMessage] = useState<IMessage | undefined>(undefined);
+  const [latestMessage, setLatestMessage] = useState<StoreMessage | undefined>(undefined);
 
   useEffect(() => {
     const getLatestMessage = async () => {
-      try {
-        const res: IMessage = await messageApi.getMessageLatestFromConversation(conversation._id);
-        setLatestMessage(res);
-      } catch (error) {
-        console.log(error);
-      }
+      // try {
+      //   const res: StoreMessage = await messageApi.getMessageLatestFromConversation(conversation._id);
+      //   setLatestMessage(res);
+      // } catch (error) {
+      //   console.log(error);
+      // }
     };
     getLatestMessage();
-    // socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
+    // socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: StoreMessage }) => {
     //   if (conversation._id === message.conversation) setLatestMessage(message);
     // });
   }, []);
@@ -50,12 +44,12 @@ const Conversation: React.FC<Props> = ({ conversation, active, latestMessageChan
   }, [latestMessageChanged]);
   useEffect(() => {
     const getLatestMessage = async () => {
-      try {
-        const res: IMessage = await axiosClient.get(`/messages/latest/${conversation._id}`);
-        setLatestMessage(res);
-      } catch (error) {
-        console.log(error);
-      }
+      // try {
+      //   const res: StoreMessage = await axiosClient.get(`/messages/latest/${conversation._id}`);
+      //   setLatestMessage(res);
+      // } catch (error) {
+      //   console.log(error);
+      // }
     };
     active && getLatestMessage();
   }, [conversation, active]);

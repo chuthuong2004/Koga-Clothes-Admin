@@ -6,11 +6,10 @@ import PropTypes from 'prop-types';
 // import ScrollToTop from '../components/ScrollToTop';
 import { useLocation, useParams } from 'react-router-dom';
 import React, { useEffect, ReactNode } from 'react';
-import Sidebar from '../components/Sidebar/Sidebar';
-import HeaderContent from '../components/HeaderContent';
-import FooterContent from '../components/FooterContent';
-import { selectAuth } from '../../features/authSlice';
 import { useAppSelector } from '@/types/commons';
+import { selectAuth } from '@/store/selectors';
+import HeaderContent from '../components/HeaderContent';
+import Sidebar from '../components/Sidebar';
 const cx = classNames.bind(styles);
 
 type Props = {

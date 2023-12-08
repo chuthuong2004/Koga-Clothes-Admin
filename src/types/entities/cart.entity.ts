@@ -16,6 +16,6 @@ export type StoreCartItem = {
     size: string;
     color: string;
     image: string;
-    _id?: string;
+    _id: string;
     repository: string;
 }

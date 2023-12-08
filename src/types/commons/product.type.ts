@@ -17,7 +17,7 @@ export type StoreSize = {
 
 export type StoredProduct = {
   colors: StoreColor[];
-  repository: StoreRepository['_id'];
+  repository: StoreRepository;
 };
 export type StoreTabContent = {
   _id: string;

@@ -1,21 +1,19 @@
-import React, { Fragment, ReactNode, useContext } from 'react';
+import React, { Fragment } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useNavigate,
   Navigate,
-  Outlet,
   useLocation,
 } from 'react-router-dom';
-import { selectAuth } from './features/authSlice';
-import DefaultLayout from './layouts/DefaultLayout/DefaultLayout';
 import * as config from '@/config';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import routes from './routes';
 import { useAppSelector } from './types/commons';
+import DefaultLayout from './layouts';
+import { selectAuth } from './store/selectors';
 const App: React.FC = () => {
   return (
     <Router>

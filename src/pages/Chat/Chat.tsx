@@ -12,33 +12,27 @@ import {
   FaVideo,
 } from 'react-icons/fa';
 import { MdClose } from 'react-icons/md';
-import conversationApi from '../../api/conversationApi';
-import Conversation from '../../components/Conversation';
-import Message from '../../components/Message';
-import SearchInput from '../../components/SearchInput';
-import { selectAuth } from '../../features/authSlice';
-import { IConversation } from '../../models/conversation.model';
-import { IMessage } from '../../models/message.model';
-import { IUser } from '../../models/user.model';
-import messageApi from './../../api/messageApi';
 import styles from './Chat.module.scss';
-import { useAppSelector } from '@/types/commons';
+import { Nullable, useAppSelector } from '@/types/commons';
+import { selectAuth } from '@/store/selectors';
+import { StoreConversation, StoreMessage, StoreUser } from '@/types/entities';
+import { SearchInput } from '@/components/shares';
 const cx = classNames.bind(styles);
 const Chat = () => {
   const { user } = useAppSelector(selectAuth);
-  const [conversations, setConversations] = useState<IConversation[]>([]);
+  const [conversations, setConversations] = useState<StoreConversation[]>([]);
   const [loadingConversation, setLoadingConversation] = useState(false);
   const [loadingGetMessage, setLoadingGetMessage] = useState(false);
-  const [currentChat, setCurrentChat] = useState<IConversation | null>(null);
+  const [currentChat, setCurrentChat] = useState<Nullable<StoreConversation>>(null);
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState<IMessage[]>([]);
-  const [receiver, setReceiver] = useState<IUser | undefined>(undefined);
+  const [messages, setMessages] = useState<StoreMessage[]>([]);
+  const [receiver, setReceiver] = useState<StoreUser | undefined>(undefined);
   const [fileImages, setFileImages] = useState<File[]>([]);
   const [currentPageYOffset, setCurrentPageYOffset] = useState({ page: 2, limit: 20, height: 0 });
   const messageInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   // useEffect(() => {
-  //   socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: IMessage }) => {
+  //   socket.on(config.socketEvents.SERVER.GET_MESSAGE, ({ message }: { message: StoreMessage }) => {
   //     setMessages((prev) => {
   //       const lastPrevMessage = prev[prev.length - 1];
   //       if (
@@ -75,12 +69,12 @@ const Chat = () => {
     const fetchConversations = async () => {
       try {
         setLoadingConversation(true);
-        const res: IConversation[] = await conversationApi.getMyConversation();
-        console.log(res);
-        if (res) {
-          setConversations(res);
-          setLoadingConversation(false);
-        }
+        // const res: StoreConversation[] = await conversationApi.getMyConversation();
+        // console.log(res);
+        // if (res) {
+        //   setConversations(res);
+        //   setLoadingConversation(false);
+        // }
       } catch (error) {
         console.log(error);
       }
@@ -88,26 +82,26 @@ const Chat = () => {
     fetchConversations();
   }, [user?._id]);
   useEffect(() => {
-    const getMessages = async () => {
-      setReceiver(currentChat?.members.find((member) => member._id !== user?._id));
-      try {
-        const params = {
-          page: 1,
-          limit: currentPageYOffset.limit,
-        };
-        setLoadingGetMessage(true);
-        const res = await messageApi.getMessagesFromConversation(currentChat?._id || '', params);
-        // console.log(res);
-        if (res.data.length > 0) {
-          setMessages(res.data);
-          setLoadingGetMessage(false);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    setCurrentPageYOffset({ page: 2, limit: 20, height: 0 });
-    currentChat && getMessages();
+    // const getMessages = async () => {
+    //   setReceiver(currentChat?.members.find((member) => member._id !== user?._id));
+    //   try {
+    //     const params = {
+    //       page: 1,
+    //       limit: currentPageYOffset.limit,
+    //     };
+    //     setLoadingGetMessage(true);
+    //     const res = await messageApi.getMessagesFromConversation(currentChat?._id || '', params);
+    //     // console.log(res);
+    //     if (res.data.length > 0) {
+    //       setMessages(res.data);
+    //       setLoadingGetMessage(false);
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
+    // setCurrentPageYOffset({ page: 2, limit: 20, height: 0 });
+    // currentChat && getMessages();
   }, [currentChat]);
 
   useEffect(() => {
@@ -119,12 +113,12 @@ const Chat = () => {
 
   const handleUpdateSeenMessage = async (conversation: string, receiverId: string) => {
     try {
-      const res = await messageApi.updateSeenMessage(conversation, receiverId);
+      // const res = await messageApi.updateSeenMessage(conversation, receiverId);
     } catch (error) {
       console.log(error);
     }
   };
-  const handleClickConversation = (conversation: IConversation) => {
+  const handleClickConversation = (conversation: StoreConversation) => {
     const receiverId = conversation.members.find((member) => member._id !== user?._id)?._id || '';
     handleUpdateSeenMessage(conversation._id, receiverId);
     setCurrentChat(conversation);
@@ -157,7 +151,7 @@ const Chat = () => {
     // if (newMessage || (createMessage?.images && createMessage?.images?.length > 0)) {
     //   try {
     //     if (newMessage) createMessage.text = newMessage;
-    //     const message: IMessage = await messageApi.create(createMessage);
+    //     const message: StoreMessage = await messageApi.create(createMessage);
     //     if (message) {
     //       // setMessages((prev) => [...prev, message]);
     //       socket.emit(config.socketEvents.CLIENT.SEND_MESSAGE, {
@@ -174,38 +168,38 @@ const Chat = () => {
     // }
   };
   const handleScroll = async (e: any) => {
-    setCurrentPageYOffset({ ...currentPageYOffset, height: e.target.scrollTop });
-    if (e.target.scrollTop === 0 && e.target.scrollTop < currentPageYOffset.height) {
-      try {
-        const params = {
-          page: currentPageYOffset.page,
-          limit: currentPageYOffset.limit,
-          skip: messages.length,
-        };
-        console.log(params);
-        const res = await messageApi.getMessagesFromConversation(currentChat?._id || '', params);
-        console.log(res);
+    // setCurrentPageYOffset({ ...currentPageYOffset, height: e.target.scrollTop });
+    // if (e.target.scrollTop === 0 && e.target.scrollTop < currentPageYOffset.height) {
+    //   try {
+    //     const params = {
+    //       page: currentPageYOffset.page,
+    //       limit: currentPageYOffset.limit,
+    //       skip: messages.length,
+    //     };
+    //     console.log(params);
+    //     const res = await messageApi.getMessagesFromConversation(currentChat?._id || '', params);
+    //     console.log(res);
 
-        if (res.data.length > 0) {
-          const isExist = messages.find((message) => message._id === res.data[0]._id);
-          if (res.resultPerPage === currentPageYOffset.page && !isExist) {
-            setCurrentPageYOffset({ ...currentPageYOffset, page: currentPageYOffset.page + 1 });
-            setMessages((prev) => [...res.data, ...prev]);
-          }
-          // setLoadingGetMessage(false);
-        }
+    //     if (res.data.length > 0) {
+    //       const isExist = messages.find((message) => message._id === res.data[0]._id);
+    //       if (res.resultPerPage === currentPageYOffset.page && !isExist) {
+    //         setCurrentPageYOffset({ ...currentPageYOffset, page: currentPageYOffset.page + 1 });
+    //         setMessages((prev) => [...res.data, ...prev]);
+    //       }
+    //       // setLoadingGetMessage(false);
+    //     }
 
-        // if (res.data.length > 0) {
-        //   const isExist = messages.find((message) => message._id === res.data[0]._id);
-        //   if (res.resultPerPage === currentPageYOffset.page && !isExist) {
-        //     setCurrentPageYOffset({ ...currentPageYOffset, page: currentPageYOffset.page + 1 });
-        //     setMessages((prev) => [...res.data, ...prev]);
-        //   }
-        // }
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    //     // if (res.data.length > 0) {
+    //     //   const isExist = messages.find((message) => message._id === res.data[0]._id);
+    //     //   if (res.resultPerPage === currentPageYOffset.page && !isExist) {
+    //     //     setCurrentPageYOffset({ ...currentPageYOffset, page: currentPageYOffset.page + 1 });
+    //     //     setMessages((prev) => [...res.data, ...prev]);
+    //     //   }
+    //     // }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
   };
   const handleKeyDown = () => {
     // socket.emit(config.socketEvents.CLIENT.KEY_DOWN, {
@@ -262,7 +256,7 @@ const Chat = () => {
             ) : conversations ? (
               conversations.map((conversation) => (
                 <div key={conversation._id} onClick={() => handleClickConversation(conversation)}>
-                  <Conversation
+                  {/* <Conversation
                     conversation={conversation}
                     active={currentChat?._id === conversation._id}
                     latestMessageChanged={
@@ -270,7 +264,7 @@ const Chat = () => {
                         ? messages[messages.length - 1]
                         : undefined
                     }
-                  />
+                  /> */}
                 </div>
               ))
             ) : (
@@ -318,7 +312,7 @@ const Chat = () => {
             <div className={cx('chat-box__body')} onScroll={handleScroll}>
               {messages.map((message) => (
                 <div ref={scrollRef} key={message._id}>
-                  <Message message={message} own={message?.sender?._id === user?._id} />
+                  {/* <Message message={message} own={message?.sender?._id === user?._id} /> */}
                 </div>
               ))}
             </div>

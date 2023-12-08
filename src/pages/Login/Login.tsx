@@ -1,6 +1,6 @@
 import jwt_decode from 'jwt-decode';
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // STYLES
 import classNames from 'classnames/bind';
@@ -17,11 +17,17 @@ const cx = classNames.bind(styles);
 
 const Login = () => {
   const location = useLocation();
-  const { account } = useAppSelector(selectAuth);
-
+  const navigate = useNavigate()
+  const { account, user } = useAppSelector(selectAuth);
   const [activeSignUp, setActiveSignUp] = useState(false);
   const [openForgotPassword, setOpenForgotPassword] = useState(false);
-
+  useEffect(() => {
+    if (location.pathname === routes.login || location.pathname === routes.register) {
+      if (user) {
+        navigate(routes.dashboard)
+      }
+    }
+  }, [user, location.pathname, navigate])
   useEffect(() => {
     if (location.pathname === routes.login) {
       setActiveSignUp(false);
@@ -29,66 +35,6 @@ const Login = () => {
       setActiveSignUp(true);
     }
   }, [location.pathname, account]);
-
-  // useEffect(() => {
-  // if (isLoginSuccess) {
-  //   const handleAddAllToCart = async () => {
-  //     for (const cartItem of cartItems) {
-  //       await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
-  //     }
-  //   };
-  //   const { accessToken, refreshToken, ...user } = loginData;
-  //   dispatch(setCredentials({ user: { ...user }, token: { accessToken, refreshToken } }));
-  //   if (cart.cartItems && cart.cartItems.length > 0) {
-  //     setCartItems(cart.cartItems);
-  //     dispatch(clearCart());
-  //   }
-  //   toast.success('Đăng nhập thành công !');
-  //   navigate(from.pathname === routes.payment ? routes.cart : from.pathname);
-  // }
-
-  // if (isLoginError) {
-  //   toast.error((loginError as any).data.message, {
-  //     position: 'top-right',
-  //   });
-  // }
-  // if (isRegisterSuccess && activeSignup) {
-  //   toast.success(registerData.message);
-  //   setFormValue(initialState);
-  //   navigate(routes.login);
-  // }
-  // if (isRegisterError) {
-  //   toast.error((registerError as any).data.message, {
-  //     position: 'top-right',
-  //   });
-  // }
-  // }, [isLoadingLogin, isLoadingRegister]);
-
-  // useEffect(() => {
-  //   if (isSuccessGoogle) {
-  //     const { accessToken, refreshToken, ...user } = dataGoogle;
-  //     dispatch(setCredentials({ user: { ...user }, token: { accessToken, refreshToken } }));
-  //     if (cart.cartItems && cart.cartItems.length > 0) {
-  //       setCartItems(cart.cartItems);
-  //       dispatch(clearCart());
-  //       cartItems.forEach(async (cartItem: StoreCartItem) => {
-  //         const newCart = await addToCart(cartItem.product._id, cartItem.color, cartItem.size);
-  //         console.log(newCart);
-  //       });
-  //     }
-  //     toast.success('Đăng nhập thành công !');
-  //     navigate(from.pathname === routes.payment ? routes.cart : from.pathname);
-  //   }
-
-  //   if (isErrorGoogle) {
-  //     console.log(errorGoogle);
-  //   }
-  // }, [isLoadingGoogle]);
-
-  // useEffect(() => {
-  //   isSuccessForgotPassword && toast.info(dataForgotPassword.message);
-  //   isErrorForgotPassword && toast.error((errorForgotPassword as any).data.message);
-  // }, [isLoadingForgotPassword]);
 
   const addToCart = async (productId: string, color: string, size: string | number) => {
     // const cart = await addItemToCart({
