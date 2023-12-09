@@ -1,6 +1,6 @@
 import { QueryOptions } from '@/services/types';
 import { ResponsePaginate } from '@/types/commons';
-import {useCallback, useEffect, useState} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 
 interface PaginationResult<T> {
@@ -45,11 +45,11 @@ export function usePagination<T>(
     [query.search],
   );
 
-  const {data, error, isValidating, isLoading, mutate} = useSWR(key, callback, {
+  const { data, error, isValidating, isLoading, mutate } = useSWR(key, callback, {
     revalidateOnFocus: false,
     revalidateIfStale: false,
   });
-  
+
   useEffect(() => {
     mutate();
   }, [query.search, mutate]);
@@ -78,7 +78,7 @@ export function usePagination<T>(
               : [...prevData.docs, ...updateData.docs],
           };
         },
-        {revalidate: false},
+        { revalidate: false },
       );
       setIsLoadMore(false);
     }
@@ -92,7 +92,7 @@ export function usePagination<T>(
       ...query,
       offset: 0,
     });
-    mutate(updateData, {revalidate: false});
+    mutate(updateData, { revalidate: false });
   }, [fetcher, mutate, query]);
   return {
     data,

@@ -1,5 +1,3 @@
-import ProductTable from "./ProductTable";
+import ProductTable from './ProductTable';
 
-export {
-    ProductTable
-}
+export { ProductTable };

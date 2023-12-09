@@ -10,6 +10,7 @@ const routes = {
   review: '/danh-gia',
   login: '/dang-nhap',
   register: '/dang-ki',
+  orderDetail: '/order-detail/:orderId',
   home: '/',
 };
 export default routes;

@@ -13,6 +13,7 @@ import Category from '../pages/Category';
 import Brand from '../pages/Brand';
 import Chat from '../pages/Chat';
 import Review from '../pages/Review';
+import OrderDetail from '@/pages/order-detail';
 // import NotPageFound from '../pages/NotPageFound';
 
 type routeType = {
@@ -42,6 +43,10 @@ const routes: Array<routeType> = [
   {
     path: config.routes.order,
     component: Order,
+  },
+  {
+    path: config.routes.orderDetail,
+    component: OrderDetail,
   },
   {
     path: config.routes.customer,
