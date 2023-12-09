@@ -9,6 +9,8 @@ module.exports = {
         background: '#f8f7fa',
         error: '#ea5455',
         backgroundButton: '#fef1f4',
+        'text-color': '#2f2b3d',
+        'text-color-secondary': '#a09ea3',
       },
       flex: {
         2: '2 2 0%',

@@ -27,11 +27,6 @@ const links = [
     title: 'Thương hiệu',
   },
   {
-    to: config.routes.catalog,
-    icon: <MdOutlineCategory />,
-    title: 'Thể loại',
-  },
-  {
     to: config.routes.category,
     icon: <BiCategory />,
     title: 'Danh mục',
@@ -73,7 +68,7 @@ const Sidebar = () => {
     }
   };
   return (
-    <div className={cx('container')}>
+    <div className={cx('container', 'h-screen')}>
       <div className={cx('logo')}>Admin Koga</div>
       <div className={cx('menu')}>
         <div className={cx('menu__account')}>
