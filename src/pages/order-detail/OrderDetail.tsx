@@ -60,7 +60,7 @@ const OrderDetail = () => {
           </div>
         </div>
         <div>
-          <Button className="bg-[#ebd4d8] text-[#ef9598] border-0 hover:bg-[#f2bfc3]">
+          <Button className="bg-danger text-primary hover:bg-danger-hover">
             Delete Order
           </Button>
         </div>

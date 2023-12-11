@@ -16,7 +16,8 @@ import DefaultLayout from './layouts';
 import { selectAuth } from './store/selectors';
 import { ConfigProvider } from 'antd';
 
-import 'draft-js/dist/Draft.css';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 const App: React.FC = () => {
   return (
     <ConfigProvider theme={{ token: { colorPrimary: '#eb3d63' }, }}>
