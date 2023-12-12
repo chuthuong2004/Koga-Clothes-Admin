@@ -14,6 +14,4 @@ export const PATTERN_NAME =
   /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$|^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
 
 export const PATTERN_NUMBER = /^\d+$/;
-
-
-
+export const FORMAT_DATE = 'YYYY-MM-DD HH:mm:ss';

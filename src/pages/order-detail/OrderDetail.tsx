@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderDetailModify from './components/order-detail-modify';
 import { OrderDetailInfoUser } from './components/order-detail-info-user';
+import { FORMAT_DATE } from '@/utils/constants';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
@@ -27,7 +28,6 @@ const OrderDetail = () => {
   console.log(order);
 
   const colorStatus = colorStatusOrder[order?.orderStatus as OrderStatus];
-  console.log(colorStatus);
 
   return (
     <div className="h-full ">
@@ -55,7 +55,7 @@ const OrderDetail = () => {
           </div>
           <div className="">
             <span className="text-2xl text-[#2f2b3d]">
-              {moment(order?.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+              {moment(order?.createdAt).format(FORMAT_DATE)}
             </span>
           </div>
         </div>
