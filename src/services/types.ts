@@ -111,3 +111,17 @@ export type OTPParams = {
   code: string;
 };
 export type ParamCreateAddress = Omit<StoreUserAddress, '_id'>;
+
+export type ParamCreateProduct = {
+  name: string;
+  code: string;
+  description: string;
+  category: string;
+  gender: string[];
+  brand: string;
+  preserveInformation: string;
+  deliveryReturnPolicy: string;
+  price: number;
+  discount: number;
+  keywords: string[];
+}

@@ -1,19 +1,34 @@
-import { Button, Card, Col, Input, Row, Space, Typography } from 'antd';
+import { Button, Card, Col, Row, Space, Typography } from 'antd';
 
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { FormPricing, FormOrganization, FormInfoBasic, FormVariants } from './forms';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
+import { ParamCreateProduct } from '@/services/types';
+import draftToHtml from 'draftjs-to-html';
 export type FormCreateProduct = {
   name: string;
+  code: string;
   description: EditorState;
   category: string;
   gender: string[];
   brand: string;
-  preserveInformation: string;
-  deliveryReturnPolicy: string;
+  preserveInformation: EditorState;
+  deliveryReturnPolicy: EditorState;
   price: string;
   discount: string;
   keywords: string[];
+  storedProducts: {
+    repository: string;
+    colors: {
+      imageSmall: string;
+      imageMedium: string;
+      images: string[];
+      sizes: {
+        size: string;
+        quantity: string;
+      }[]
+    }[]
+  }[]
 }
 const FormProduct = () => {
   // const [editorState, setEditorState] = React.useState(() => EditorState.createEmpty());
@@ -25,22 +40,67 @@ const FormProduct = () => {
       category: '',
       gender: [],
       brand: '',
-      deliveryReturnPolicy: '',
+      deliveryReturnPolicy: EditorState.createEmpty(),
       discount: '0',
-      preserveInformation: '',
+      preserveInformation: EditorState.createEmpty(),
       price: '',
-      keywords: []
+      keywords: [],
+      storedProducts: [
+        {
+          repository: '',
+          colors: [{
+            imageMedium: '',
+            images: [],
+            imageSmall: '',
+            sizes: [
+              {
+                "quantity": '',
+                size: ''
+              }
+            ]
+          }]
+        },
+        {
+          repository: '',
+          colors: [{
+            imageMedium: '',
+            images: [],
+            imageSmall: '',
+            sizes: [
+              {
+                "quantity": '',
+                size: ''
+              }
+            ]
+          }]
+        }
+      ]
     }
   })
   const onSubmit = (data: FormCreateProduct) => {
-    console.log(data);
+    const descContentState = convertToRaw(data.description.getCurrentContent());
+    const preserveContentState = convertToRaw(data.preserveInformation.getCurrentContent());
+    const deliveryContentState = convertToRaw(data.deliveryReturnPolicy.getCurrentContent());
+
+    const newData: ParamCreateProduct = {
+      ...data,
+      description: draftToHtml(descContentState),
+      deliveryReturnPolicy: draftToHtml(deliveryContentState),
+      preserveInformation: draftToHtml(preserveContentState),
+      price: parseInt(data.price, 10),
+      discount: parseInt(data.discount, 10),
+    }
+
+    console.log(newData);
   }
 
-
+  const onError = (err: any) => {
+    console.log(err);
+  }
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form onSubmit={methods.handleSubmit(onSubmit, onError)}>
         <div className="flex flex-col gap-8">
           <div className="flex justify-between items-center">
             <div>
@@ -61,9 +121,9 @@ const FormProduct = () => {
           <Row gutter={[16, 16]}>
             <Col span={16} sm={16} className="gap-4">
               <div className="flex flex-col gap-8">
-                <FormInfoBasic  />
+                <FormInfoBasic />
                 <FormVariants />
-               
+
                 <Card bordered={false}>Product Information</Card>
               </div>
             </Col>
