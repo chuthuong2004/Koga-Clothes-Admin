@@ -12,7 +12,7 @@ module.exports = {
         'text-color': '#2f2b3d',
         'text-color-secondary': '#a09ea3',
         danger: '#fce2e8',
-        'danger-hover':  '#f8bec9'
+        'danger-hover': '#f8bec9',
       },
       flex: {
         2: '2 2 0%',
