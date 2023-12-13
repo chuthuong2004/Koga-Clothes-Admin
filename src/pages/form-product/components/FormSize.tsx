@@ -1,53 +1,46 @@
-import { Button, Input, Typography } from 'antd'
-import React from 'react'
+import { Button, Card, Input, Space, Typography } from 'antd'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { FormCreateProduct } from '../FormProduct'
 
-type FormSizeProps = {
-    indexColor: number
-}
-const FormSize = ({ indexColor }: FormSizeProps) => {
-    const { control } = useFormContext<FormCreateProduct>()
-    const { fields, append } = useFieldArray({
+const FormSize = () => {
+    const { control, formState: { errors }, } = useFormContext<FormCreateProduct>()
+    const { fields, append, remove } = useFieldArray({
         control,
-        name: `storedProducts.${indexColor}.colors.${indexColor}.sizes`
+        name: 'sizes'
     })
     return (
-        <div>
-            {fields.map((field, index) => {
-                return (
-                    <div className='flex gap-4' key={index}>
-                        <div className='flex-1 gap-2 flex flex-col'>
-                            <Typography.Text >Size</Typography.Text>
+        <Card >
+            <Space direction='vertical' className='w-full'>
+                <div className='flex justify-between items-end'>
+                    <Typography.Text>Kích cỡ</Typography.Text>
+                </div>
+                {fields.map((field, index) => (
+                    <div className='flex flex-col'>
+                        <div className='flex gap-4'>
                             <Controller
                                 control={control}
-                                name={`storedProducts.${indexColor}.colors.${indexColor}.sizes.${index}.size`}
+                                name={`sizes.${index}.sizeName`}
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: 'Vui lòng nhập màu sắc !',
+                                    },
+                                }}
                                 render={({ field }) => (
-
-                                    <Input size="large" placeholder='Size' {...field} />
+                                    <Input size='large' {...field} placeholder='Nhập màu sắc' status={errors.sizes?.[index]?.sizeName && 'error'} />
                                 )}
                             />
+                            <Button size="large" danger onClick={() => remove(index)}>Delete</Button>
                         </div>
-                        <div className='flex-1 gap-2 flex flex-col'>
-                            <Typography.Text >Quantity</Typography.Text>
-                            <Controller
-                                control={control}
-                                name={`storedProducts.${indexColor}.colors.${indexColor}.sizes.${index}.quantity`}
-                                render={({ field }) => (
-
-                                    <Input size="large" placeholder='Quantity' {...field} />
-                                )}
-                            />
-                        </div>
+                        {errors.sizes?.[index]?.sizeName && <Typography.Text type="danger">{errors.sizes?.[index]?.sizeName?.message}</Typography.Text>}
                     </div>
-                )
-            })}
+                ))}
+                <Button type="primary" size="large" onClick={() => append({
+                    sizeName: ''
+                })}>Add Size</Button>
+            </Space>
+        </Card>
 
-            <Button type='primary' onClick={() => append({
-                quantity: '',
-                size: ''
-            })}>Add Size</Button>
-        </div>
     )
 }
 

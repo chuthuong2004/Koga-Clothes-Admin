@@ -24,7 +24,7 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
       <Sidebar />
       <div className='flex flex-col flex-1 mx-20 mt-12 gap-12'>
         <HeaderContent />
-        <div className='min-h-screen' > {children} </div>
+        <div className='min-h-screen pb-60' > {children} </div>
         {/* 
         {pathname !== config.routes.chat && <FooterContent />} */}
       </div>

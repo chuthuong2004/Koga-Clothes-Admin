@@ -14,45 +14,46 @@ const FormColor = ({ indexStoredProduct }: FormColorProps) => {
         control,
         name: `storedProducts.${indexStoredProduct}.colors`
     })
-    return (
-        <>
-            {fields.map((field, indexColor) => (
-                <Fragment key={indexColor}>
-                    <div className='flex flex-col gap-4'>
-                        <Typography.Text>Màu sản phẩm</Typography.Text>
-                        <Controller
-                            control={control}
-                            name='name'
-                            rules={{
-                                required: {
-                                    value: true,
-                                    message: 'Vui lòng nhập màu sản phẩm !'
-                                }
-                            }}
-                            render={({ field }) => (
-                                <Input size="large" placeholder="Nhập màu sản phẩm" status={errors.name && 'error'}  {...field} type='danger' />
+    return null
+    // return (
+    //     // <>
+    //     //     {fields.map((field, indexColor) => (
+    //     //         <Fragment key={indexColor}>
+    //     //             <div className='flex flex-col gap-4'>
+    //     //                 <Typography.Text>Màu sản phẩm</Typography.Text>
+    //     //                 <Controller
+    //     //                     control={control}
+    //     //                     name='name'
+    //     //                     rules={{
+    //     //                         required: {
+    //     //                             value: true,
+    //     //                             message: 'Vui lòng nhập màu sản phẩm !'
+    //     //                         }
+    //     //                     }}
+    //     //                     render={({ field }) => (
+    //     //                         <Input size="large" placeholder="Nhập màu sản phẩm" status={errors.name && 'error'}  {...field} type='danger' />
 
-                            )}
-                        />
-                        {errors.name && <Typography.Text type='danger'>{errors.name?.message}</Typography.Text>}
-                    </div>
+    //     //                     )}
+    //     //                 />
+    //     //                 {errors.name && <Typography.Text type='danger'>{errors.name?.message}</Typography.Text>}
+    //     //             </div>
 
-                    <FormImage />
-                    <FormSize indexColor={indexColor} />
-                </Fragment>
-            ))}
-            <Button type="primary" size="large" onClick={() => append({
-                imageMedium: '',
-                images: [],
-                imageSmall: '',
-                sizes: [{
-                    quantity: '',
-                    size: ''
-                }]
-            })}>Add Color</Button>
+    //     //             <FormImage />
+    //     //             <FormSize indexColor={indexColor} />
+    //     //         </Fragment>
+    //     //     ))}
+    //     //     <Button type="primary" size="large" onClick={() => append({
+    //     //         imageMedium: '',
+    //     //         images: [],
+    //     //         imageSmall: '',
+    //     //         sizes: [{
+    //     //             quantity: '',
+    //     //             size: ''
+    //     //         }]
+    //     //     })}>Add Color</Button>
 
-        </>
-    )
+    //     // </>
+    // )
 }
 
 export default FormColor

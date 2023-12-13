@@ -12,7 +12,6 @@ const FormPricing = () => {
     return (
         <Card bordered={false}>
             <Space direction="vertical" className="w-full">
-                <Typography.Text>Giá</Typography.Text>
                 <div className="flex flex-col gap-2">
                     <Typography.Text>Giá</Typography.Text>
                     <Controller

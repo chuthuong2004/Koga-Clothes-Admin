@@ -85,6 +85,7 @@ const FormOrganization = () => {
               <Select
                 size="large"
                 {...field}
+                value={field.value ? field.value : undefined}
                 status={errors.category && 'error'}
                 placeholder="Chọn danh mục"
                 options={
@@ -158,7 +159,7 @@ const FormOrganization = () => {
               <Select
                 size="large"
                 {...field}
-                value={field.value && field.value}
+                value={field.value ? field.value : undefined}
                 status={errors.brand && 'error'}
                 placeholder="Chọn thương hiệu"
                 options={
