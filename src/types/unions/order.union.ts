@@ -1,6 +1,7 @@
 import { StoreOrder } from '../entities';
+import { EOrderStatus } from '../enums';
 
-export type OrderStatus = 'Processing' | 'Shipping' | 'Delivery' | 'Delivered' | 'Canceled';
+export type OrderStatus = keyof typeof EOrderStatus;
 
 export type TimeStatusAt = keyof Pick<
   StoreOrder,

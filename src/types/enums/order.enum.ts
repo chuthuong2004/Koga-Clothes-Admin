@@ -1,8 +1,7 @@
 export enum EOrderStatus {
-    Processing = 'Processing',
-    Shipping = 'Shipping',
-    Delivery = 'Delivery',
-    Delivered = 'Delivered',
-    Canceled = 'Canceled',
-  }
-  
+  Processing = 'Processing',
+  Shipping = 'Shipping',
+  Delivery = 'Delivery',
+  Delivered = 'Delivered',
+  Canceled = 'Canceled',
+}

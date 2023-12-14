@@ -1,7 +1,7 @@
 import { routes } from '@/config';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { Input, Space, Select, Button, Typography, SelectProps, Divider } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CustomHeader = () => {
@@ -10,35 +10,6 @@ const CustomHeader = () => {
     console.log(`selected ${value}`);
   };
 
-  const handleChangeCategory = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
-  const options: SelectProps['options'] = [
-    {
-      label: 'China',
-      value: 'china',
-      emoji: '🇨🇳',
-      desc: 'China (中国)',
-    },
-    {
-      label: 'USA',
-      value: 'usa',
-      emoji: '🇺🇸',
-      desc: 'USA (美国)',
-    },
-    {
-      label: 'Japan',
-      value: 'japan',
-      emoji: '🇯🇵',
-      desc: 'Japan (日本)',
-    },
-    {
-      label: 'Korea',
-      value: 'korea',
-      emoji: '🇰🇷',
-      desc: 'Korea (韩国)',
-    },
-  ];
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex flex-col border-b-slate-100" />
@@ -60,16 +31,9 @@ const CustomHeader = () => {
               { value: '50', label: '50' },
             ]}
           />
+
           <Button type="primary" disabled size="large" icon={<UploadOutlined size={20} rev />}>
             Export
-          </Button>
-          <Button
-            onClick={() => navigate(routes.createProduct)}
-            type="primary"
-            size="large"
-            icon={<PlusOutlined size={20} rev />}
-          >
-            Thêm mới
           </Button>
         </Space>
       </div>

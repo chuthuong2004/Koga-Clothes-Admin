@@ -3,24 +3,30 @@ import { OrderStatus, StoreOrder } from '@/types/entities';
 import { colorStatusOrder } from '@/utils/constants/color.constant';
 import { cn } from '@/utils/helpers';
 import './_order-detail.scss';
-import { Badge, Button } from 'antd';
+import { Badge, Button, Select } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderDetailModify from './components/order-detail-modify';
 import { OrderDetailInfoUser } from './components/order-detail-info-user';
 import { FORMAT_DATE } from '@/utils/constants';
+import {
+  OptionsUpdateStatusOrder,
+  OptionsStatusOrderDefault,
+} from '@/utils/constants/order.constant';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
 
   const [order, setOrder] = useState<StoreOrder>();
+  const [valueSelect, setValueSelect] = useState<OrderStatus>();
 
   useEffect(() => {
     if (!orderId) return;
     const getOrder = async () => {
       const response = await orderService.getById(orderId);
       setOrder(response);
+      setValueSelect(OptionsStatusOrderDefault[response.orderStatus].value);
     };
     getOrder();
   }, [orderId]);
@@ -28,6 +34,7 @@ const OrderDetail = () => {
   console.log(order);
 
   const colorStatus = colorStatusOrder[order?.orderStatus as OrderStatus];
+  console.log(valueSelect);
 
   return (
     <div className="h-full ">
@@ -59,10 +66,17 @@ const OrderDetail = () => {
             </span>
           </div>
         </div>
-        <div>
-          <Button className="bg-danger text-primary hover:bg-danger-hover">
-            Delete Order
-          </Button>
+        <div className="flex gap-5 items-center">
+          <Select
+            size="large"
+            onChange={(value) => {
+              setValueSelect(value as OrderStatus);
+            }}
+            value={OptionsStatusOrderDefault[valueSelect as OrderStatus]?.label}
+            style={{ minWidth: 180 }}
+            options={[OptionsUpdateStatusOrder[valueSelect as OrderStatus] || {}]}
+          />
+          <Button className="bg-danger text-primary hover:bg-danger-hover">Delete Order</Button>
         </div>
       </div>
       <div className="content flex w-full h-full gap-8 mt-10">
