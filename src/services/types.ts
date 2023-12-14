@@ -1,5 +1,6 @@
 import { StoreMessage, StoreProvinceAddress, StoreUserAddress } from '@/types/entities';
 import { GenderUser } from '@/types/unions';
+import { OrderStatus } from '@/types/unions/order.union';
 
 import { Socket } from 'socket.io-client';
 import { DisconnectDescription } from 'socket.io-client/build/esm/socket';
@@ -78,6 +79,9 @@ export type ParamCreateOrder = {
   isPaid?: boolean;
   shippingPrice?: number;
 };
+export type ParamUpdateOrder = {
+  orderStatus: OrderStatus;
+} & Partial<ParamCreateOrder>;
 
 export type ParamCancelOrder = {
   canceledReason: string;
@@ -124,4 +128,4 @@ export type ParamCreateProduct = {
   price: number;
   discount: number;
   keywords: string[];
-}
+};

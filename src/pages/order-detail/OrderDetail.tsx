@@ -3,9 +3,9 @@ import { OrderStatus, StoreOrder } from '@/types/entities';
 import { colorStatusOrder } from '@/utils/constants/color.constant';
 import { cn } from '@/utils/helpers';
 import './_order-detail.scss';
-import { Badge, Button, Select } from 'antd';
+import { Badge, Button, Select, Steps, StepsProps } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import OrderDetailModify from './components/order-detail-modify';
 import { OrderDetailInfoUser } from './components/order-detail-info-user';
@@ -14,27 +14,54 @@ import {
   OptionsUpdateStatusOrder,
   OptionsStatusOrderDefault,
 } from '@/utils/constants/order.constant';
+import useSWR from 'swr';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
 
-  const [order, setOrder] = useState<StoreOrder>();
   const [valueSelect, setValueSelect] = useState<OrderStatus>();
-
+  const { data: order, mutate } = useSWR(
+    `OrderDetails${orderId}`,
+    () => (orderId ? orderService.getById(orderId) : undefined),
+    {
+      onError(err, key, config) {},
+    },
+  );
   useEffect(() => {
-    if (!orderId) return;
-    const getOrder = async () => {
-      const response = await orderService.getById(orderId);
-      setOrder(response);
-      setValueSelect(OptionsStatusOrderDefault[response.orderStatus].value);
+    if (order) {
+      setValueSelect(OptionsStatusOrderDefault[order.orderStatus].value);
+    }
+    return () => {
+      // mutate(() => undefined, { revalidate: false });
     };
-    getOrder();
-  }, [orderId]);
+  }, [order, mutate]);
 
   console.log(order);
 
   const colorStatus = colorStatusOrder[order?.orderStatus as OrderStatus];
   console.log(valueSelect);
+  const [currentStep, setCurrentStep] = useState<number>(3);
+
+  const [itemSteps, setItemSteps] = useState<StepsProps['items']>([]);
+
+  useEffect(() => {
+    const itemsStep: StepsProps['items'] = Object.keys(OptionsStatusOrderDefault).map(
+      (key: string, index: number) => {
+        const storeValue = OptionsStatusOrderDefault[key as OrderStatus];
+        let disabled = false;
+        if (order?.orderStatus === key) {
+          setCurrentStep(index);
+          disabled = true;
+        }
+        return {
+          title: storeValue.value,
+          description: storeValue.label,
+          disabled,
+        };
+      },
+    );
+    setItemSteps(itemsStep);
+  }, [order?.orderStatus]);
 
   return (
     <div className="h-full ">
@@ -79,11 +106,28 @@ const OrderDetail = () => {
           <Button className="bg-danger text-primary hover:bg-danger-hover">Delete Order</Button>
         </div>
       </div>
-      <div className="content flex w-full h-full gap-8 mt-10">
+      <div className="content flex flex-col w-full h-full gap-8 mt-10">
+        <div className="flex flex-col">
+          <Steps
+            current={currentStep}
+            items={itemSteps}
+            onChange={async (current: number) => {
+              const itemStepCurrent = itemSteps?.[currentStep];
+              const statusNext = OptionsUpdateStatusOrder[itemStepCurrent?.title as OrderStatus];
+              const itemStepNext = itemSteps?.[current];
+              if (itemStepNext?.title !== statusNext.value) return;
+              console.log('go to');
+              setCurrentStep(current);
+              orderService.updateOrder(order?._id || '', {
+                orderStatus: itemStepNext?.title as OrderStatus,
+              });
+            }}
+          />
+        </div>
         <div className="info-detail-order  flex-2">
           <OrderDetailModify order={order} />
         </div>
-        <div className="info-detail-user flex-1 ">
+        <div className="info-detail-user f  lex-1 ">
           <OrderDetailInfoUser order={order} />
         </div>
       </div>
