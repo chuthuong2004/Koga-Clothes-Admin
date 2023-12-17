@@ -1,11 +1,28 @@
 import { routes } from '@/config';
+import { brandService, categoryService } from '@/services';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 import { Input, Space, Select, Button, Typography, SelectProps, Divider } from 'antd'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom';
+import useSWR from 'swr';
 
 const CustomHeader = () => {
     const navigate = useNavigate()
+
+    const { data: brands } = useSWR("ListBrandsInProducts", () => {
+        return brandService.getAll({
+            page: 1,
+            limit: 99999,
+            offset: 0
+        })
+    })
+    const { data: categories } = useSWR("ListCategoriesInProducts", () => {
+        return categoryService.getAll({
+            page: 1,
+            limit: 999999,
+            offset: 0
+        })
+    })
     const handleChange = (value: string) => {
         console.log(`selected ${value}`);
     };
@@ -13,32 +30,19 @@ const CustomHeader = () => {
     const handleChangeCategory = (value: string[]) => {
         console.log(`selected ${value}`);
     };
-    const options: SelectProps['options'] = [
-        {
-            label: 'China',
-            value: 'china',
-            emoji: '🇨🇳',
-            desc: 'China (中国)',
-        },
-        {
-            label: 'USA',
-            value: 'usa',
-            emoji: '🇺🇸',
-            desc: 'USA (美国)',
-        },
-        {
-            label: 'Japan',
-            value: 'japan',
-            emoji: '🇯🇵',
-            desc: 'Japan (日本)',
-        },
-        {
-            label: 'Korea',
-            value: 'korea',
-            emoji: '🇰🇷',
-            desc: 'Korea (韩国)',
-        },
-    ];
+    const brandOptions = useMemo<SelectProps['options']>(() => {
+        return brands ? brands.docs.map(brand => ({
+            label: brand.name,
+            value: brand._id
+        })) : []
+    }, [brands])
+
+    const categoryOptions = useMemo<SelectProps['options']>(() => {
+        return categories ? categories.docs.map(brand => ({
+            label: brand.name,
+            value: brand._id
+        })) : []
+    }, [categories])
     return (
         <div className='w-full flex flex-col'>
             <div className='w-full flex flex-col border-b-slate-100'>
@@ -50,17 +54,13 @@ const CustomHeader = () => {
                         mode="multiple"
                         size="large"
                         className='flex-1'
-                        placeholder="select one country"
-                        defaultValue={['china']}
+                        placeholder="Chọn thương hiệu"
                         onChange={handleChangeCategory}
                         optionLabelProp="label"
-                        options={options}
+                        options={brandOptions}
                         optionRender={(option) => (
                             <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
-                                </span>
-                                {option.data.desc}
+                                {option.label}
                             </Space>
                         )}
                     />
@@ -68,37 +68,32 @@ const CustomHeader = () => {
                         mode="multiple"
                         size="large"
                         className='flex-1'
-                        placeholder="select one country"
-                        defaultValue={['china']}
+
+                        placeholder="Chọn danh mục"
                         onChange={handleChangeCategory}
                         optionLabelProp="label"
-                        options={options}
+                        options={categoryOptions}
                         optionRender={(option) => (
                             <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
-                                </span>
-                                {option.data.desc}
+                                {option.label}
                             </Space>
                         )}
                     />
                     <Select
+
                         mode="multiple"
                         size="large"
                         className='flex-1'
-                        placeholder="select one country"
-                        defaultValue={['china']}
                         onChange={handleChangeCategory}
                         optionLabelProp="label"
-                        options={options}
-                        optionRender={(option) => (
-                            <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
-                                </span>
-                                {option.data.desc}
-                            </Space>
-                        )}
+                        placeholder="Chọn collection"
+                        options={[
+                            // { value: '', label: 'Chọn collection' },
+                            { value: 'man', label: "Man's Clothing" },
+                            { value: 'woman', label: "Women's Clothing" },
+                            { value: 'kid', label: "Kid's Clothing" },
+                            { value: 'unisex', label: "Unisex's Clothing" },
+                        ]}
                     />
                 </div>
 
