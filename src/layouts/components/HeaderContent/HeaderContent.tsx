@@ -7,17 +7,17 @@ import { FaBell } from 'react-icons/fa';
 
 const HeaderContent = () => {
   return (
-    <Card bordered={false} >
+    <Card bordered={false}>
       <div className="flex justify-between">
         <div className="flex items-center gap-4">
           <BiSearch size={25} />
           <Input placeholder="Search" className="outline-none border-none" />
         </div>
         <div className="flex gap-4 items-center">
-          <IoLanguageOutline size={25} className='text-slate-500' />
-          <MdOutlineLightMode size={25} className='text-slate-500' />
-        <BiCategory size={25} className='text-slate-500' />
-          <FaBell size={25} className='text-slate-500'/>
+          <IoLanguageOutline size={25} className="text-slate-500 cursor-pointer" />
+          <MdOutlineLightMode size={25} className="text-slate-500 cursor-pointer" />
+          <BiCategory size={25} className="text-slate-500 cursor-pointer" />
+          <FaBell size={25} className="text-slate-500 cursor-pointer" />
           <Avatar
             size={35}
             src="https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-1/images/avatars/avatar-1.png"

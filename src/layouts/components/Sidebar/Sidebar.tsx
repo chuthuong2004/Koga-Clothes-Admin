@@ -1,5 +1,3 @@
-import classNames from 'classnames/bind';
-import styles from './Sidebar.module.scss';
 import { NavLink } from 'react-router-dom';
 import * as config from '@/config';
 import { BsBarChart, BsChatSquare, BsPersonBadge, BsReceipt, BsTruck } from 'react-icons/bs';
@@ -9,7 +7,8 @@ import { FaTrademark } from 'react-icons/fa';
 import { useAppSelector } from '@/types/commons';
 import { useAuth } from '@/hooks/services';
 import { selectAuth } from '@/store/selectors';
-const cx = classNames.bind(styles);
+import { cn } from '@/utils';
+import { Typography } from 'antd';
 const links = [
   {
     to: config.routes.dashboard,
@@ -30,6 +29,11 @@ const links = [
     to: config.routes.category,
     icon: <BiCategory />,
     title: 'Danh mục',
+  },
+  {
+    to: config.routes.repository,
+    icon: <BiCategory />,
+    title: 'Kho lưu trữ',
   },
   {
     to: config.routes.product,
@@ -61,45 +65,34 @@ const links = [
 
 const Sidebar = () => {
   const { user } = useAppSelector(selectAuth);
-  const {handleLogout: onLogout} = useAuth()
+  const { handleLogout: onLogout } = useAuth()
   const handleLogout = async (link: any) => {
     if (link.to === '#') {
       await onLogout()
     }
   };
   return (
-    <div className={cx('container', 'h-screen')}>
-      <div className={cx('logo')}>Admin Koga</div>
-      <div className={cx('menu')}>
-        <div className={cx('menu__account')}>
-          <img
-            src={
-              user?.avatar
-                ? process.env.REACT_APP_API_URL + user.avatar
-                : 'https://vetra.laborasyon.com/assets/images/user/man_avatar3.jpg'
-            }
-            className={cx('menu__account__img')}
-            alt=""
-          />
-          <div className={cx('menu__account__info')}>
-            <h3>{user?.firstName ? user.firstName + ' ' + user?.lastName : user?.username}</h3>
-            <span>Quản lý bán hàng</span>
-          </div>
+    <div className='fixed top-0 bottom-0 left-0 z-10 w-[15vw] bg-card shadow-card px-4 py-8'>
+      <div className='flex flex-col w-full h-full mb-12'>
+        <div >
+          <Typography.Title level={2}>Admin Koga</Typography.Title>
         </div>
-        <div className={cx('menu__links')}>
-          {links.map((link, i) => (
-            <NavLink
-              key={i}
-              to={link.to}
-              onClick={() => handleLogout(link)}
-              className={(nav) =>
-                cx('menu__links--item', { active: nav.isActive && link.to !== '#' })
-              }
-            >
-              <span className={cx('icon')}>{link.icon}</span>
-              <span>{link.title}</span>
-            </NavLink>
-          ))}
+        <div className=' overflow-y-scroll'>
+          <div className='flex flex-col gap-2'>
+            {links.map((link, i) => (
+              <NavLink
+                key={i}
+                to={link.to}
+                onClick={() => handleLogout(link)}
+                className={(nav) =>
+                  cn('flex gap-4 p-4 rounded-lg py-4 items-center', nav.isActive && link.to !== '#' && 'bg-primary-gradient text-white')
+                }
+              >
+                <div className=''>{link.icon}</div>
+                <Typography.Text className={cn('text-current')}>{link.title}</Typography.Text>
+              </NavLink>
+            ))}
+          </div>
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { StoredProduct } from '@/types/commons';
 import { StoreMessage, StoreProvinceAddress, StoreUserAddress } from '@/types/entities';
 import { GenderUser } from '@/types/unions';
 import { OrderStatus } from '@/types/unions/order.union';
@@ -55,6 +56,7 @@ export type QueryOptions = {
   parent?: string; // with category
   brand?: string;
   category?: string;
+  creator?: string;
 };
 
 export type ParamAddToCart = {
@@ -128,4 +130,21 @@ export type ParamCreateProduct = {
   price: number;
   discount: number;
   keywords: string[];
+  storedProducts: StoredProduct[];
+};
+export type FolderUpload = 'avatars' | 'brands' | 'categories' | 'stores' | 'products' | 'reviews';
+
+export type ParamCreateBrand = {
+  name: string;
+  history: string;
+  image: string;
+  logo: string;
+};
+
+export type ParamCreateRepository = {
+  name: string;
+  description: string;
+  code: string;
+  images: string[];
+  address: StoreProvinceAddress;
 };

@@ -1,20 +1,20 @@
 import { orderService } from '@/services';
-import { OrderStatus, StoreOrder } from '@/types/entities';
-import { colorStatusOrder } from '@/utils/constants/color.constant';
-import { cn } from '@/utils/helpers';
-import './_order-detail.scss';
-import { Badge, Button, Select, Steps, StepsProps } from 'antd';
-import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import OrderDetailModify from './components/order-detail-modify';
-import { OrderDetailInfoUser } from './components/order-detail-info-user';
+import { OrderStatus } from '@/types/entities';
 import { FORMAT_DATE } from '@/utils/constants';
+import { colorStatusOrder } from '@/utils/constants/color.constant';
 import {
-  OptionsUpdateStatusOrder,
   OptionsStatusOrderDefault,
+  OptionsUpdateStatusOrder,
 } from '@/utils/constants/order.constant';
+import { cn } from '@/utils/helpers';
+import { Button, Select, Steps, StepsProps } from 'antd';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
+import './_order-detail.scss';
+import { OrderDetailInfoUser } from './components/order-detail-info-user';
+import OrderDetailModify from './components/order-detail-modify';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
@@ -106,8 +106,8 @@ const OrderDetail = () => {
           <Button className="bg-danger text-primary hover:bg-danger-hover">Delete Order</Button>
         </div>
       </div>
-      <div className="content flex flex-col w-full h-full gap-8 mt-10">
-        <div className="flex flex-col">
+      <div className="content flex flex-col w-full h-full gap-3  mt-10">
+      <div className="flex flex-col">
           <Steps
             current={currentStep}
             items={itemSteps}
@@ -124,12 +124,14 @@ const OrderDetail = () => {
             }}
           />
         </div>
-        <div className="info-detail-order  flex-2">
-          <OrderDetailModify order={order} />
-        </div>
-        <div className="info-detail-user f  lex-1 ">
-          <OrderDetailInfoUser order={order} />
-        </div>
+      <div className='flex gap-8'>
+          <div className="info-detail-order flex-2">
+            <OrderDetailModify order={order} />
+          </div>
+          <div className="info-detail-user flex-1 ">
+            <OrderDetailInfoUser order={order} />
+          </div>
+      </div>
       </div>
     </div>
   );

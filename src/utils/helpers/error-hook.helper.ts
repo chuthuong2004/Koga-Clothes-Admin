@@ -4,7 +4,9 @@ import axios from 'axios';
 export function handleErrorHooks(err: unknown, cb?: ErrCallbackType) {
   if (axios.isAxiosError(err) && err.response) {
     if (cb) {
-      cb(err);
+      console.log(err);
+
+      cb(err.response.data);
     }
   }
 }

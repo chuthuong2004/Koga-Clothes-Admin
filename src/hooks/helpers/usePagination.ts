@@ -42,7 +42,7 @@ export function usePagination<T>(
       return fetcher(query);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [query.search],
+    [query.search, query.limit, query.creator, query.page],
   );
 
   const { data, error, isValidating, isLoading, mutate } = useSWR(key, callback, {
@@ -52,7 +52,9 @@ export function usePagination<T>(
 
   useEffect(() => {
     mutate();
-  }, [query.search, mutate]);
+  }, [query.search, query.limit, query.creator, mutate]);
+
+  const handleChangePage = useCallback(() => {}, []);
 
   /**
    * @remarks
