@@ -1,45 +1,39 @@
 import { orderService } from '@/services';
-import { OrderStatus, StoreOrder } from '@/types/entities';
-import { colorStatusOrder } from '@/utils/constants/color.constant';
-import { cn } from '@/utils/helpers';
-import './_order-detail.scss';
-import { Badge, Button, Select, Steps, StepsProps } from 'antd';
-import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import OrderDetailModify from './components/order-detail-modify';
-import { OrderDetailInfoUser } from './components/order-detail-info-user';
+import { OrderStatus } from '@/types/entities';
 import { FORMAT_DATE } from '@/utils/constants';
+import { colorStatusOrder } from '@/utils/constants/color.constant';
 import {
-  OptionsUpdateStatusOrder,
   OptionsStatusOrderDefault,
+  OptionsUpdateStatusOrder,
 } from '@/utils/constants/order.constant';
+import { cn } from '@/utils/helpers';
+import { Button, Steps, StepsProps } from 'antd';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
+import './_order-detail.scss';
+import { OrderDetailInfoUser } from './components/order-detail-info-user';
+import OrderDetailModify from './components/order-detail-modify';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
 
-  const [valueSelect, setValueSelect] = useState<OrderStatus>();
   const { data: order, mutate } = useSWR(
     `OrderDetails${orderId}`,
-    () => (orderId ? orderService.getById(orderId) : undefined),
+    () => {
+      return orderId ? orderService.getById(orderId) : undefined;
+    },
     {
-      onError(err, key, config) {},
+      onError(err, key, config) {
+        console.log(err);
+      },
     },
   );
-  useEffect(() => {
-    if (order) {
-      setValueSelect(OptionsStatusOrderDefault[order.orderStatus].value);
-    }
-    return () => {
-      // mutate(() => undefined, { revalidate: false });
-    };
-  }, [order, mutate]);
 
   console.log(order);
 
   const colorStatus = colorStatusOrder[order?.orderStatus as OrderStatus];
-  console.log(valueSelect);
   const [currentStep, setCurrentStep] = useState<number>(3);
 
   const [itemSteps, setItemSteps] = useState<StepsProps['items']>([]);
@@ -61,7 +55,7 @@ const OrderDetail = () => {
       },
     );
     setItemSteps(itemsStep);
-  }, [order?.orderStatus]);
+  }, []);
 
   return (
     <div className="h-full ">
@@ -94,15 +88,6 @@ const OrderDetail = () => {
           </div>
         </div>
         <div className="flex gap-5 items-center">
-          <Select
-            size="large"
-            onChange={(value) => {
-              setValueSelect(value as OrderStatus);
-            }}
-            value={OptionsStatusOrderDefault[valueSelect as OrderStatus]?.label}
-            style={{ minWidth: 180 }}
-            options={[OptionsUpdateStatusOrder[valueSelect as OrderStatus] || {}]}
-          />
           <Button className="bg-danger text-primary hover:bg-danger-hover">Delete Order</Button>
         </div>
       </div>
@@ -116,11 +101,15 @@ const OrderDetail = () => {
               const statusNext = OptionsUpdateStatusOrder[itemStepCurrent?.title as OrderStatus];
               const itemStepNext = itemSteps?.[current];
               if (itemStepNext?.title !== statusNext.value) return;
-              console.log('go to');
               setCurrentStep(current);
-              orderService.updateOrder(order?._id || '', {
-                orderStatus: itemStepNext?.title as OrderStatus,
-              });
+              try {
+                const newOrder = await orderService.updateOrder(order?._id || '', {
+                  orderStatus: itemStepNext?.title as OrderStatus,
+                });
+                mutate({ ...newOrder });
+              } catch (error) {
+                console.log(error);
+              }
             }}
           />
         </div>

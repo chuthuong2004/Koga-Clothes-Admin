@@ -5,6 +5,7 @@ import DataTable, { Alignment, Direction } from 'react-data-table-component';
 import { columns } from './column';
 import { StatusOrderItem } from '../status-order-item';
 import { statusCombineTime } from '../../constrants';
+import { useSWRConfig } from 'swr';
 
 type OrderProps = {
   order?: StoreOrder;
@@ -21,6 +22,7 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
     selectAllRowsItemText: 'Todos',
   };
 
+  console.log(order);
   const timesStatusOrder: TimeStatusOrder[] = Object.keys(statusCombineTime).map((key) => {
     const fieldTime = statusCombineTime[key as OrderStatus];
     return {
@@ -29,7 +31,8 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
     };
   });
 
-  console.log(order);
+  console.log(timesStatusOrder);
+
   return (
     <div className="flex flex-col gap-10">
       <Card
@@ -102,12 +105,17 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
               </div>
               <div className="item-info-price">
                 <span className="text-[#2f2b3d] text-2xl mr-2">Total:</span>
-                <span className="text-[#2f2b3d] text-2xl mr-2">
-                  {order?.totalPrice.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
-                </span>
+                {order ? (
+                  <span className="text-[#2f2b3d] text-2xl mr-2">
+                    {(order?.totalPrice + order?.taxPrice + order?.shippingPrice)?.toLocaleString(
+                      'vi-VN',
+                      {
+                        style: 'currency',
+                        currency: 'VND',
+                      },
+                    )}
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>

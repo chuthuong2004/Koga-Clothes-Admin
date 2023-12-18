@@ -1,5 +1,4 @@
 import { ColorStatusOrder } from '@/types/commons/order.type';
-import { OrderStatus } from '@/types/unions/order.union';
 
 export const colorStatusOrder: ColorStatusOrder = {
   Processing: {

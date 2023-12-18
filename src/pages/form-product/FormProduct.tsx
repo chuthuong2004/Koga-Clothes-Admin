@@ -25,12 +25,15 @@ export type FormCreateProduct = {
   keywords: string[];
   colors: { colorName: string }[];
   sizes: { sizeName: string }[];
-  medias: Record<string, {
-    images: UploadFile<any>[];
-    imageSmall: UploadFile<any>[]
-    imageMedium: UploadFile<any>[]
-  }>
-  repositories: { repository: string }[]
+  medias: Record<
+    string,
+    {
+      images: UploadFile<any>[];
+      imageSmall: UploadFile<any>[];
+      imageMedium: UploadFile<any>[];
+    }
+  >;
+  repositories: { repository: string }[];
   storedProducts: {
     repository: string;
     colors: {
@@ -40,13 +43,13 @@ export type FormCreateProduct = {
       sizes: {
         size: string;
         quantity: string;
-      }[]
-    }[]
-  }[]
-}
+      }[];
+    }[];
+  }[];
+};
 const FormProduct = () => {
   // const [editorState, setEditorState] = React.useState(() => EditorState.createEmpty());
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const methods = useForm<FormCreateProduct>({
     defaultValues: {
       name: '',
@@ -62,49 +65,55 @@ const FormProduct = () => {
       storedProducts: [
         {
           repository: '',
-          colors: [{
-            imageMedium: '',
-            images: [],
-            imageSmall: '',
-            sizes: [
-              {
-                "quantity": '',
-                size: ''
-              }
-            ]
-          }]
+          colors: [
+            {
+              imageMedium: '',
+              images: [],
+              imageSmall: '',
+              sizes: [
+                {
+                  quantity: '',
+                  size: '',
+                },
+              ],
+            },
+          ],
         },
         {
           repository: '',
-          colors: [{
-            imageMedium: '',
-            images: [],
-            imageSmall: '',
-            sizes: [
-              {
-                "quantity": '',
-                size: ''
-              }
-            ]
-          }]
-        }
+          colors: [
+            {
+              imageMedium: '',
+              images: [],
+              imageSmall: '',
+              sizes: [
+                {
+                  quantity: '',
+                  size: '',
+                },
+              ],
+            },
+          ],
+        },
       ],
-      colors: [{
-        colorName: ''
-      }],
+      colors: [
+        {
+          colorName: '',
+        },
+      ],
       medias: {},
       sizes: [
         {
-          sizeName: ''
-        }
+          sizeName: '',
+        },
       ],
       repositories: [
         {
-          repository: ''
-        }
-      ]
-    }
-  })
+          repository: '',
+        },
+      ],
+    },
+  });
   const onSubmit = (data: FormCreateProduct) => {
     const descContentState = convertToRaw(data.description.getCurrentContent());
     const preserveContentState = convertToRaw(data.preserveInformation.getCurrentContent());
@@ -117,30 +126,33 @@ const FormProduct = () => {
       preserveInformation: draftToHtml(preserveContentState),
       price: parseInt(data.price, 10),
       discount: parseInt(data.discount, 10),
-    }
-    console.log("Current: ", current);
+    };
+    console.log('Current: ', current);
 
     if (data.colors.length > 0 && current === 2) {
-      console.log("VOO");
-      const medias = data.colors.reduce((acc, item) => ({
-        ...acc,
-        [item.colorName]: {
-          images: [],
-          imageMedium: [],
-          imageSmall: []
-        }
-      }), {})
-      dispatch(setFormMedias(medias))
-      console.log("medica: ", medias);
-      methods.setValue('medias', medias)
+      console.log('VOO');
+      const medias = data.colors.reduce(
+        (acc, item) => ({
+          ...acc,
+          [item.colorName]: {
+            images: [],
+            imageMedium: [],
+            imageSmall: [],
+          },
+        }),
+        {},
+      );
+      dispatch(setFormMedias(medias));
+      console.log('medica: ', medias);
+      methods.setValue('medias', medias);
     }
-    setCurrent(prev => prev + 1)
+    setCurrent((prev) => prev + 1);
     console.log(newData);
-  }
+  };
 
   const onError = (err: any) => {
     console.log(err);
-  }
+  };
   const [current, setCurrent] = useState(0);
 
   const onChange = (value: number) => {
@@ -150,7 +162,7 @@ const FormProduct = () => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit, onError)} className='flex flex-col flex-gap12'>
+      <form onSubmit={methods.handleSubmit(onSubmit, onError)} className="flex flex-col flex-gap12">
         {/* <div className="flex flex-col gap-8">
           <div className="flex justify-between items-center">
             <div>
@@ -185,11 +197,11 @@ const FormProduct = () => {
             </Col>
           </Row>
         </div> */}
-        <Space direction='vertical'>
+        <Space direction="vertical">
           <Steps
             current={current}
             onChange={onChange}
-            status='process'
+            status="process"
             responsive
             items={[
               {
@@ -199,46 +211,48 @@ const FormProduct = () => {
               },
               {
                 title: 'Step 2',
-                description: "Organization",
+                description: 'Organization',
                 disabled: current < 1,
               },
               {
                 title: 'Step 3',
-                description: "Pricing & Variants",
-                disabled: current < 2
+                description: 'Pricing & Variants',
+                disabled: current < 2,
               },
               {
                 title: 'Step 4',
-                description: "Medias",
-                disabled: current < 3
+                description: 'Medias',
+                disabled: current < 3,
               },
               {
                 title: 'Step 5',
-                description: "Inventory",
-                disabled: current < 4
+                description: 'Inventory',
+                disabled: current < 4,
               },
             ]}
-
           />
           {current === 0 && <FormInfoBasic />}
           {current === 1 && <FormOrganization />}
-          {current === 2 && <div className="grid grid-cols-2 gap-4 w-full">
-            < FormPricing />
-            <FormInventory />
-            <FormVariants />
-            <FormSize />
-          </div>}
+          {current === 2 && (
+            <div className="grid grid-cols-2 gap-4 w-full">
+              <FormPricing />
+              <FormInventory />
+              <FormVariants />
+              <FormSize />
+            </div>
+          )}
           {current === 3 && <FormMedias />}
           {current === 4 && <FormVariants />}
-          <div className='flex justify-between'>
-            <Button size="large" danger>Previous</Button>
-            <Button size="large" type="primary" onClick={methods.handleSubmit(onSubmit, onError)}>Next</Button>
+          <div className="flex justify-between">
+            <Button size="large" danger>
+              Previous
+            </Button>
+            <Button size="large" type="primary" onClick={methods.handleSubmit(onSubmit, onError)}>
+              Next
+            </Button>
           </div>
         </Space>
-
       </form>
-
-
     </FormProvider>
   );
 };

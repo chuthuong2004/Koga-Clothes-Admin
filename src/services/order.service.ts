@@ -13,7 +13,7 @@ const orderService = {
   getById: async (id: StoreOrder['_id']): Promise<StoreOrder> => axiosClient.get(`${URL}/${id}`),
   cancelOrder: async (id: StoreOrder['_id'], body: ParamCancelOrder) =>
     axiosClient.patch(`${URL}/${id}/cancel`, body),
-  updateOrder: async (id: StoreOrder['_id'], body: ParamUpdateOrder) =>
+  updateOrder: async (id: StoreOrder['_id'], body: ParamUpdateOrder): Promise<StoreOrder> =>
     axiosClient.patch(`${URL}/${id}`, body),
 };
 export default orderService;

@@ -1,4 +1,9 @@
-import { StoreMessage, StoreProvinceAddress, StoreUserAddress } from '@/types/entities';
+import {
+  StoreCategory,
+  StoreMessage,
+  StoreProvinceAddress,
+  StoreUserAddress,
+} from '@/types/entities';
 import { GenderUser } from '@/types/unions';
 import { OrderStatus } from '@/types/unions/order.union';
 
@@ -128,4 +133,9 @@ export type ParamCreateProduct = {
   price: number;
   discount: number;
   keywords: string[];
+};
+
+export type ParamsCreateCategory = Pick<StoreCategory, 'name'> & {
+  parent: string;
+  gender: string[];
 };
