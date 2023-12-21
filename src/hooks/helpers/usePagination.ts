@@ -42,7 +42,7 @@ export function usePagination<T>(
       return fetcher(query);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [query.search, query.limit, query.creator, query.page],
+    [key,query.search, query.limit, query.creator, query.page],
   );
 
   const { data, error, isValidating, isLoading, mutate } = useSWR(key, callback, {
@@ -52,9 +52,12 @@ export function usePagination<T>(
 
   useEffect(() => {
     mutate();
-  }, [query.search, query.limit, query.creator, mutate]);
+  }, [key, query.search, query.limit, query.creator, mutate]);
 
-  const handleChangePage = useCallback(() => {}, []);
+  const handleChangePage = useCallback(() => {
+    // setCurrentPage(2)
+    // mutate(key+page) // => data
+  }, []);
 
   /**
    * @remarks

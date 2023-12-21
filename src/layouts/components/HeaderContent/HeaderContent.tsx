@@ -4,8 +4,12 @@ import { MdOutlineLightMode } from 'react-icons/md';
 import { IoLanguageOutline } from 'react-icons/io5';
 import { BiCategory } from 'react-icons/bi';
 import { FaBell } from 'react-icons/fa';
+import { useAppSelector } from '@/types/commons';
+import { selectAuth } from '@/store/selectors';
+import { getFirstLetter } from '@/utils';
 
 const HeaderContent = () => {
+  const { user, colorUser } = useAppSelector(selectAuth)
   return (
     <Card bordered={false}>
       <div className="flex justify-between">
@@ -20,8 +24,9 @@ const HeaderContent = () => {
           <FaBell size={25} className="text-slate-500 cursor-pointer" />
           <Avatar
             size={35}
-            src="https://demos.pixinvent.com/vuexy-vuejs-admin-template/demo-1/images/avatars/avatar-1.png"
-          />
+            style={{ background: colorUser }}
+            src={user?.avatar ? process.env.REACT_APP_API_URL + user.avatar : undefined}
+          >{getFirstLetter(user?.firstName + ' ' + user?.lastName)}</Avatar>
         </div>
       </div>
     </Card>
