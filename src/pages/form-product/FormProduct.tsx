@@ -14,11 +14,13 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { ParamCreateProduct } from '@/services/types';
 import draftToHtml from 'draftjs-to-html';
 import { useState } from 'react';
-import { StoreColor, StoredProduct, useAppDispatch } from '@/types/commons';
-import { setFormMedias } from '@/store/actions';
+import { StoreColor, StoredProduct } from '@/types/commons';
 import FormSize from './components/FormSize';
 import { uploadImageProduct } from '@/utils';
-import { useProduct } from '@/hooks/services/useProduct';
+import { useProduct } from '@/hooks/services';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '@/config';
+import { toast } from 'react-toastify';
 export type FormCreateProduct = {
   name: string;
   code: string;
@@ -45,6 +47,7 @@ export type FormCreateProduct = {
   storedProducts: StoredProduct[];
 };
 const FormProduct = () => {
+  const navigate = useNavigate()
   const { onCreateProduct } = useProduct()
   const methods = useForm<FormCreateProduct>({
     defaultValues: {
@@ -201,7 +204,8 @@ const FormProduct = () => {
       console.log('Data submit: ', newData);
       onCreateProduct(newData, () => {
         console.log("Tạo thành công !");
-
+        toast.success('Thêm mới sản phẩm thành công !')
+        navigate(routes.product)
       }, ({ message }) => {
         console.log({ message });
 

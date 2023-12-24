@@ -2,16 +2,19 @@ import { ConversationItem } from '@/components/app'
 import { useListenConversation } from '@/hooks/events/useListenConversation'
 import { usePagination } from '@/hooks/helpers'
 import { conversationService } from '@/services'
+import { selectAuth } from '@/store/selectors'
+import { useAppSelector } from '@/types/commons'
 import { Typography } from 'antd'
-import React from 'react'
+import { memo } from 'react'
 
 const ListConversation = () => {
-  const { data } = usePagination("ListConversation", {
+  const {user} = useAppSelector(selectAuth)
+  const { data } = usePagination(`ListConversation${user?._id}`, {
     limit: 10,
     offset: 0,
     page: 1
   }, conversationService.getMyConversation)
-  useListenConversation("ListConversation")
+  useListenConversation(`ListConversation${user?._id}`)
   console.log("data: ", data);
 
   return (
@@ -27,4 +30,4 @@ const ListConversation = () => {
   )
 }
 
-export default ListConversation
+export default memo(ListConversation)

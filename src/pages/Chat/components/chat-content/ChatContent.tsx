@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { ChatHeading, ChatBody, ChatBottom, EmptyChat } from './components'
 import { useAppSelector } from '@/types/commons'
 import { selectChat } from '@/store/selectors'
 
 const ChatContent = () => {
+
     const { selectedConversation } = useAppSelector(selectChat)
     return (
         <div className='flex-4 h-full'>
             {selectedConversation ? <div className='flex flex-col h-full'>
-                <ChatHeading />
+                <ChatHeading/>
                 <ChatBody />
                 <ChatBottom />
             </div> : <EmptyChat />
@@ -18,4 +19,4 @@ const ChatContent = () => {
     )
 }
 
-export default ChatContent
+export default memo(ChatContent)

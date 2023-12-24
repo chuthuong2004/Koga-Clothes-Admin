@@ -5,3 +5,4 @@ export * from './useOTP';
 export * from './useProfile';
 export * from './useBrand';
 export * from './useRepository';
+export * from './useProduct';

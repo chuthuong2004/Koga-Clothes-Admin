@@ -1,1 +1,1 @@
-export {setSelectedConversation} from '../slices/chat.slice'
+export {setSelectedConversation, toggleSidebar} from '../slices/chat.slice'

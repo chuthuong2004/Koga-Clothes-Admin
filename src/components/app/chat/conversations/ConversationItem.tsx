@@ -1,4 +1,4 @@
-import { setSelectedConversation } from '@/store/actions';
+import { setSelectedConversation, toggleSidebar } from '@/store/actions';
 import { selectAuth, selectChat } from '@/store/selectors';
 import { useAppDispatch, useAppSelector } from '@/types/commons';
 import { StoreConversation } from '@/types/entities';
@@ -20,7 +20,7 @@ const ConversationItem = ({ conversation }: ConversationItemProps) => {
   const handleJoinConversation = () => {
     if (selectedConversation?._id === conversation._id) return
     dispatch(setSelectedConversation(conversation))
-
+    dispatch(toggleSidebar())
   }
   const activeChat = selectedConversation && conversation._id === selectedConversation._id
 
@@ -35,6 +35,7 @@ const ConversationItem = ({ conversation }: ConversationItemProps) => {
         {conversation.lastMessage && (
 
           <div>
+            {conversation.lastMessage.sender._id === user?._id && <Typography.Text className={cn('text-slate-500', activeChat && 'text-slate-200')}>Bạn: </Typography.Text>}
             <Typography.Text className={cn('text-slate-500', activeChat && 'text-slate-200')}>{conversation.lastMessage.text}</Typography.Text>
           </div>
         )}

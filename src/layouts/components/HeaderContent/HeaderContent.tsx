@@ -1,19 +1,27 @@
 import { Avatar, Card, Input } from 'antd';
 import { BiSearch } from 'react-icons/bi';
-import { MdOutlineLightMode } from 'react-icons/md';
+import { MdOutlineDehaze, MdOutlineLightMode } from 'react-icons/md';
 import { IoLanguageOutline } from 'react-icons/io5';
 import { BiCategory } from 'react-icons/bi';
 import { FaBell } from 'react-icons/fa';
 import { useAppSelector } from '@/types/commons';
 import { selectAuth } from '@/store/selectors';
 import { getFirstLetter } from '@/utils';
+import useMediaQuery from 'beautiful-react-hooks/useMediaQuery';
 
-const HeaderContent = () => {
-  const { user, colorUser } = useAppSelector(selectAuth)
+type HeaderContentProps = {
+  toggleSidebar: () => void;
+}
+const HeaderContent = ({toggleSidebar}: HeaderContentProps) => {
+  const { user, colorUser } = useAppSelector(selectAuth) 
+  const isTablet = useMediaQuery("(max-width: 68rem)")
   return (
     <Card bordered={false}>
       <div className="flex justify-between">
         <div className="flex items-center gap-4">
+          {isTablet &&
+            <MdOutlineDehaze onClick={toggleSidebar} size={25} className='cursor-pointer' />
+          }
           <BiSearch size={25} />
           <Input placeholder="Search" className="outline-none border-none" />
         </div>
