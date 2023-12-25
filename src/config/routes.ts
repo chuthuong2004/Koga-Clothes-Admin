@@ -13,5 +13,6 @@ const routes = {
   register: '/register',
   home: '/',
   orderDetail: '/order-detail/:orderId',
+  role: '/role',
 };
 export default routes;
