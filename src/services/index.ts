@@ -13,6 +13,7 @@ import socketServices from './socket.service';
 import uploadService from './upload.service';
 import userService from './user.service';
 import repositoryService from './repository.service';
+import staffService from './staff.service';
 
 export {
   addressService,
@@ -29,5 +30,6 @@ export {
   socketServices,
   uploadService,
   userService,
-  repositoryService
+  repositoryService,
+  staffService
 };

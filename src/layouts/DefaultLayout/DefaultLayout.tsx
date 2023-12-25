@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import React, { useEffect, ReactNode } from 'react';
 import HeaderContent from '../components/HeaderContent';
 import Sidebar from '../components/Sidebar';
+import { routes } from '@/config';
 
 type Props = {
   children: ReactNode;
@@ -22,11 +23,9 @@ const DefaultLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className='flex bg-background'>
       <Sidebar />
-      <div className='flex flex-col flex-1 mx-20 mt-12 gap-12'>
+      <div className='flex flex-col flex-1 mx-20 mt-12 ml-[calc(15vw+2rem)] gap-12'>
         <HeaderContent />
-        <div className='min-h-screen pb-60' > {children} </div>
-        {/* 
-        {pathname !== config.routes.chat && <FooterContent />} */}
+        <div className={`${pathname !== routes.chat && 'min-h-screen pb-60'} `} > {children} </div>
       </div>
     </div>
   );

@@ -305,7 +305,7 @@ select {
 
 // ** Custom shadow
 .shadow-card {
-  box-shadow: 0 2px 6px rgba(50, 15, 174, 0.14), 0 0 transparent, 0 0 transparent;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 // ** Reset tailwind
@@ -317,4 +317,8 @@ button.ant-btn-primary {
 .rdt_Pagination {
   border-bottom-left-radius: 50;
   background-color: red;
+}
+
+.bg-primary-gradient {
+  background: linear-gradient(72.47deg,#eb3d63 22.16%, #eb3d63db   76.47%)!important
 }

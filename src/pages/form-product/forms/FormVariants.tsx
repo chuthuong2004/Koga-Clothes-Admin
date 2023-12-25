@@ -1,6 +1,7 @@
 import { Button, Card, Input, Space, Typography } from 'antd'
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
 import { FormCreateProduct } from '../FormProduct'
+import { PATTERN_NUMBER } from '@/utils'
 
 const FormVariants = () => {
     const { control, formState: { errors }, } = useFormContext<FormCreateProduct>()

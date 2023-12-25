@@ -133,9 +133,10 @@ const FormOrganization = () => {
                 placeholder="Chọn collection"
                 options={[
                   // { value: '', label: 'Chọn collection' },
-                  { value: 'Man', label: "Man's Clothing" },
-                  { value: 'Woman', label: "Women's Clothing" },
-                  { value: 'Kids', label: "Kid's Clothing" },
+                  { value: 'man', label: "Man's Clothing" },
+                  { value: 'woman', label: "Women's Clothing" },
+                  { value: 'kid', label: "Kid's Clothing" },
+                  { value: 'unisex', label: "Unisex's Clothing" },
                 ]}
               />
             )}

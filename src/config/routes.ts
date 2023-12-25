@@ -5,6 +5,7 @@ const routes = {
   createProduct: '/products/create',
   customer: '/customers',
   category: '/categories',
+  repository: '/repositories',
   brand: '/brands',
   chat: '/chat',
   review: '/reviews',

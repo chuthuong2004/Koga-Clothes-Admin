@@ -91,8 +91,8 @@ const OrderDetail = () => {
           <Button className="bg-danger text-primary hover:bg-danger-hover">Delete Order</Button>
         </div>
       </div>
-      <div className="content flex flex-col w-full h-full gap-8 mt-10">
-        <div className="flex flex-col">
+      <div className="content flex flex-col w-full h-full gap-3  mt-10">
+      <div className="flex flex-col">
           <Steps
             current={currentStep}
             items={itemSteps}
@@ -113,12 +113,14 @@ const OrderDetail = () => {
             }}
           />
         </div>
-        <div className="info-detail-order  flex-2">
-          <OrderDetailModify order={order} />
-        </div>
-        <div className="info-detail-user f  lex-1 ">
-          <OrderDetailInfoUser order={order} />
-        </div>
+      <div className='flex gap-8'>
+          <div className="info-detail-order flex-2">
+            <OrderDetailModify order={order} />
+          </div>
+          <div className="info-detail-user flex-1 ">
+            <OrderDetailInfoUser order={order} />
+          </div>
+      </div>
       </div>
     </div>
   );

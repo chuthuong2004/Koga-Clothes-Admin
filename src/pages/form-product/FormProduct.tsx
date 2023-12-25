@@ -1,16 +1,24 @@
 import { Button, Space, Steps, UploadFile } from 'antd';
 
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormPricing, FormOrganization, FormInfoBasic, FormVariants } from './forms';
+import {
+  FormPricing,
+  FormOrganization,
+  FormInfoBasic,
+  FormVariants,
+  FormQuantity,
+  FormMedias,
+  FormInventory,
+} from './forms';
 import { EditorState, convertToRaw } from 'draft-js';
 import { ParamCreateProduct } from '@/services/types';
 import draftToHtml from 'draftjs-to-html';
 import { useState } from 'react';
-import FormMedias from './forms/FormMedias';
-import FormInventory from './forms/FormInventory';
-import FormSize from './components/FormSize';
-import { useAppDispatch } from '@/types/commons';
+import { StoreColor, StoredProduct, useAppDispatch } from '@/types/commons';
 import { setFormMedias } from '@/store/actions';
+import FormSize from './components/FormSize';
+import { uploadImageProduct } from '@/utils';
+import { useProduct } from '@/hooks/services/useProduct';
 export type FormCreateProduct = {
   name: string;
   code: string;
@@ -120,7 +128,13 @@ const FormProduct = () => {
     const deliveryContentState = convertToRaw(data.deliveryReturnPolicy.getCurrentContent());
 
     const newData: ParamCreateProduct = {
-      ...data,
+      brand: data.brand,
+      category: data.category,
+      code: data.code,
+      gender: data.gender,
+      keywords: data.keywords,
+      name: data.name,
+      storedProducts: data.storedProducts,
       description: draftToHtml(descContentState),
       deliveryReturnPolicy: draftToHtml(deliveryContentState),
       preserveInformation: draftToHtml(preserveContentState),
@@ -129,6 +143,7 @@ const FormProduct = () => {
     };
     console.log('Current: ', current);
 
+    // ** Submit variants
     if (data.colors.length > 0 && current === 2) {
       console.log('VOO');
       const medias = data.colors.reduce(
