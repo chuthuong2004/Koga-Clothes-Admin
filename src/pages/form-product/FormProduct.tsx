@@ -42,22 +42,10 @@ export type FormCreateProduct = {
     }
   >;
   repositories: { repository: string }[];
-  storedProducts: {
-    repository: string;
-    colors: {
-      imageSmall: string;
-      imageMedium: string;
-      images: string[];
-      sizes: {
-        size: string;
-        quantity: string;
-      }[];
-    }[];
-  }[];
+  storedProducts: StoredProduct[];
 };
 const FormProduct = () => {
-  // const [editorState, setEditorState] = React.useState(() => EditorState.createEmpty());
-  const dispatch = useAppDispatch();
+  const { onCreateProduct } = useProduct()
   const methods = useForm<FormCreateProduct>({
     defaultValues: {
       name: '',
@@ -122,7 +110,7 @@ const FormProduct = () => {
       ],
     },
   });
-  const onSubmit = (data: FormCreateProduct) => {
+  const onSubmit = async (data: FormCreateProduct) => {
     const descContentState = convertToRaw(data.description.getCurrentContent());
     const preserveContentState = convertToRaw(data.preserveInformation.getCurrentContent());
     const deliveryContentState = convertToRaw(data.deliveryReturnPolicy.getCurrentContent());
@@ -157,9 +145,68 @@ const FormProduct = () => {
         }),
         {},
       );
-      dispatch(setFormMedias(medias));
-      console.log('medica: ', medias);
       methods.setValue('medias', medias);
+    }
+    // ** Submit images
+    if (current === 3) {
+      const colors: StoreColor[] = data.colors.map((color) => {
+        return {
+          colorName: color.colorName,
+          sizes: data.sizes.map((size) => {
+            return {
+              size: size.sizeName,
+              quantity: '',
+              _id: '',
+            };
+          }),
+          imageMedium: '',
+          images: [''],
+          imageSmall: '',
+          _id: '',
+        };
+      });
+      const storedProductsTemp: StoredProduct[] = data.repositories
+        .filter((item) => item.repository)
+        .map((repo) => {
+          return {
+            repository: repo.repository,
+            colors: colors,
+          };
+        });
+      methods.setValue('storedProducts', storedProductsTemp);
+    }
+
+    // ** Submit quantity
+    if (current === 4) {
+      const storedProducts = data.storedProducts
+      if (data.medias) {
+        const listFileMedia = Object.values(data.medias);
+        for (let i = 0; i < listFileMedia.length; i++) {
+          const media = listFileMedia[i];
+          const uploaded = await uploadImageProduct(
+            media.images
+              .map((file) => (file.originFileObj)),
+            media.imageSmall[0].originFileObj,
+            media.imageMedium[0].originFileObj,
+          );
+          data.storedProducts.forEach((storedProduct, index) => {
+            storedProducts[index].colors[i].images = uploaded.images
+            storedProducts[index].colors[i].imageSmall = uploaded.imageSmall
+            storedProducts[index].colors[i].imageMedium = uploaded.imageMedium
+          })
+        }
+      }
+      newData.storedProducts = storedProducts;
+
+      console.log('Data submit: ', newData);
+      onCreateProduct(newData, () => {
+        console.log("Tạo thành công !");
+
+      }, ({ message }) => {
+        console.log({ message });
+
+      })
+      return;
     }
     setCurrent((prev) => prev + 1);
     console.log(newData);
@@ -257,7 +304,7 @@ const FormProduct = () => {
             </div>
           )}
           {current === 3 && <FormMedias />}
-          {current === 4 && <FormVariants />}
+          {current === 4 && <FormQuantity />}
           <div className="flex justify-between">
             <Button size="large" danger>
               Previous

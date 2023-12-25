@@ -4,17 +4,17 @@ import { useToggle } from '@/hooks/utils';
 import { StoreRepository } from '@/types/entities';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Modal } from 'antd';
-import { memo } from 'react'
+import { memo } from 'react';
 import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
 type ActionColumnProps = {
   id: string;
-  repository: StoreRepository
-}
+  repository: StoreRepository;
+};
 const ActionColumn = ({ id, repository }: ActionColumnProps) => {
-  const { onDeleteRepository } = useRepository()
-  const { isOpen, onClose, toggle } = useToggle(false)
+  const { onDeleteRepository } = useRepository();
+  const { isOpen, onClose, toggle } = useToggle(false);
   const showDeleteConfirm = () => {
     Modal.confirm({
       title: 'Bạn có chắc chắn muốn xoá kho ?',
@@ -26,12 +26,16 @@ const ActionColumn = ({ id, repository }: ActionColumnProps) => {
       centered: true,
 
       onOk() {
-        onDeleteRepository(id, () => {
-          toast.success("Xoá kho thành công !")
-        }, ({ message }) => {
-          console.log(message);
-          toast.error(message)
-        })
+        onDeleteRepository(
+          id,
+          () => {
+            toast.success('Xoá kho thành công !');
+          },
+          ({ message }) => {
+            console.log(message);
+            toast.error(message);
+          },
+        );
       },
       onCancel() {
         console.log('Cancel');
@@ -45,6 +49,6 @@ const ActionColumn = ({ id, repository }: ActionColumnProps) => {
       <FormRepository onClose={onClose} open={isOpen} repository={repository} type="Edit" />
     </div>
   );
-}
+};
 
-export default memo(ActionColumn)
+export default memo(ActionColumn);

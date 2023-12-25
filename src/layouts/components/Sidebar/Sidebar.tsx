@@ -9,6 +9,7 @@ import { useAuth } from '@/hooks/services';
 import { selectAuth } from '@/store/selectors';
 import { cn } from '@/utils';
 import { Typography } from 'antd';
+import { IoSettingsOutline } from 'react-icons/io5';
 const links = [
   {
     to: config.routes.dashboard,
@@ -57,6 +58,11 @@ const links = [
     title: 'Đánh giá',
   },
   {
+    to: config.routes.role,
+    icon: <IoSettingsOutline />,
+    title: 'Role',
+  },
+  {
     to: '#',
     icon: <MdLogout />,
     title: 'Đăng xuất',
@@ -65,30 +71,33 @@ const links = [
 
 const Sidebar = () => {
   const { user } = useAppSelector(selectAuth);
-  const { handleLogout: onLogout } = useAuth()
+  const { handleLogout: onLogout } = useAuth();
   const handleLogout = async (link: any) => {
     if (link.to === '#') {
-      await onLogout()
+      await onLogout();
     }
   };
   return (
-    <div className='fixed top-0 bottom-0 left-0 z-10 w-[15vw] bg-card shadow-card px-4 py-8'>
-      <div className='flex flex-col w-full h-full mb-12'>
-        <div >
+    <div className="fixed top-0 bottom-0 left-0 z-10 w-[15vw] bg-card shadow-card px-4 py-8">
+      <div className="flex flex-col w-full h-full mb-12">
+        <div>
           <Typography.Title level={2}>Admin Koga</Typography.Title>
         </div>
-        <div className=' overflow-y-scroll'>
-          <div className='flex flex-col gap-2'>
+        <div className=" overflow-y-scroll">
+          <div className="flex flex-col gap-2">
             {links.map((link, i) => (
               <NavLink
                 key={i}
                 to={link.to}
                 onClick={() => handleLogout(link)}
                 className={(nav) =>
-                  cn('flex gap-4 p-4 rounded-lg py-4 items-center', nav.isActive && link.to !== '#' && 'bg-primary-gradient text-white')
+                  cn(
+                    'flex gap-4 p-4 rounded-lg py-4 items-center',
+                    nav.isActive && link.to !== '#' && 'bg-primary-gradient text-white',
+                  )
                 }
               >
-                <div className=''>{link.icon}</div>
+                <div className="">{link.icon}</div>
                 <Typography.Text className={cn('text-current')}>{link.title}</Typography.Text>
               </NavLink>
             ))}
