@@ -7,17 +7,19 @@ import { BASE_URL } from '@/config';
 
 // ** Class
 class WebSocketService {
-  // public socket: Socket<ServerToClientEvents, ClientToServerEvents>;
+  public socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   constructor() {
-    // this.socket = io(BASE_URL, {
-    //   transports: ['websocket'],
-    //   query: {
-    //     device: 'Iphone 14 Pro Max',
-    //   },
-    // });
+    this.socket = io(BASE_URL, {
+      transports: ['websocket'],
+      query: {
+        device: 'Iphone 14 Pro Max',
+      },
+    });
 
     this.listen('connect', () => {
       console.log('Connected');
+      console.log(this.socket.id);
+      
     });
 
     this.listen('disconnect', (reason: string) => {
@@ -63,19 +65,19 @@ class WebSocketService {
     event: EventName,
     ...args: Parameters<ClientToServerEvents[EventName]>
   ) {
-    // this.socket.emit(event, ...args);
+    this.socket.emit(event, ...args);
   }
   listen<EventName extends keyof ServerToClientEvents>(
     event: EventName,
     listener: (...args: Parameters<ServerToClientEvents[EventName]>) => void,
   ) {
-    // this.socket.on(event, listener as any);
+    this.socket.on(event, listener as any);
   }
   off<EventName extends keyof ServerToClientEvents>(
     event: EventName,
     listener: (...args: Parameters<ServerToClientEvents[EventName]>) => void,
   ) {
-    // this.socket.off(event, listener as any);
+    this.socket.off(event, listener as any);
   }
 }
 const socketServices = new WebSocketService();

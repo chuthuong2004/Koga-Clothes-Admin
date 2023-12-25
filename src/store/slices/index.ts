@@ -1,3 +1,4 @@
 import authSlice from './auth.slice';
 import productSlice from './product.slice';
-export { authSlice, productSlice };
+import chatSlice from './chat.slice';
+export { authSlice, productSlice, chatSlice };

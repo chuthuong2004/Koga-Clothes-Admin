@@ -3,6 +3,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Image, Typography } from 'antd';
 import { TableColumn } from 'react-data-table-component';
 import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
+import ActionColumn from './ActionColumn';
 
 export const columns: TableColumn<StoreProduct>[] = [
   {
@@ -82,10 +83,7 @@ export const columns: TableColumn<StoreProduct>[] = [
     selector: (row) => row.brand.name,
     cell: (row, index, column, id) => {
       return (
-        <div className="flex gap-2 items-center">
-          <FaRegEdit  size={20} className="text-primary cursor-pointer" />
-          <FaTrashAlt size={20} className="text-primary cursor-pointer" />
-        </div>
+        <ActionColumn product={row}/>
       );
     },
   },

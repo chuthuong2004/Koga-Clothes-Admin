@@ -1,2 +1,3 @@
 import Message from './Message';
-export {Message}
+import MessageLoading from './MessageLoading';
+export {Message, MessageLoading}

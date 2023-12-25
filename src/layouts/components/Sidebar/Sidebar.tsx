@@ -2,13 +2,13 @@ import { NavLink } from 'react-router-dom';
 import * as config from '@/config';
 import { BsBarChart, BsChatSquare, BsPersonBadge, BsReceipt, BsTruck } from 'react-icons/bs';
 import { BiCategory } from 'react-icons/bi';
-import { MdLogout, MdOutlineCategory, MdOutlineReviews } from 'react-icons/md';
+import { MdLogout, MdOutlineReviews } from 'react-icons/md';
 import { FaTrademark } from 'react-icons/fa';
-import { useAppSelector } from '@/types/commons';
 import { useAuth } from '@/hooks/services';
-import { selectAuth } from '@/store/selectors';
 import { cn } from '@/utils';
 import { Typography } from 'antd';
+import { motion } from 'framer-motion';
+import useMediaQuery from 'beautiful-react-hooks/useMediaQuery';
 import { IoSettingsOutline } from 'react-icons/io5';
 const links = [
   {
@@ -69,16 +69,30 @@ const links = [
   },
 ];
 
-const Sidebar = () => {
-  const { user } = useAppSelector(selectAuth);
+type SidebarProps = {
+  openSidebar: boolean;
+  closeSidebar: () => void;
+};
+const Sidebar = ({ openSidebar, closeSidebar }: SidebarProps) => {
+  const isTablet = useMediaQuery('(max-width: 68rem)');
   const { handleLogout: onLogout } = useAuth();
   const handleLogout = async (link: any) => {
+    isTablet && closeSidebar();
     if (link.to === '#') {
       await onLogout();
     }
   };
   return (
-    <div className="fixed top-0 bottom-0 left-0 z-10 w-[15vw] bg-card shadow-card px-4 py-8">
+    <motion.div
+      animate={{
+        x: isTablet ? (openSidebar ? 0 : -250) : 0,
+        opacity: isTablet ? (openSidebar ? 1 : 0) : 1,
+        animation: 'linear',
+      }}
+      transition={{ ease: 'linear', duration: 0.2 }}
+      // exit={{ x: -500 }}
+      className="fixed top-0 bottom-0 left-0 z-10 w-[25rem] bg-card shadow-card px-4 py-8"
+    >
       <div className="flex flex-col w-full h-full mb-12">
         <div>
           <Typography.Title level={2}>Admin Koga</Typography.Title>
@@ -104,7 +118,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
