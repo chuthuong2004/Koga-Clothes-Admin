@@ -1,7 +1,7 @@
 import { useRepository } from '@/hooks/services';
 import { ParamCreateRepository } from '@/services/types';
 import { StoreRepository, StoreProvinceAddress } from '@/types/entities';
-import { cn, getBase64, uploadMultipleImage } from '@/utils';
+import { cn, convertContent, getBase64, uploadMultipleImage } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Select, Typography, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
@@ -58,13 +58,9 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
 
     useEffect(() => {
         if (type === 'Edit' && repository && open) {
-            const blocksFromHtml = htmlToDraft(repository?.description);
-            const { contentBlocks, entityMap } = blocksFromHtml;
-            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-            const description = EditorState.createWithContent(contentState);
             reset({
                 name: repository?.name,
-                description,
+                description: convertContent(repository.description),
                 code: repository.code,
                 address: repository.address,
                 // images: repository.images

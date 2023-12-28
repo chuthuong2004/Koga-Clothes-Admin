@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/config';
 import { setSelectedConversation, toggleSidebar } from '@/store/actions';
 import { selectAuth, selectChat } from '@/store/selectors';
 import { useAppDispatch, useAppSelector } from '@/types/commons';
@@ -26,7 +27,7 @@ const ConversationItem = ({ conversation }: ConversationItemProps) => {
 
   return (
     <div onClick={handleJoinConversation} className={cn('flex gap-2 items-center rounded-md   p-2 cursor-pointer', activeChat ? 'bg-primary-gradient' : 'hover:bg-slate-100')}>
-      <Avatar style={{ backgroundColor: selectedConversation?._id === conversation._id ? colorUser : randomBgAvatar() }} size='large' shape='circle' >{getFirstLetter(receiver?.firstName + ' ' + receiver?.lastName)}</Avatar>
+      <Avatar style={{ backgroundColor: selectedConversation?._id === conversation._id ? colorUser : randomBgAvatar() }} size='large' shape='circle' src={BASE_URL + receiver.avatar} >{getFirstLetter(receiver?.firstName + ' ' + receiver?.lastName)}</Avatar>
       <div className='flex-1'>
         <div className='flex gap-4'>
           <Typography.Text className={cn('font-medium flex-1', activeChat && 'text-white')}>{receiver.firstName + ' ' + receiver.lastName}</Typography.Text>

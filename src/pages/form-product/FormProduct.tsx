@@ -220,6 +220,11 @@ const FormProduct = () => {
         );
         methods.setValue('medias', medias);
       }
+      if(slug) {
+        if(product && data.sizes.length !== product?.storedProducts[0].colors[0].sizes.length) {
+
+        }
+      }
 
     }
     // ** Submit images
