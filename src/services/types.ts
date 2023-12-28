@@ -57,6 +57,7 @@ export type QueryOptions = {
   brand?: string;
   category?: string;
   creator?: string;
+  sort?: string;
 };
 
 export type ParamAddToCart = {

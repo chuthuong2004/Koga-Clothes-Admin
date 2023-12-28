@@ -10,17 +10,20 @@ import {
   FormMedias,
   FormInventory,
 } from './forms';
-import { EditorState, convertToRaw } from 'draft-js';
+import { ContentState, EditorState, convertToRaw } from 'draft-js';
 import { ParamCreateProduct } from '@/services/types';
 import draftToHtml from 'draftjs-to-html';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StoreColor, StoredProduct } from '@/types/commons';
 import FormSize from './components/FormSize';
-import { uploadImageProduct } from '@/utils';
+import { convertContent, uploadImageProduct } from '@/utils';
 import { useProduct } from '@/hooks/services';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '@/config';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { BASE_URL, routes } from '@/config';
 import { toast } from 'react-toastify';
+import useSWR from 'swr';
+import { productService } from '@/services';
+import htmlToDraft from 'html-to-draftjs';
 export type FormCreateProduct = {
   name: string;
   code: string;
@@ -49,6 +52,11 @@ export type FormCreateProduct = {
 const FormProduct = () => {
   const navigate = useNavigate()
   const { onCreateProduct } = useProduct()
+  const params = useParams()
+  const slug = params.productId
+  const { data: product } = useSWR("GetProductDetails", () => slug ? productService.getById(slug) : undefined);
+  console.log("slug: " + slug);
+
   const methods = useForm<FormCreateProduct>({
     defaultValues: {
       name: '',
@@ -113,6 +121,67 @@ const FormProduct = () => {
       ],
     },
   });
+
+
+  useEffect(() => {
+    if (product) {
+      methods.reset({
+        name: product.name,
+        code: product.code,
+        description: convertContent(product.description),
+        preserveInformation: convertContent(product.preserveInformation || ''),
+        deliveryReturnPolicy: convertContent(product.deliveryReturnPolicy || ''),
+        category: product.category._id,
+        gender: product.gender,
+        brand: product.brand._id,
+        discount: product.discount?.toString(),
+        price: product.price?.toString(),
+        keywords: product.keywords,
+        storedProducts: product.storedProducts.map(item => ({
+          colors: item.colors,
+          repository: typeof item.repository === 'string' ? item.repository : item.repository._id
+        })),
+
+        colors: product.storedProducts[0].colors.map(item => ({
+          colorName: item.colorName
+        })),
+        sizes: product.storedProducts[0].colors[0].sizes.map(item => ({
+          sizeName: item.size
+        })),
+        repositories: product.storedProducts.map(item => ({
+          repository: typeof item.repository === 'string' ? item.repository : item.repository._id
+        })),
+        medias: product.storedProducts[0].colors.reduce((acc, item) => {
+          return {
+            ...acc,
+            [item.colorName]: {
+              images: item.images.map((image, index) => ({
+                uid: `${index + 1}`,
+                name: 'image.png',
+                status: 'done',
+                url: BASE_URL + image,
+              })),
+              imageSmall: [{
+                uid: '-1',
+                name: 'image.png',
+                status: 'done',
+                url: BASE_URL + item.imageSmall,
+              }],
+              imageMedium: [{
+                uid: '-1',
+                name: 'image.png',
+                status: 'done',
+                url: BASE_URL + item.imageMedium,
+              }],
+            }
+          }
+        }, {})
+
+      })
+    }
+  }, [product, methods])
+  console.log("product: ", product);
+
   const onSubmit = async (data: FormCreateProduct) => {
     const descContentState = convertToRaw(data.description.getCurrentContent());
     const preserveContentState = convertToRaw(data.preserveInformation.getCurrentContent());
@@ -137,18 +206,21 @@ const FormProduct = () => {
     // ** Submit variants
     if (data.colors.length > 0 && current === 2) {
       console.log('VOO');
-      const medias = data.colors.reduce(
-        (acc, item) => ({
-          ...acc,
-          [item.colorName]: {
-            images: [],
-            imageMedium: [],
-            imageSmall: [],
-          },
-        }),
-        {},
-      );
-      methods.setValue('medias', medias);
+      if(!slug) {
+        const medias = data.colors.reduce(
+          (acc, item) => ({
+            ...acc,
+            [item.colorName]: {
+              images: [],
+              imageMedium: [],
+              imageSmall: [],
+            },
+          }),
+          {},
+        );
+        methods.setValue('medias', medias);
+      }
+
     }
     // ** Submit images
     if (current === 3) {
@@ -216,6 +288,7 @@ const FormProduct = () => {
     console.log(newData);
   };
 
+
   const onError = (err: any) => {
     console.log(err);
   };
@@ -229,40 +302,6 @@ const FormProduct = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit, onError)} className="flex flex-col flex-gap12">
-        {/* <div className="flex flex-col gap-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <Typography.Title level={4}>Thêm mới sản phẩm</Typography.Title>
-            </div>
-            <Space>
-              <Button type="default" size="large">
-                Discard
-              </Button>
-              <Button danger size="large">
-                Save Draft
-              </Button>
-              <Button onClick={methods.handleSubmit(onSubmit)} type="primary" size="large">
-                Publish Product
-              </Button>
-            </Space>
-          </div>
-          <Row gutter={[16, 16]}>
-            <Col span={16} sm={16} className="gap-4">
-              <div className="flex flex-col gap-8">
-                <FormInfoBasic />
-                <FormVariants />
-
-                <Card bordered={false}>Product Information</Card>
-              </div>
-            </Col>
-            <Col span={8}>
-              <div className="flex flex-col gap-8">
-                <FormPricing />
-                <FormOrganization />
-              </div>
-            </Col>
-          </Row>
-        </div> */}
         <Space direction="vertical">
           <Steps
             current={current}
@@ -278,22 +317,22 @@ const FormProduct = () => {
               {
                 title: 'Step 2',
                 description: 'Organization',
-                disabled: current < 1,
+                disabled: slug ? false : current < 1,
               },
               {
                 title: 'Step 3',
                 description: 'Pricing & Variants',
-                disabled: current < 2,
+                disabled: slug ? false : current < 2,
               },
               {
                 title: 'Step 4',
                 description: 'Medias',
-                disabled: current < 3,
+                disabled: slug ? false : current < 3,
               },
               {
                 title: 'Step 5',
                 description: 'Inventory',
-                disabled: current < 4,
+                disabled: slug ? false : current < 4,
               },
             ]}
           />

@@ -27,7 +27,7 @@ export const columns: TableColumn<StoreProduct>[] = [
           </div>
           <div className="flex-1 items-center">
             <Typography className="line-clamp-1 font-semibold">{row.name}</Typography>
-            <Typography className="line-clamp-2">{row.description}</Typography>
+            <Typography className="line-clamp-2" dangerouslySetInnerHTML={{__html: row.description}}></Typography>
           </div>
         </div>
       );
