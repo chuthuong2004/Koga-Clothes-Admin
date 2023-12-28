@@ -34,12 +34,13 @@ const routes: Array<routeType> = [
     path: config.routes.product,
     component: Product,
   },
-  {
-    path: `${config.routes.product}/:productId`,
-    component: ProductDetails,
-  },
+
   {
     path: config.routes.createProduct,
+    component: FormProduct,
+  },
+  {
+    path: `${config.routes.product}/edit/:productId`,
     component: FormProduct,
   },
   {

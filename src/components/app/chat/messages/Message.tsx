@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/config'
 import { selectAuth, selectChat } from '@/store/selectors'
 import { useAppSelector } from '@/types/commons'
 import { StoreMessage } from '@/types/entities'
@@ -18,7 +19,7 @@ const Message = ({ own, message }: MessageProps) => {
     <div className={cn('flex flex-col', own ? 'justify-end' : 'justify-start')}>
       <div className={cn('flex gap-4', own && 'flex-row-reverse')}>
 
-        <Avatar  style={{ backgroundColor: own ? colorUser : receiverBgColor }} size='large' shape='circle' >{getFirstLetter(message.sender?.firstName + ' ' + message.sender?.lastName)}</Avatar>
+        <Avatar  style={{ backgroundColor: own ? colorUser : receiverBgColor }} size='large' shape='circle' src={BASE_URL + message.sender.avatar}>{getFirstLetter(message.sender?.firstName + ' ' + message.sender?.lastName)}</Avatar>
         <div className={cn('w-[70%] flex flex-col gap-2', own ? 'items-end' : 'items-start')}>
           <div className={cn('bg-card shadow-card rounded-xl p-4 ', own ? 'bg-primary-gradient rounded-tr-none' : 'rounded-ss-none')}>
             <Typography.Text className={cn(own && 'text-white')}>{message.text}</Typography.Text>

@@ -63,6 +63,7 @@ export type QueryOptions = {
   category?: string;
   creator?: string;
   role?: string;
+  sort?: string;
 };
 
 export type ParamAddToCart = {

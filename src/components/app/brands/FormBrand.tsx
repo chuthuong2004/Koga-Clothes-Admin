@@ -2,7 +2,7 @@ import { useBrand } from '@/hooks/services';
 import { ParamCreateBrand } from '@/services/types';
 import { Nullable } from '@/types/commons';
 import { StoreBrand } from '@/types/entities';
-import { cn, getBase64, uploadSingleImage } from '@/utils';
+import { cn, convertContent, getBase64, uploadSingleImage } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Modal, Typography, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
@@ -59,19 +59,14 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
     image: '',
     logo: '',
   });
-
-  useEffect(() => {
-    if (type === 'Edit' && brand && open) {
-      const blocksFromHtml = htmlToDraft(brand?.history);
-      const { contentBlocks, entityMap } = blocksFromHtml;
-      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
-      const history = EditorState.createWithContent(contentState);
-      reset({
-        name: brand?.name,
-        history,
-      });
-    }
-  }, [brand, type, reset, open]);
+    useEffect(() => {
+        if (type === 'Edit' && brand && open) {
+            reset({
+                name: brand?.name,
+                history: convertContent(brand.history)
+            })
+        }
+    }, [brand, type, reset, open])
 
   const handleCancel = useCallback(() => setPreviewOpen(defaultPreview), []);
 

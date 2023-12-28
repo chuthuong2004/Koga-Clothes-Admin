@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/config'
 import { toggleSidebar } from '@/store/actions'
 import { selectAuth, selectChat } from '@/store/selectors'
 import { useAppDispatch, useAppSelector } from '@/types/commons'
@@ -7,7 +8,7 @@ import useMediaQuery from 'beautiful-react-hooks/useMediaQuery'
 import { memo, useMemo } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { IoSearchOutline, IoVideocamOutline } from 'react-icons/io5'
-import {  MdOutlineDehaze, MdOutlineLocalPhone } from 'react-icons/md'
+import { MdOutlineDehaze, MdOutlineLocalPhone } from 'react-icons/md'
 
 const ChatHeading = () => {
     const dispatch = useAppDispatch()
@@ -17,7 +18,7 @@ const ChatHeading = () => {
     const { selectedConversation, colorUser } = useAppSelector(selectChat)
     const { user } = useAppSelector(selectAuth)
     const receiver = useMemo(() => {
-        return selectedConversation?.members.filter(member => member.userId._id !== user?._id)[0].userId
+        return selectedConversation?.members.filter(member => member.userId?._id !== user?._id)[0].userId
     }, [selectedConversation, user])
 
     const handleSidebar = () => dispatch(toggleSidebar())
@@ -28,7 +29,7 @@ const ChatHeading = () => {
                     <MdOutlineDehaze onClick={handleSidebar} size={25} className='cursor-pointer' />
                 }
                 <div className='flex gap-4 flex-1'>
-                    <Avatar style={{ backgroundColor: colorUser }} size='large' shape='circle' >{getFirstLetter(receiver?.firstName + ' ' + receiver?.lastName)}</Avatar>
+                    <Avatar style={{ backgroundColor: colorUser }} size='large' shape='circle' src={BASE_URL + receiver?.avatar} >{getFirstLetter(receiver?.firstName + ' ' + receiver?.lastName)}</Avatar>
                     <div className='flex flex-col gap-0'>
                         <Typography.Text className='font-medium'>{receiver?.firstName + ' ' + receiver?.lastName}</Typography.Text>
                         <p className='font-normal text-slate-500 text-lg'>Frontend Developer</p>

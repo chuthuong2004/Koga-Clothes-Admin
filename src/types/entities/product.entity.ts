@@ -17,7 +17,7 @@ export type StoreProduct = {
     reviews: string[];
     storedProducts: StoredProduct[];
     brand: Omit<StoreBrand, 'products'>;
-    gender: string;
+    gender: string[];
     preserveInformation?: string;
     deliveryReturnPolicy?: string;
     slug: string;

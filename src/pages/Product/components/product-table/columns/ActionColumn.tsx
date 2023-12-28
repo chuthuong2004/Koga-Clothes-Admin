@@ -1,14 +1,18 @@
-import { useProduct } from '@/hooks/services/useProduct';
+import { routes } from '@/config';
+import { useProduct } from '@/hooks/services';
 import { StoreProduct } from '@/types/entities';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Modal } from 'antd';
+import { memo } from 'react';
 import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 type ActionColumnProps = {
     product: StoreProduct
 }
 const ActionColumn = ({ product }: ActionColumnProps) => {
+    const navigate = useNavigate()
     const { onDeleteProduct } = useProduct()
     const showDeleteConfirm = () => {
         Modal.confirm({
@@ -33,12 +37,15 @@ const ActionColumn = ({ product }: ActionColumnProps) => {
             },
         });
     };
+    const handleGoToEdit = () => {
+        navigate(`${routes.product}/edit/${product.slug}`)
+    }
     return (
         <div className="flex gap-2 items-center">
-            <FaRegEdit size={20} className="text-primary cursor-pointer" />
+            <FaRegEdit onClick={handleGoToEdit} size={20} className="text-primary cursor-pointer" />
             <FaTrashAlt onClick={showDeleteConfirm} size={20} className="text-primary cursor-pointer" />
         </div>
     );
 }
 
-export default ActionColumn
+export default memo(ActionColumn)

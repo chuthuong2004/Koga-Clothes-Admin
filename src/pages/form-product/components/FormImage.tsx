@@ -75,6 +75,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                     multiple
                                     accept='image/*'
                                     fileList={value}
+                                    
                                     onPreview={(file) => handlePreviewImages(file, 'images')}
                                     onChange={(info) => onChange(info.fileList)}
 
@@ -116,6 +117,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                         <Upload
                                             listType="picture-card"
                                             accept='image/*'
+                                            maxCount={1}
                                             fileList={value}
                                             onPreview={(file) => handlePreviewImages(file, 'imageSmall')}
                                             onChange={(info) => onChange(info.fileList)}
@@ -152,6 +154,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                 <Upload
                                     listType="picture-card"
                                     accept='image/*'
+                                    maxCount={1}
                                     fileList={value}
                                     onPreview={(file) => handlePreviewImages(file, 'imageMedium',)}
                                     onChange={(info) => onChange(info.fileList)}
