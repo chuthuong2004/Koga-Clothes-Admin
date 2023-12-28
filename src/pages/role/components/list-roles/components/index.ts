@@ -1,2 +1,3 @@
 import ItemRole from './ItemRole';
-export { ItemRole };
+import AddRole from './AddRole';
+export { ItemRole, AddRole };
