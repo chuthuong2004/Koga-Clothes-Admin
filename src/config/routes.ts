@@ -14,5 +14,7 @@ const routes = {
   home: '/',
   orderDetail: '/order-detail/:orderId',
   role: '/role',
+  blog: '/blogs',
+  categoryBlog: '/blogs/categories'
 };
 export default routes;

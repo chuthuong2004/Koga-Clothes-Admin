@@ -1,11 +1,14 @@
-import { StoreRole } from '@/types/entities';
-import { QueryOptions } from './types';
 import axiosClient from '@/lib/axios';
-import { ResponsePaginate } from '@/types/commons/response.type';
+import { StoreAdmin, StoreRole } from '@/types/entities';
+import { ParamCreateRole } from './types';
 
 const URL = 'roles';
 
 export const roleService = {
-  getAll: async (params: QueryOptions): Promise<ResponsePaginate<StoreRole>> =>
-    axiosClient.get(URL, { params }),
+  create: async (body: ParamCreateRole): Promise<StoreRole> => axiosClient.post(URL, body),
+  update: async (id: string, body: ParamCreateRole): Promise<StoreRole> =>
+    axiosClient.patch(`${URL}/${id}`, body),
+  getAll: async (): Promise<StoreRole[]> => axiosClient.get(URL),
+  getAllStaffByRole: async (roleId: string): Promise<StoreAdmin[]> =>
+    axiosClient.get(`${URL}/${roleId}/staff`),
 };

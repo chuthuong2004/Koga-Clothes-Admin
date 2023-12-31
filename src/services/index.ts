@@ -14,6 +14,7 @@ import uploadService from './upload.service';
 import userService from './user.service';
 import repositoryService from './repository.service';
 import staffService from './staff.service';
+import blogService from './blog.service';
 
 export {
   addressService,
@@ -31,5 +32,6 @@ export {
   uploadService,
   userService,
   repositoryService,
-  staffService
+  staffService,
+  blogService
 };

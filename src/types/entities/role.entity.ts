@@ -2,8 +2,9 @@ import { ERoleDefault } from '../enums/role.enum';
 
 export type StoreRole = {
   _id: string;
-  name: ERoleDefault;
-  permissions: StorePermission[];
+  name: string;
+  default: boolean; 
+  permissions: string[];
 };
 
 export type StorePermission = {

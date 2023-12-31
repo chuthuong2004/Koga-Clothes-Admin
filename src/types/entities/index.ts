@@ -14,3 +14,5 @@ export * from './conversation.entity';
 export * from './message.entity';
 export * from './order.entity';
 export * from './review.entity';
+export * from './category-blog.entity';
+export * from './blog.entity';

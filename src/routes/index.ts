@@ -2,23 +2,22 @@
 
 // Pages
 import * as config from '@/config';
-import Login from '../pages/Login/Login';
-import React, { ReactNode } from 'react';
-import Dashboard from '../pages/Dashboard';
-import Order from '../pages/Order';
-import Category from '../pages/Category';
-import Review from '../pages/Review';
 import OrderDetail from '@/pages/order-detail';
+import React, { ReactNode } from 'react';
+import Category from '../pages/Category';
+import Dashboard from '../pages/Dashboard';
+import Login from '../pages/Login/Login';
+import Order from '../pages/Order';
+import Review from '../pages/Review';
 // import NotPageFound from '../pages/NotPageFound';
-import ProductDetails from '@/pages/product-details/ProductDetails';
+import Brand from '@/pages/brand';
+import Chat from '@/pages/chat';
+import Customer from '@/pages/customer';
 import FormProduct from '@/pages/form-product/FormProduct';
-import NotPageFound from '../pages/NotPageFound';
+import Product from '@/pages/product';
 import Repository from '@/pages/repository';
-import Product from '@/pages/Product';
-import Customer from '@/pages/Customer';
-import Brand from '@/pages/Brand';
-import Chat from '@/pages/Chat';
 import Role from '@/pages/role/Role';
+import NotPageFound from '../pages/NotPageFound';
 
 type routeType = {
   path: string;

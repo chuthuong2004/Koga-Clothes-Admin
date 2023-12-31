@@ -5,6 +5,7 @@ import {
   StoreProvinceAddress,
   StoreUserAddress,
 } from '@/types/entities';
+import { EModeBlog } from '@/types/enums';
 import { GenderUser } from '@/types/unions';
 import { OrderStatus } from '@/types/unions/order.union';
 
@@ -159,4 +160,20 @@ export type ParamCreateRepository = {
 export type ParamsCreateCategory = Pick<StoreCategory, 'name'> & {
   parent: string;
   gender: string[];
+};
+
+export type ParamCreateRole = {
+  name: string;
+  permissions: string[];
+};
+
+export type ParamCreateBlog = {
+  title: string;
+  summary: string;
+  content: string;
+  image: string;
+  category: string;
+  mode: EModeBlog;
+  tags: string[];
+  time_public: Date;
 };

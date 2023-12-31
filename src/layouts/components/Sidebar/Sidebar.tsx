@@ -1,73 +1,11 @@
-import { NavLink } from 'react-router-dom';
-import * as config from '@/config';
-import { BsBarChart, BsChatSquare, BsPersonBadge, BsReceipt, BsTruck } from 'react-icons/bs';
-import { BiCategory } from 'react-icons/bi';
-import { MdLogout, MdOutlineReviews } from 'react-icons/md';
-import { FaTrademark } from 'react-icons/fa';
 import { useAuth } from '@/hooks/services';
+import { NAVIGATION_VERTICAL } from '@/navigation';
 import { cn } from '@/utils';
-import { Typography } from 'antd';
-import { motion } from 'framer-motion';
+import { Collapse, Typography } from 'antd';
 import useMediaQuery from 'beautiful-react-hooks/useMediaQuery';
-import { IoSettingsOutline } from 'react-icons/io5';
-const links = [
-  {
-    to: config.routes.dashboard,
-    icon: <BsBarChart />,
-    title: 'Dashboard',
-  },
-  {
-    to: config.routes.order,
-    icon: <BsReceipt />,
-    title: 'Đơn hàng',
-  },
-  {
-    to: config.routes.brand,
-    icon: <FaTrademark />,
-    title: 'Thương hiệu',
-  },
-  {
-    to: config.routes.category,
-    icon: <BiCategory />,
-    title: 'Danh mục',
-  },
-  {
-    to: config.routes.repository,
-    icon: <BiCategory />,
-    title: 'Kho lưu trữ',
-  },
-  {
-    to: config.routes.product,
-    icon: <BsTruck />,
-    title: 'Sản phẩm',
-  },
-
-  {
-    to: config.routes.customer,
-    icon: <BsPersonBadge />,
-    title: 'Khách hàng',
-  },
-  {
-    to: config.routes.chat,
-    icon: <BsChatSquare />,
-    title: 'Tin nhắn',
-  },
-  {
-    to: config.routes.review,
-    icon: <MdOutlineReviews />,
-    title: 'Đánh giá',
-  },
-  {
-    to: config.routes.role,
-    icon: <IoSettingsOutline />,
-    title: 'Role',
-  },
-  {
-    to: '#',
-    icon: <MdLogout />,
-    title: 'Đăng xuất',
-  },
-];
+import { motion } from 'framer-motion';
+import { NavLink } from 'react-router-dom'; import { SlArrowDown } from "react-icons/sl";
+import { Fragment } from 'react';
 
 type SidebarProps = {
   openSidebar: boolean;
@@ -99,21 +37,50 @@ const Sidebar = ({ openSidebar, closeSidebar }: SidebarProps) => {
         </div>
         <div className=" overflow-y-scroll">
           <div className="flex flex-col gap-2">
-            {links.map((link, i) => (
-              <NavLink
-                key={i}
-                to={link.to}
-                onClick={() => handleLogout(link)}
-                className={(nav) =>
-                  cn(
-                    'flex gap-4 p-4 rounded-lg py-4 items-center',
-                    nav.isActive && link.to !== '#' && 'bg-primary-gradient text-white',
-                  )
-                }
-              >
-                <div className="">{link.icon}</div>
-                <Typography.Text className={cn('text-current')}>{link.title}</Typography.Text>
-              </NavLink>
+            {NAVIGATION_VERTICAL.map((link, i) => (
+              <Fragment>
+                <NavLink
+                  key={i}
+                  to={link.to} 
+                  end
+                  onClick={() => handleLogout(link)}
+                  className={(nav) =>
+                    cn(
+                      'flex gap-4 p-4 rounded-lg py-4 items-center justify-between',
+                      nav.isActive && link.to !== '#' && 'bg-primary-gradient text-white',
+                    )
+                  }
+                >
+                  <div className='flex items-center gap-4'>
+
+                    <div className="">{link.icon}</div>
+                    <Typography.Text className={cn('text-current')}>{link.title}</Typography.Text>
+                  </div>
+                  {link.children && <div>
+                    <SlArrowDown />
+                  </div>}
+                </NavLink>
+                {link.children && link.children.map(item => (
+                  <NavLink
+                    key={i}
+                    to={item.to}
+                    end
+                    onClick={() => handleLogout(item)}
+                    className={(nav) =>
+                      cn(
+                        'flex gap-4 p-4 rounded-lg py-4 items-center justify-between',
+                        nav.isActive && item.to !== '#' && 'bg-primary-gradient text-white',
+                      )
+                    }
+                  >
+                    <div className='flex items-center gap-4'>
+
+                      <div className="">{item.icon}</div>
+                      <Typography.Text className={cn('text-current')}>{item.title}</Typography.Text>
+                    </div>
+                  </NavLink>
+                ))}
+              </Fragment>
             ))}
           </div>
         </div>

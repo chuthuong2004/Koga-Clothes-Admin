@@ -1,20 +1,32 @@
+import { useToggle } from '@/hooks/utils';
 import { Button, Card, Image, Typography } from 'antd';
+import ModalRole from '../../modal-role/ModalRole';
 
-const ItemRole = () => {
+const AddRole = () => {
+
+  const { isOpen, toggle, onClose } = useToggle(false)
+
   return (
-    <Card className="min-w-[45rem] h-[15rem]  pb-10">
-      <div className="justify-between flex">
-        <Image
-          className="max-h-[13rem] max-w-[16rem]"
-          src={require('../../../../../config/images/add-role.png')}
-        />
-        <div className="actions flex  flex-col justify-end">
-          <Button className="bg-primary">Add role</Button>
-          <Typography.Text>Add role, if it doesn't exist.</Typography.Text>
+    <>
+      <Card>
+        <div className="justify-between flex">
+          <Image
+            className="max-h-[13rem]"
+            src={require('@/config/images/add-role.png')}
+          />
+          <div className="flex flex-col justify-end">
+            <Button onClick={toggle} type="primary" size="large">
+              Thêm mới
+            </Button>
+            <Typography.Text>Add role, if it doesn't exist.</Typography.Text>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+      <ModalRole open={isOpen} onCancel={onClose} onClose={onClose} />
+
+    </>
+
   );
 };
 
-export default ItemRole;
+export default AddRole;

@@ -6,3 +6,5 @@ export * from './useProfile';
 export * from './useBrand';
 export * from './useRepository';
 export * from './useProduct';
+export * from './useRole';
+export * from './useBlog';

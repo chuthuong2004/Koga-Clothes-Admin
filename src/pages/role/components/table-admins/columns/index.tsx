@@ -1,10 +1,9 @@
-import { StoreAdmin, StoreProduct } from '@/types/entities';
+import { StoreAdmin } from '@/types/entities';
 import { ROLE } from '@/utils/constants/role.constant';
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Image, Typography } from 'antd';
+import { Typography } from 'antd';
 import { TableColumn } from 'react-data-table-component';
-import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import ActionColumn from './ActionColumn';
+import { ERoleDefault } from '@/types/enums/role.enum';
 
 export const columns: TableColumn<StoreAdmin>[] = [
   {
@@ -32,7 +31,7 @@ export const columns: TableColumn<StoreAdmin>[] = [
       return (
         <div className="flex gap-1">
           {row.roles.map((role) => {
-            const RoleMapping = ROLE[role.name || 'Staff'];
+            const RoleMapping = ROLE[role.name as ERoleDefault || 'Staff' ];
 
             return (
               <div

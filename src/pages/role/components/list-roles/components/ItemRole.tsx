@@ -1,11 +1,12 @@
-import { usePagination } from '@/hooks/helpers';
+import { BASE_URL } from '@/config';
 import { useToggle } from '@/hooks/utils';
-import { authService } from '@/services';
-import { StoreAdmin, StoreRole } from '@/types/entities';
-import { AntDesignOutlined } from '@ant-design/icons';
-import { Avatar, Card, Typography } from 'antd';
+import { roleService } from '@/services/role.service';
+import { StoreRole } from '@/types/entities';
+import { getFirstLetter, randomBgAvatar } from '@/utils';
+import { Avatar, Card, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { HiOutlineDuplicate } from 'react-icons/hi';
+import useSWR from 'swr';
 import ModalRole from '../../modal-role';
 
 type ItemRoleProps = {
@@ -13,37 +14,48 @@ type ItemRoleProps = {
 };
 
 const ItemRole: React.FC<ItemRoleProps> = ({ role }) => {
-  console.log(role._id);
-  const { data: listStaffs } = usePagination<StoreAdmin>(
-    'ListStaffs',
-    {
-      page: 1,
-      limit: 10,
-      offset: 0,
-      role: role._id,
-    },
-    authService.getAllStaffs,
+  const { data: listStaffs } = useSWR(
+    `GetListStaffByRole${role._id}`,
+    () => roleService.getAllStaffByRole(role._id),
   );
-  const { isOpen, toggle } = useToggle(false);
-  console.log(listStaffs);
+  const { isOpen, onClose, toggle } = useToggle(false);
+  console.log("listStaffs: ", listStaffs);
   return (
-    <Card className="min-w-[45rem] h-[15rem] justify-between flex flex-col">
-      <div className="flex justify-between items-center">
-        <Typography.Title level={3}>{role.name}</Typography.Title>
-        <Avatar.Group>
-          <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
-          <a href="https://ant.design">
-            <Avatar style={{ backgroundColor: '#f56a00' }}>K</Avatar>
-          </a>
-        </Avatar.Group>
+    <Card bordered={false} >
+      <div className="flex flex-col gap-4">
+        <div className='flex justify-between items-center gap-4 text-slate-200'>
+          <Typography.Text>Tổng số {listStaffs?.length} người dùng</Typography.Text>
+          <Avatar.Group
+            maxCount={4}
+            maxPopoverTrigger="click"
+            size="default"
+            maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf', cursor: 'pointer' }}
+          >
+            {
+              listStaffs?.map((staff, index) => {
+                return <Tooltip title={staff.firstName + ' ' + staff.lastName} placement="top">
+                  <Avatar style={{ backgroundColor: randomBgAvatar() }} src={staff.avatar ? BASE_URL + staff.avatar : undefined}>{getFirstLetter(staff.firstName + ' ' + staff.lastName)}</Avatar>
+                </Tooltip>
+              }
+              )
+            }
+          </Avatar.Group>
+        </div>
+        <div className="flex flex-col">
+          <Typography.Text className='font-semibold text-2xl'>{role.name}</Typography.Text>
+          <Typography.Text className='text-slate-500 text-xl'>Có {role.permissions.length} permissions</Typography.Text>
+        </div>
+        <div className="flex justify-between items-center gap-4">
+          {!role.default && <div >
+            <Typography.Text onClick={toggle} className='text-primary font-medium cursor-pointer'>Edit role</Typography.Text>
+          </div>}
+          <div>
+            <HiOutlineDuplicate className="text-4xl text-text-color-secondary" />
+          </div>
+        </div>
       </div>
-      <div className="actions flex justify-between">
-        <Typography.Text onClick={toggle}>Edit role</Typography.Text>
-        <ModalRole open={isOpen} onCancel={toggle} />
-        <span>
-          <HiOutlineDuplicate className="text-4xl text-text-color-secondary" />
-        </span>
-      </div>
+
+      <ModalRole open={isOpen} onCancel={onClose} role={role} onClose={onClose} />
     </Card>
   );
 };
