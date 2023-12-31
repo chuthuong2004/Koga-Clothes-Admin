@@ -7,7 +7,7 @@ import { GrUserAdmin } from 'react-icons/gr';
 export const ROLE: Record<
   ERoleDefault,
   {
-    icon?: ReactNode;
+    icon?: ReactNode; 
     value: ERoleDefault;
     color?: string;
     backgroundColor?: string;
