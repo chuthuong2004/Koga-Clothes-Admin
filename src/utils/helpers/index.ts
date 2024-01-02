@@ -5,3 +5,4 @@ export * from './color.helper';
 export * from './time.helper';
 export * from './format-text.helper';
 export * from './editor.helper';
+export * from './recursive.helper';

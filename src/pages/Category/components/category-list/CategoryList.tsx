@@ -5,6 +5,8 @@ import { Breadcrumb, BreadcrumbProps, Typography } from 'antd';
 import { useCallback, useState } from 'react';
 import { mutate } from 'swr';
 import { CategoryItem, FormCategory } from './components';
+import { Nullable } from '@/types/commons';
+import { motion } from 'framer-motion';
 
 const CategoryList = () => {
   const [itemsBreadcrumb, setItemsBreadcrumb] = useState<BreadcrumbProps['items']>([
@@ -14,15 +16,16 @@ const CategoryList = () => {
           onClick={() => {
             mutate('ListCategory');
           }}
+          className='cursor-pointer'
         >
-          Categories
+          Tất cả danh mục
         </Typography.Text>
       ),
       path: '',
     },
   ]);
-  const [category, setCategory] = useState<StoreCategory | null>(null);
-  const { data } = usePagination(
+  const [selectedCategory, setSelectedCategory] = useState<Nullable<StoreCategory>>(null);
+  const { data, isLoading, isValidating } = usePagination(
     `ListCategory${itemsBreadcrumb?.[itemsBreadcrumb.length - 1].path}`,
     {
       page: 1,
@@ -45,6 +48,7 @@ const CategoryList = () => {
                   onClick={() => {
                     console.log(itemsBreadcrumb);
                   }}
+                  className='cursor-pointer'
                 >
                   <Typography.Text>{newCategory.name}</Typography.Text>
                 </div>
@@ -54,15 +58,13 @@ const CategoryList = () => {
           ];
       });
     },
-    [data],
+    [itemsBreadcrumb],
   );
   const handleChoiceCategory = useCallback((category: StoreCategory) => {
-    console.log(category);
-    setCategory(category);
+    setSelectedCategory(category);
   }, []);
-  console.log(category);
   return (
-    <div className="container flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="">
         <Breadcrumb
           items={itemsBreadcrumb}
@@ -84,19 +86,28 @@ const CategoryList = () => {
           }}
         />
       </div>
-      <div className="flex gap-6">
-        <div className="flex flex-col gap-3 h-[67rem] overflow-y-scroll w-[25rem] px-2 relative flex-2">
-          {data?.docs.map((category) => (
-            <CategoryItem
-              category={category}
-              handleAddItemsBreadcrumb={handleAddItemsBreadcrumb}
-              handleChoiceCategory={handleChoiceCategory}
-              key={category._id}
-            />
-          ))}
+      <div className="flex gap-12">
+        <div className="flex flex-col gap-4 relative flex-6">
+          {isLoading || isValidating ? <Typography.Text>Đang tải...</Typography.Text> :
+
+            data?.docs.map((category, index) => (
+              <motion.div
+                key={category._id}
+                // initial={{ y: 10 }}
+                // animate={{ y: 0 }}
+                // transition={{delay: index * 200}}
+                layout
+              >
+                <CategoryItem
+                  category={category}
+                  handleAddItemsBreadcrumb={handleAddItemsBreadcrumb}
+                  handleChoiceCategory={handleChoiceCategory}
+                />
+              </motion.div>
+            ))}
         </div>
-        <div className="form-category bg-white rounded p-5  flex-3">
-          <FormCategory category={category} />
+        <div className="flex-4">
+          <FormCategory category={selectedCategory} />
         </div>
       </div>
     </div>

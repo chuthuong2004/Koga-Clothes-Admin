@@ -10,6 +10,8 @@ const productService = {
   getById: async (id: StoreProduct['_id'] | string): Promise<StoreProduct> =>
     axiosClient.get(`${URL}/${id}`),
   create: async (body: ParamCreateProduct): Promise<StoreProduct> => axiosClient.post(URL, body),
+  update: async (id: string, body: Partial<ParamCreateProduct>): Promise<StoreProduct> =>
+    axiosClient.patch(`${URL}/${id}`, body),
   delete: async (id: StoreProduct['_id']): Promise<void> => axiosClient.delete(`${URL}/${id}`),
 };
 export default productService;

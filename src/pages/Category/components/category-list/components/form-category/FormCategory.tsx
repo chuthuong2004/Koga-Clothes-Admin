@@ -1,79 +1,112 @@
 import { usePagination } from '@/hooks/helpers';
+import { useCategory } from '@/hooks/services';
 import { categoryService } from '@/services';
 import { ParamsCreateCategory } from '@/services/types';
+import { ResponseMessage } from '@/types/commons';
 import { StoreCategory } from '@/types/entities';
-import { optionsGenderCategory } from '@/utils/constants/category.constant';
-import { Button, Input, Select, Space, Typography } from 'antd';
+import { GenderCategory } from '@/types/unions';
+import { recursiveOptionTree } from '@/utils';
+import { Button, Card, Input, Select, TreeSelect, Typography } from 'antd';
+import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { defaultValues } from '../../../../../../hooks/helpers/useAddress';
 
 type FormCategoryProps = {
   category?: StoreCategory | null;
 };
+
+type FormCreateCategory = {
+  parent: string;
+  name: string;
+  gender: GenderCategory[]
+}
+
 const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
+  const { loading, onCreateCategory, onUpdateCategory } = useCategory()
+  const { data: listTreeCategories } = usePagination(
+    'ListAllCategories',
+    {
+      limit: 100,
+      offset: 0,
+      page: 1,
+    },
+    categoryService.getTree,
+  );
   const {
     control,
     formState: { errors },
     handleSubmit,
     setValue,
-  } = useForm<ParamsCreateCategory>({
+  } = useForm<FormCreateCategory>({
     defaultValues: {
       name: '',
-      parent: category?._id!,
+      parent: '',
       gender: [],
     },
   });
 
-  const { data: listCategory } = usePagination(
-    'ListAllCategories',
-    {
-      limit: 1000,
-      offset: 0,
-      page: 1,
-    },
-    categoryService.getAll,
-  );
 
-  const options = useMemo(() => {
-    return listCategory
-      ? listCategory?.docs.map((repo) => ({
-          value: repo._id,
-          label: repo.name,
-        }))
-      : [];
-  }, [listCategory]);
-  const filterOption = (input: string, option?: { label: string; value: string }) =>
-    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
-  const onSearch = (value: string) => {
-    console.log('search:', value);
-  };
-  const onSubmit = async (data: ParamsCreateCategory) => {
-    console.log(data);
-    let newCategory = null;
+  useEffect(() => {
     if (category) {
-      newCategory = await categoryService.update(category._id, data);
-    } else {
-      newCategory = await categoryService.create(data);
+      setValue('parent', category.parent._id);
+      setValue('name', category.name);
+      setValue('gender', category.gender);
     }
-    console.log(newCategory);
+
+  }, [category, setValue]);
+
+  const onSubmit = (data: ParamsCreateCategory) => {
+    const successCallback = (result: StoreCategory) => {
+      console.log(result);
+
+    }
+    const errorCallback = ({ message }: ResponseMessage) => {
+
+    }
+    if (category) {
+      onUpdateCategory(category._id, data, successCallback, errorCallback)
+    } else {
+      onCreateCategory(data, successCallback, errorCallback)
+    }
   };
 
   const onError = (err: any) => {
     console.log(err);
   };
-  useEffect(() => {
-    setValue('parent', category?._id!);
-    setValue('name', category?.name!);
-    setValue('gender', category?.gender!);
-  }, [category]);
 
+  const categoriesTree = useMemo<DefaultOptionType[]>(() => {
+    return listTreeCategories ? recursiveOptionTree(listTreeCategories.docs) : []
+  }, [listTreeCategories])
   return (
-    <div>
-      <form>
-        <div className="w-full gap-2 flex flex-col">
-          <Typography.Text>Category</Typography.Text>
+    <Card bordered={false}>
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
 
+        <div className="gap-2 flex flex-col" >
+          <Typography.Text>Tên danh mục</Typography.Text>
+          <Controller
+            control={control}
+            name="name"
+
+            rules={{
+              required: {
+                value: true,
+                message: 'Vui lòng nhập tên danh mục !',
+              },
+            }}
+            render={({ field }) => (
+              <Input
+                size="large"
+                placeholder="Nhập tên danh mục"
+                status={errors.name && 'error'}
+                {...field}
+                value={field.value}
+              />
+            )}
+          />
+          {errors.name && <Typography.Text type="danger">{errors.name.message}</Typography.Text>}
+        </div>
+        {/* <div className="gap-2 flex flex-col">
+          <Typography.Text>Danh mục cha</Typography.Text>
           <Controller
             control={control}
             name="parent"
@@ -85,6 +118,7 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
                 showSearch
                 optionFilterProp="children"
                 status={errors.parent && 'error'}
+                placeholder="Chọn danh mục cha"
                 onSearch={onSearch}
                 filterOption={filterOption}
                 filterSort={(optionA, optionB) =>
@@ -97,76 +131,86 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
             rules={{
               required: {
                 value: true,
-                message: 'Vui lòng chọn parent !',
+                message: 'Vui lòng chọn danh mục cha !',
               },
             }}
           />
           {errors.parent && (
             <Typography.Text type="danger">{errors.parent.message}</Typography.Text>
           )}
+        </div> */}
 
-          <Typography.Text>Gender</Typography.Text>
+        <div className="gap-2 flex flex-col">
+          <Typography.Text>Danh mục cha</Typography.Text>
+          <Controller
+            control={control}
+            name="parent"
+            render={({ field }) => (
+              <TreeSelect
+                style={{ width: '100%' }}
+                {...field}
+                value={field.value}
+                // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeData={categoriesTree}
+                placeholder="Please select"
+                showSearch
 
+                treeDefaultExpandAll
+
+              />
+            )}
+            rules={{
+              required: {
+                value: true,
+                message: 'Vui lòng chọn danh mục cha !',
+              },
+            }}
+          />
+          {errors.parent && (
+            <Typography.Text type="danger">{errors.parent.message}</Typography.Text>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <Typography.Text>Collection</Typography.Text>
           <Controller
             control={control}
             name="gender"
+            rules={{
+              required: {
+                value: true,
+                message: 'Vui lòng chọn collection !',
+              },
+            }}
             render={({ field }) => (
               <Select
                 mode="multiple"
                 size="large"
                 {...field}
-                options={optionsGenderCategory}
+                value={field.value && field.value}
                 status={errors.gender && 'error'}
-                showSearch
-                onSearch={onSearch}
-                filterOption={filterOption}
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? '')
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? '').toLowerCase())
-                }
+                placeholder="Chọn collection"
+                options={[
+                  { value: 'Man', label: "Man's Clothing" },
+                  { value: 'Women', label: "Women's Clothing" },
+                  { value: 'Unisex', label: "Unisex's Clothing" },
+                ]}
               />
             )}
-            rules={{
-              required: {
-                value: true,
-                message: 'Vui lòng chọn gender !',
-              },
-            }}
           />
           {errors.gender && (
-            <Typography.Text type="danger">{errors.gender.message}</Typography.Text>
+            <Typography.Text type="danger">{errors.gender?.message}</Typography.Text>
           )}
-
-          <Typography.Text>Name</Typography.Text>
-          <Controller
-            control={control}
-            name="name"
-            render={({ field }) => (
-              <Input
-                size="large"
-                placeholder="Nhập ten"
-                inputMode="numeric"
-                status={errors.name && 'error'}
-                {...field}
-                value={field.value}
-              />
-            )}
-            rules={{
-              required: {
-                value: true,
-                message: 'Vui lòng nhập tên !',
-              },
-            }}
-          />
-          {errors.name && <Typography.Text type="danger">{errors.name.message}</Typography.Text>}
-          <Button size="large" type="primary" onClick={handleSubmit(onSubmit, onError)}>
-            {category ? 'Cập nhật' : 'Thêm mới'}
-          </Button>
         </div>
+
+
+        <Button size="large" type="primary" onClick={handleSubmit(onSubmit, onError)}>
+          {category ? 'Cập nhật' : 'Thêm mới'}
+        </Button>
       </form>
-    </div>
+    </Card >
   );
 };
 
 export default FormCategory;
+

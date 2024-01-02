@@ -140,7 +140,14 @@ export type ParamCreateProduct = {
   keywords: string[];
   storedProducts: StoredProduct[];
 };
-export type FolderUpload = 'avatars' | 'brands' | 'categories' | 'stores' | 'products' | 'reviews';
+export type FolderUpload =
+  | 'avatars'
+  | 'brands'
+  | 'categories'
+  | 'stores'
+  | 'products'
+  | 'reviews'
+  | 'blogs';
 
 export type ParamCreateBrand = {
   name: string;

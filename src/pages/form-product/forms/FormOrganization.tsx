@@ -1,12 +1,11 @@
+import { brandService, categoryService } from '@/services';
+import { cn } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
-import { Card, Space, Typography, Select, Tag, Input, theme, InputRef } from 'antd';
-import { TweenOneGroup } from 'rc-tween-one';
+import { Card, Input, InputRef, Select, Space, Tag, Typography, theme } from 'antd';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
-import { FormCreateProduct } from '../FormProduct';
-import { brandService, categoryService } from '@/services';
 import useSWR from 'swr';
-import { cn } from '@/utils';
+import { FormCreateProduct } from '../FormProduct';
 
 const FormOrganization = () => {
   const { data } = useSWR('GetAllBrandsInFormProduct', () =>

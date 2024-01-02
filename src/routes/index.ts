@@ -18,6 +18,7 @@ import Product from '@/pages/product';
 import Repository from '@/pages/repository';
 import Role from '@/pages/role/Role';
 import NotPageFound from '../pages/NotPageFound';
+import Blog from '@/pages/blogs/Blog';
 
 type routeType = {
   path: string;
@@ -88,6 +89,14 @@ const routes: Array<routeType> = [
     path: config.routes.role,
     component: Role,
   },
+  {
+    path: config.routes.blog,
+    component: Blog,
+  },
+  // {
+  //   path: config.routes.categoryBlog,
+  //   component: CategoryBlog,
+  // },
   {
     path: '*',
     component: NotPageFound,

@@ -28,7 +28,7 @@ const defaultValues: FormInputLogin = {
     email: '',
     password: '',
     saveAccount: false,
-    phone: ''
+    phone: '',
 }
 const FormLogin = ({ activeSignUp, openSignUp }: FormLoginProps) => {
     const { account } = useAppSelector(selectAuth)
@@ -88,6 +88,7 @@ const FormLogin = ({ activeSignUp, openSignUp }: FormLoginProps) => {
                 Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ và số, không bao gồm ký tự
                 đặc biệt.
             </div>}
+          
             <Controller
                 control={control}
                 name='email'

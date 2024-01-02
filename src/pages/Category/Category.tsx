@@ -5,7 +5,6 @@ import './_category.scss';
 const Category = () => {
   return (
     <div className="h-full flex-col flex gap-12">
-      <StatsCategory />
       <CategoryList />
     </div>
   );

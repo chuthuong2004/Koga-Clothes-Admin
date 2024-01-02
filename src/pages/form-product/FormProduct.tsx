@@ -51,7 +51,7 @@ export type FormCreateProduct = {
 };
 const FormProduct = () => {
   const navigate = useNavigate()
-  const { onCreateProduct } = useProduct()
+  const { onCreateProduct, onUpdateProduct } = useProduct()
   const params = useParams()
   const slug = params.productId
   const { data: product } = useSWR("GetProductDetails", () => slug ? productService.getById(slug) : undefined);
@@ -259,7 +259,7 @@ const FormProduct = () => {
     // ** Submit quantity
     if (current === 4) {
       const storedProducts = data.storedProducts
-      if (data.medias) {
+      if (data.medias && !slug) {
         const listFileMedia = Object.values(data.medias);
         for (let i = 0; i < listFileMedia.length; i++) {
           const media = listFileMedia[i];
@@ -279,14 +279,27 @@ const FormProduct = () => {
       newData.storedProducts = storedProducts;
 
       console.log('Data submit: ', newData);
-      onCreateProduct(newData, () => {
-        console.log("Tạo thành công !");
-        toast.success('Thêm mới sản phẩm thành công !')
-        navigate(routes.product)
-      }, ({ message }) => {
-        console.log({ message });
-
-      })
+      if(!product) {
+        // ** Handle create product
+        onCreateProduct(newData, () => {
+          console.log("Tạo thành công !");
+          toast.success('Thêm mới sản phẩm thành công !')
+          navigate(routes.product)
+        }, ({ message }) => {
+          console.log({ message });
+  
+        })
+      } else {
+        onUpdateProduct(product._id, newData, () => {
+          console.log("Cập nhật thành công !");
+          toast.success('Cập nhật sản phẩm thành công !')
+          navigate(routes.product)
+        }, ({ message }) => {
+          console.log({ message });
+  
+        })
+      }
+      
       return;
     }
     setCurrent((prev) => prev + 1);

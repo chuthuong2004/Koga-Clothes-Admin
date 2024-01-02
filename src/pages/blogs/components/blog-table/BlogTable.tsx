@@ -1,9 +1,9 @@
-import DataTable, { Alignment, Direction } from 'react-data-table-component';
 import { usePagination, useSearch } from '@/hooks/helpers';
-import { brandService } from '@/services';
-import { columns } from './columns';
-import { BrandHeader } from './components';
+import { blogService } from '@/services';
 import { useCallback, useState } from 'react';
+import DataTable, { Alignment, Direction } from 'react-data-table-component';
+import { columns } from './columns';
+import { BlogHeader } from './components';
 
 export type FilterBrand ={
   creator: string[],
@@ -16,14 +16,14 @@ const BlogTable = () => {
     limit: 10,
   })
   const { data, } = usePagination(
-    'ListBrandManagement',
+    'ListBlogManagement',
     {
       page: 1,
       limit: filter.limit,
       search: debounceSearch,
       creator: filter.creator.join(',')
     },
-    brandService.getAll,
+    blogService.getAll,
   );
 
   const handleChangeFilter = useCallback((value: string[] | string, field: keyof FilterBrand ) => {
@@ -54,7 +54,7 @@ const BlogTable = () => {
         subHeaderWrap
         subHeaderAlign={Alignment.CENTER}
         subHeader
-        subHeaderComponent={<BrandHeader search={search} onChangeSearch={onChangeSearch} onChangeFilter={handleChangeFilter} />}
+        subHeaderComponent={<BlogHeader search={search} onChangeSearch={onChangeSearch} onChangeFilter={handleChangeFilter} />}
         direction={Direction.LTR}
         customStyles={{
           cells: {

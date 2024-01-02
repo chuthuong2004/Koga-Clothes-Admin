@@ -37,6 +37,28 @@ export function useProduct() {
     },
     [mutate],
   );
+  const handleUpdateProduct = useCallback(
+    async (
+      id: string,
+      params: ParamCreateProduct,
+      successCallback: () => void,
+      errCallback?: ErrCallbackType,
+    ) => {
+      try {
+        setIsLoading(true);
+        const created = await productService.update(id ,params);
+        console.log('created: ', created);
+
+        mutate('ListProducts');
+        successCallback();
+      } catch (error) {
+        handleErrorHooks(error, errCallback);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [mutate],
+  );
   const handleDeleteProduct = useCallback(
     async (id: string, successCallback: () => void, errCallback?: ErrCallbackType) => {
       try {
@@ -57,5 +79,6 @@ export function useProduct() {
     isLoading,
     onCreateProduct: handleCreateProduct,
     onDeleteProduct: handleDeleteProduct,
+    onUpdateProduct: handleUpdateProduct,
   };
 }

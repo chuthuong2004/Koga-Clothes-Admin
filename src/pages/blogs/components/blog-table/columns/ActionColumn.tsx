@@ -1,4 +1,4 @@
-import { FormBrand } from '@/components/app';
+import { FormBlog, FormBrand } from '@/components/app';
 import { useBrand } from '@/hooks/services';
 import { useToggle } from '@/hooks/utils';
 import { StoreBlog } from '@/types/entities';
@@ -41,7 +41,7 @@ const ActionColumn = ({ id, blog }: ActionColumnProps) => {
     <div className="flex gap-2 items-center">
       <FaRegEdit onClick={toggle} size={20} className="text-primary cursor-pointer" />
       <FaTrashAlt onClick={showDeleteConfirm} size={20} className="text-primary cursor-pointer" />
-      <FormBrand onClose={onClose} open={isOpen} brand={brand} type="Edit" />
+      <FormBlog onClose={onClose} open={isOpen} blog={blog} type="Edit" />
     </div>
   );
 }

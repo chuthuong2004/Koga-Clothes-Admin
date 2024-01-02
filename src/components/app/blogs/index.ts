@@ -1,2 +1,2 @@
-import FormBrand from './FormBlog';
-export { FormBrand };
+import FormBlog from './FormBlog';
+export { FormBlog };

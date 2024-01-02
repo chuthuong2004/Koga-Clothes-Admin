@@ -1,10 +1,9 @@
-import React from 'react';
-import { StatsBrand, BrandTable } from './components';
+import { BlogTable, StatsBlog } from './components';
 const Brand = () => {
   return (
     <div className="h-full flex-col flex gap-12">
-      <StatsBrand />
-      <BrandTable />
+      <StatsBlog />
+      <BlogTable />
     </div>
   );
 };

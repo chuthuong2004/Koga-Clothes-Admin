@@ -15,6 +15,7 @@ import userService from './user.service';
 import repositoryService from './repository.service';
 import staffService from './staff.service';
 import blogService from './blog.service';
+import categoryBlogService from './category-blog.service';
 
 export {
   addressService,
@@ -33,5 +34,6 @@ export {
   userService,
   repositoryService,
   staffService,
-  blogService
+  blogService,
+  categoryBlogService
 };

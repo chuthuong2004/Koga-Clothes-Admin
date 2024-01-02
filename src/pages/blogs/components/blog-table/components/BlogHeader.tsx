@@ -1,4 +1,4 @@
-import { FormBrand } from '@/components/app';
+import { FormBlog, FormBrand } from '@/components/app';
 import { usePagination } from '@/hooks/helpers';
 import { staffService } from '@/services';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
@@ -41,7 +41,7 @@ const BrandHeader = ({ search, onChangeSearch, onChangeFilter }: BrandHeaderProp
         <div className='w-full flex flex-col'>
             <div className='w-full flex flex-col border-b-slate-100'>
                 <div className='w-full flex flex-1 items-start'>
-                    <Typography.Title level={4}>Danh sách thương hiệu</Typography.Title>
+                    <Typography.Title level={4}>Danh sách bài viết</Typography.Title>
                 </div>
             </div>
             <Divider />
@@ -70,7 +70,7 @@ const BrandHeader = ({ search, onChangeSearch, onChangeFilter }: BrandHeaderProp
                     </Button>
                 </Space>
             </div>
-            <FormBrand open={openModal} onClose={handleCloseModal} />
+            <FormBlog open={openModal} onClose={handleCloseModal} />
         </div>
     )
 }

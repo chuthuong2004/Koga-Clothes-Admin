@@ -1,4 +1,4 @@
 import StatsBlog from './StatsBlog';
-import { BrandTable } from './blog-table';
+import { BlogTable } from './blog-table';
 
-export { BrandTable, StatsBlog };
+export { BlogTable, StatsBlog };

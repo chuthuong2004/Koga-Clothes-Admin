@@ -1,5 +1,5 @@
 import { StoreBlog } from '@/types/entities';
-import { Avatar, Image, Typography } from 'antd';
+import { Avatar, Badge, Image, Typography } from 'antd';
 import { TableColumn } from 'react-data-table-component';
 import ActionColumn from './ActionColumn';
 
@@ -7,7 +7,7 @@ import ActionColumn from './ActionColumn';
 export const columns: TableColumn<StoreBlog>[] = [
   {
     id: 'image',
-    name: 'Image',
+    name: 'Hình ảnh',
     selector: (row) => row.image,
     cell(row, rowIndex, column, id) {
       return <div className="flex gap-4 items-center">
@@ -22,7 +22,7 @@ export const columns: TableColumn<StoreBlog>[] = [
   },
   {
     id: 'name',
-    name: 'TITLE',
+    name: 'Nội dung',
     width: '35%',
     selector: (row) => row.title,
     cell: (row, index, column, id) => {
@@ -38,7 +38,7 @@ export const columns: TableColumn<StoreBlog>[] = [
   },
   {
     id: 'author',
-    name: 'AUTHOR',
+    name: 'Tác giả',
     selector: (row) => row.author._id,
     cell: (row, index, column, id) => {
       return (
@@ -47,6 +47,30 @@ export const columns: TableColumn<StoreBlog>[] = [
             {'DVT'}
           </Avatar>
           <Typography>{row.author.firstName + ' ' + row.author.lastName}</Typography>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'mode',
+    name: 'Trạng thái',
+    selector: (row) => row.author._id,
+    cell: (row, index, column, id) => {
+      return (
+        <div className='flex gap-4 items-center'>
+          <Badge   color='magenta'   count={row.mode}></Badge>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'author',
+    name: 'Lượt xem',
+    selector: (row) => row.author._id,
+    cell: (row, index, column, id) => {
+      return (
+        <div className='flex gap-4 items-center'>
+          <Typography>{row.views}</Typography>
         </div>
       );
     },
