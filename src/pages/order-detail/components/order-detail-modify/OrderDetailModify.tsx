@@ -1,11 +1,10 @@
 import { OrderStatus, StoreOrder } from '@/types/entities';
 import { Button, Card } from 'antd';
-import React from 'react';
+import React, { memo } from 'react';
 import DataTable, { Alignment, Direction } from 'react-data-table-component';
-import { columns } from './column';
-import { StatusOrderItem } from '../status-order-item';
 import { statusCombineTime } from '../../constrants';
-import { useSWRConfig } from 'swr';
+import { StatusOrderItem } from '../status-order-item';
+import { columns } from './column';
 
 type OrderProps = {
   order?: StoreOrder;
@@ -79,7 +78,7 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
               <div className="item-info-price">
                 <span className="text-[#2f2b3d] text-2xl mr-2">Subtotal:</span>
                 <span className="text-[#2f2b3d] text-2xl mr-2">
-                  {order?.totalPrice.toLocaleString('vi-VN', {
+                  {order?.provisionalPrice.toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
                   })}
@@ -107,7 +106,7 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
                 <span className="text-[#2f2b3d] text-2xl mr-2">Total:</span>
                 {order ? (
                   <span className="text-[#2f2b3d] text-2xl mr-2">
-                    {(order?.totalPrice + order?.taxPrice + order?.shippingPrice)?.toLocaleString(
+                    {(order?.totalPrice)?.toLocaleString(
                       'vi-VN',
                       {
                         style: 'currency',
@@ -134,4 +133,4 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
   );
 };
 
-export default OrderDetailModify;
+export default memo(OrderDetailModify);

@@ -126,12 +126,12 @@ const FormInfoBasic = () => {
                         }}
                         render={({ field }) => (
                             <Editor
-                            editorState={field.value}
-                            wrapperClassName={cn(`border rounded-md transition-all ${errors.deliveryReturnPolicy?.message ? 'border-error' : ''}`)}
-                            editorClassName="p-4"
-                            editorStyle={{ maxHeight: '40vh' }}
-                            toolbarClassName='bg-primary border-none'
-                            onEditorStateChange={field.onChange}
+                                editorState={field.value}
+                                wrapperClassName={cn(`border rounded-md transition-all ${errors.deliveryReturnPolicy?.message ? 'border-error' : ''}`)}
+                                editorClassName="p-4"
+                                editorStyle={{ maxHeight: '40vh' }}
+                                toolbarClassName='bg-primary border-none'
+                                onEditorStateChange={field.onChange}
                                 placeholder='Nhập chính sách đổi trả'
                             />
 

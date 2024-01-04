@@ -1,20 +1,29 @@
-import React, { memo } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { FormCreateBlog } from './FormBlog'
-import { EModeBlog } from '@/types/enums'
-import { Typography, Select, Space, DatePicker } from 'antd'
-import { usePagination } from '@/hooks/helpers'
-import { categoryBlogService } from '@/services'
+import React, { memo } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { FormCreateBlog } from './FormBlog';
+import { EModeBlog } from '@/types/enums';
+import { Typography, Select, Space, DatePicker } from 'antd';
+import { usePagination } from '@/hooks/helpers';
+import { categoryBlogService } from '@/services';
+import moment from 'moment';
 
 const FormSelectBlog = () => {
-    const { data: categories } = usePagination("GetAllCategoriesBlog", {
-        page: 1,
-        limit: 1000,
-        offset: 0
-    }, categoryBlogService.getAll)
-    const { control, formState: { errors } } = useFormContext<FormCreateBlog>()
+    const { data: categories } = usePagination(
+        'GetAllCategoriesBlog',
+        {
+            page: 1,
+            limit: 1000,
+            offset: 0,
+        },
+        categoryBlogService.getAll,
+    );
+    const {
+        control,
+        formState: { errors },
+    } = useFormContext<FormCreateBlog>();
+    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
     return (
-        <div className='flex gap-4'>
+        <div className="flex gap-4">
             <div className="flex flex-1 flex-col gap-2">
                 <Typography.Text>Danh mục</Typography.Text>
                 <Controller
@@ -72,18 +81,16 @@ const FormSelectBlog = () => {
                             {...field}
                             value={field.value && field.value}
                             status={errors.mode && 'error'}
-                            placeholder="Chọn collection"
+                            placeholder="Chọn trạng thái"
                             options={[
-                                { value: EModeBlog.Public, label: "Công khai" },
-                                { value: EModeBlog.Private, label: "Private" },
-                                { value: EModeBlog.Hidden, label: "Ẩn" },
+                                { value: EModeBlog.Public, label: 'Công khai' },
+                                { value: EModeBlog.Private, label: 'Nội bộ' },
+                                { value: EModeBlog.Hidden, label: 'Ẩn' },
                             ]}
                         />
                     )}
                 />
-                {errors.mode && (
-                    <Typography.Text type="danger">{errors.mode?.message}</Typography.Text>
-                )}
+                {errors.mode && <Typography.Text type="danger">{errors.mode?.message}</Typography.Text>}
             </div>
             <div className="flex flex-1 flex-col gap-2">
                 <Typography.Text>Thời gian công khai</Typography.Text>
@@ -98,8 +105,13 @@ const FormSelectBlog = () => {
                     }}
                     render={({ field }) => (
                         <Space direction="vertical" size={12}>
-                            <DatePicker size='large' showTime onOk={field.onChange}
+                            <DatePicker
+                                size="large"
+                                showTime
+                                onOk={(date) => field.onChange(date)}
                                 status={errors.time_public && 'error'}
+                                format={'YYYY-MM-DD HH:mm:ss'}
+                                value={field.value}
                             />
                         </Space>
                     )}
@@ -109,7 +121,7 @@ const FormSelectBlog = () => {
                 )}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default memo(FormSelectBlog)
+export default memo(FormSelectBlog);

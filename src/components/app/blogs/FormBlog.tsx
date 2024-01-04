@@ -1,3 +1,4 @@
+import { BASE_URL } from '@/config';
 import { useBlog } from '@/hooks/services';
 import { ParamCreateBlog } from '@/services/types';
 import { ResponseMessage } from '@/types/commons';
@@ -13,7 +14,7 @@ import FormContentBlog from './FormContentBlog';
 import FormImageBlog from './FormImageBlog';
 import FormSelectBlog from './FormSelectBlog';
 import FormTagsBlog from './FormTagsBlog';
-import { BASE_URL } from '@/config';
+import dayjs from 'dayjs';
 
 export type FormCreateBlog = {
   title: string;
@@ -22,8 +23,8 @@ export type FormCreateBlog = {
   category: string;
   mode: EModeBlog;
   tags: string[]
-  time_public: Date;
-  image: UploadFile<File>[] | string;
+  time_public: dayjs.Dayjs;
+  image: UploadFile<File>[];
 };
 const defaultValues: FormCreateBlog = {
   title: '',
@@ -33,7 +34,7 @@ const defaultValues: FormCreateBlog = {
   category: '',
   mode: EModeBlog.Public,
   tags: [],
-  time_public: new Date()
+  time_public: dayjs()
 };
 
 
@@ -49,6 +50,7 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
   const methods = useForm<FormCreateBlog>({
     defaultValues,
   });
+  console.log(blog);
 
   useEffect(() => {
     if (type === 'Edit' && blog && open) {
@@ -59,13 +61,13 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
         category: blog.category._id,
         mode: blog.mode,
         tags: blog.tags,
-        image:[{
+        image: [{
           uid: '-1',
           name: 'image.png',
           status: 'done',
           url: BASE_URL + blog.image,
         }],
-        time_public: new Date(blog.time_public)
+        time_public: dayjs(blog.time_public || new Date())
       })
     }
   }, [blog, type, methods, open])
@@ -81,9 +83,9 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
       mode: data.mode,
       summary: draftContent(data.summary),
       tags: data.tags,
-      time_public: data.time_public,
-      image: typeof data.image === 'string' ? data.image : ''
-      
+      time_public: new Date(dayjs(data.time_public).format("YYYY-MM-DD HH:mm:ss")),
+      image: blog && data.image.find(item => item.url?.includes(blog?.image)) ? blog.image : ''
+
     };
     console.log("New Data: ", newData);
 
@@ -123,7 +125,7 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
   return (
     <Modal
       open={open}
-      title="Thêm mới bài viết"
+      title={`${blog ? 'Cập nhật' : 'Thêm mới'} bài viết`}
       onOk={methods.handleSubmit(onSubmit)}
       centered
       width={'50vw'}

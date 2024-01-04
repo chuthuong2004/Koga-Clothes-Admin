@@ -2,6 +2,9 @@ import { StoreBlog } from '@/types/entities';
 import { Avatar, Badge, Image, Typography } from 'antd';
 import { TableColumn } from 'react-data-table-component';
 import ActionColumn from './ActionColumn';
+import { getFirstLetter, randomBgAvatar } from '@/utils';
+import { EModeBlog } from '@/types/enums';
+import { LiteralUnion } from 'antd/es/_util/type';
 
 
 export const columns: TableColumn<StoreBlog>[] = [
@@ -23,7 +26,7 @@ export const columns: TableColumn<StoreBlog>[] = [
   {
     id: 'name',
     name: 'Nội dung',
-    width: '35%',
+    width: '20%',
     selector: (row) => row.title,
     cell: (row, index, column, id) => {
       return (
@@ -39,14 +42,28 @@ export const columns: TableColumn<StoreBlog>[] = [
   {
     id: 'author',
     name: 'Tác giả',
+    width: '15%',
     selector: (row) => row.author._id,
     cell: (row, index, column, id) => {
       return (
         <div className='flex gap-4 items-center'>
-          <Avatar style={{ backgroundColor: '#4184c8e0', verticalAlign: 'middle' }} size="large" gap={10}>
-            {'DVT'}
+          <Avatar style={{ backgroundColor: randomBgAvatar() }} size="large">
+            {getFirstLetter(row.author.firstName + ' ' + row.author.lastName)}
           </Avatar>
           <Typography>{row.author.firstName + ' ' + row.author.lastName}</Typography>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'author',
+    name: 'Danh mục',
+    selector: (row) => row.category._id,
+    cell: (row, index, column, id) => {
+      return (
+        <div className='flex gap-4 items-center'>
+
+          <Typography>{row.category.name}</Typography>
         </div>
       );
     },
@@ -56,9 +73,21 @@ export const columns: TableColumn<StoreBlog>[] = [
     name: 'Trạng thái',
     selector: (row) => row.author._id,
     cell: (row, index, column, id) => {
+      const colorsMode: Record<EModeBlog, LiteralUnion<"blue" | "purple" | "cyan" | "green" | "magenta" | "pink" | "red" | "orange" | "yellow" | "volcano" | "geekblue" | "lime" | "gold">> = {
+        [EModeBlog.Hidden]: 'blue',
+        [EModeBlog.Pending]: 'geekblue',
+        [EModeBlog.Private]: 'magenta',
+        [EModeBlog.Public]: 'pink',
+      }
+      const titleMode: Record<EModeBlog, string> = {
+        hidden: 'Ẩn',
+        pending: 'Đang chờ',
+        private: 'Nội bộ',
+        "public": "Công khai"
+      }
       return (
         <div className='flex gap-4 items-center'>
-          <Badge   color='magenta'   count={row.mode}></Badge>
+          <Badge color={colorsMode[row.mode]} count={titleMode[row.mode]}></Badge>
         </div>
       );
     },

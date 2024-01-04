@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormCreateBlog } from './FormBlog';
-import { cn } from '@/utils';
+import { cn, customToolbar, handlePastedFiles, mediaBlockRenderer } from '@/utils';
 import { Typography, Input } from 'antd';
 import { convertToRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -58,6 +58,7 @@ const FormContentBlog = () => {
                                 `border rounded-md transition-all ${errors.summary?.message ? 'border-error' : ''
                                 }`,
                             )}
+                            toolbar={customToolbar}
                             editorClassName="p-4"
                             editorStyle={{ maxHeight: '40vh' }}
                             toolbarClassName="bg-primary border-none"
@@ -95,10 +96,18 @@ const FormContentBlog = () => {
                                 }`,
                             )}
                             editorClassName="p-4"
-                            editorStyle={{ maxHeight: '40vh' }}
+                            editorStyle={{
+                                maxHeight: "60vh",
+                            }}
                             toolbarClassName="bg-primary border-none"
                             onEditorStateChange={field.onChange}
                             placeholder="Nhập nội dung bài viết"
+
+                            toolbar={customToolbar}
+                            spellCheck
+                            stripPastedStyles
+                            uploadCallback={handlePastedFiles}
+                            customBlockRenderFunc={mediaBlockRenderer}
                         />
                     )}
                 />

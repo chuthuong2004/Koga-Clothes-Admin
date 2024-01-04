@@ -9,3 +9,4 @@ export * from './useProduct';
 export * from './useRole';
 export * from './useBlog';
 export * from './useCategory';
+export * from './useCategoryBlog';

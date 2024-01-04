@@ -8,11 +8,14 @@ import { GenderCategory } from '@/types/unions';
 import { recursiveOptionTree } from '@/utils';
 import { Button, Card, Input, Select, TreeSelect, Typography } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { useSWRConfig } from 'swr';
 
 type FormCategoryProps = {
   category?: StoreCategory | null;
+  onClearCategorySelected: () => void
 };
 
 type FormCreateCategory = {
@@ -20,8 +23,14 @@ type FormCreateCategory = {
   name: string;
   gender: GenderCategory[]
 }
+const defaultValues: FormCreateCategory = {
+  name: '',
+  parent: '',
+  gender: [],
+}
 
-const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
+const FormCategory: React.FC<FormCategoryProps> = ({ category, onClearCategorySelected }) => {
+  const { mutate } = useSWRConfig()
   const { loading, onCreateCategory, onUpdateCategory } = useCategory()
   const { data: listTreeCategories } = usePagination(
     'ListAllCategories',
@@ -37,42 +46,51 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
     formState: { errors },
     handleSubmit,
     setValue,
+    clearErrors,
+    reset
   } = useForm<FormCreateCategory>({
-    defaultValues: {
-      name: '',
-      parent: '',
-      gender: [],
-    },
+    defaultValues,
   });
 
 
   useEffect(() => {
     if (category) {
-      setValue('parent', category.parent._id);
+      category.parent && setValue('parent', category.parent._id);
       setValue('name', category.name);
       setValue('gender', category.gender);
+      clearErrors()
     }
 
-  }, [category, setValue]);
+  }, [category, setValue, clearErrors]);
+
+
+  const handleCancelForm = useCallback(() => {
+    reset(defaultValues)
+    onClearCategorySelected()
+  }, [onClearCategorySelected, reset])
+
 
   const onSubmit = (data: ParamsCreateCategory) => {
     const successCallback = (result: StoreCategory) => {
-      console.log(result);
+      toast.success(`${category ? 'Thêm' : 'Cập nhật'} danh mục thành công !`)
+      handleCancelForm()
 
     }
     const errorCallback = ({ message }: ResponseMessage) => {
-
+      toast.error(message)
+    }
+    const newData: ParamsCreateCategory = {
+      gender: data.gender,
+      name: data.name,
+      parent: data.parent ? data.parent : undefined
     }
     if (category) {
-      onUpdateCategory(category._id, data, successCallback, errorCallback)
+      onUpdateCategory(category._id, newData, successCallback, errorCallback)
     } else {
-      onCreateCategory(data, successCallback, errorCallback)
+      onCreateCategory(newData, successCallback, errorCallback)
     }
   };
 
-  const onError = (err: any) => {
-    console.log(err);
-  };
 
   const categoriesTree = useMemo<DefaultOptionType[]>(() => {
     return listTreeCategories ? recursiveOptionTree(listTreeCategories.docs) : []
@@ -149,22 +167,17 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
               <TreeSelect
                 style={{ width: '100%' }}
                 {...field}
-                value={field.value}
+                value={field.value ? field.value : undefined}
                 // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                 treeData={categoriesTree}
-                placeholder="Please select"
+                placeholder="Chọn danh mục cha"
                 showSearch
-
+                size='large'
                 treeDefaultExpandAll
+                allowClear
 
               />
             )}
-            rules={{
-              required: {
-                value: true,
-                message: 'Vui lòng chọn danh mục cha !',
-              },
-            }}
           />
           {errors.parent && (
             <Typography.Text type="danger">{errors.parent.message}</Typography.Text>
@@ -202,11 +215,17 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category }) => {
             <Typography.Text type="danger">{errors.gender?.message}</Typography.Text>
           )}
         </div>
+        <div className='flex gap-4'>
 
-
-        <Button size="large" type="primary" onClick={handleSubmit(onSubmit, onError)}>
-          {category ? 'Cập nhật' : 'Thêm mới'}
-        </Button>
+          <Button size="large" type="primary" disabled={loading} loading={loading} onClick={handleSubmit(onSubmit)}>
+            {category ? 'Cập nhật' : 'Thêm mới'}
+          </Button>
+          {category &&
+            <Button size="large" onClick={handleCancelForm}>
+              Huỷ bỏ
+            </Button>
+          }
+        </div>
       </form>
     </Card >
   );

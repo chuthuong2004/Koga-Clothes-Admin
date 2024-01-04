@@ -20,7 +20,7 @@ export function useCategory() {
         setLoading(true);
         const created = await categoryService.create(params);
         if (created) {
-          mutate('');
+          mutate((key) => typeof key === 'string' && key.startsWith('ListCategory'));
           successCallback(created);
         }
       } catch (error) {
@@ -43,7 +43,7 @@ export function useCategory() {
         setLoading(true);
         const updated = await categoryService.update(id, params);
         if (updated) {
-          mutate('');
+          mutate((key) => typeof key === 'string' && key.startsWith('ListCategory'));
           successCallback(updated);
         }
       } catch (error) {
@@ -54,9 +54,31 @@ export function useCategory() {
     },
     [mutate],
   );
+
+  const handleDeleteCategory = useCallback(
+    async (
+      id: string,
+      successCallback: () => void,
+      errCallback?: ErrCallbackType,
+    ) => {
+      try {
+        setLoading(true);
+        await categoryService.delete(id);
+        mutate((key) => typeof key === 'string' && key.startsWith('ListCategory'));
+        successCallback();
+      } catch (error) {
+        handleErrorHooks(error, errCallback);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [mutate],
+  );
+
   return {
     loading,
     onCreateCategory: handleCreateCategory,
     onUpdateCategory: handleUpdateCategory,
+    onDeleteCategory: handleDeleteCategory,
   };
 }

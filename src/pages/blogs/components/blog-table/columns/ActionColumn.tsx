@@ -1,9 +1,10 @@
 import { FormBlog, FormBrand } from '@/components/app';
-import { useBrand } from '@/hooks/services';
+import { useBlog, useBrand } from '@/hooks/services';
 import { useToggle } from '@/hooks/utils';
 import { StoreBlog } from '@/types/entities';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 import { Modal } from 'antd';
+import { memo } from 'react';
 import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -12,7 +13,7 @@ type ActionColumnProps = {
   blog: StoreBlog
 }
 const ActionColumn = ({ id, blog }: ActionColumnProps) => {
-  const { onDeleteBrand } = useBrand()
+  const { onDeleteBlog } = useBlog()
   const { isOpen, onClose, toggle } = useToggle(false)
   const showDeleteConfirm = () => {
     Modal.confirm({
@@ -25,7 +26,7 @@ const ActionColumn = ({ id, blog }: ActionColumnProps) => {
       centered: true,
 
       onOk() {
-        onDeleteBrand(id, () => {
+        onDeleteBlog(id, () => {
           toast.success("Xoá bài viết thành công !")
         }, ({ message }) => {
           console.log(message);
@@ -46,4 +47,4 @@ const ActionColumn = ({ id, blog }: ActionColumnProps) => {
   );
 }
 
-export default ActionColumn
+export default memo(ActionColumn)

@@ -1,7 +1,7 @@
 import { OrderStatus, StoreOrder, StoreProduct } from '@/types/entities';
-import { FORMAT_DATE, cn } from '@/utils';
+import { FORMAT_DATE, cn, getFirstLetter, randomBgAvatar } from '@/utils';
 import { colorStatusOrder } from '@/utils/constants/color.constant';
-import { Button, Image, Typography } from 'antd';
+import { Avatar, Button, Image, Typography } from 'antd';
 import moment from 'moment';
 import { TableColumn } from 'react-data-table-component';
 import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
@@ -11,20 +11,22 @@ import { routes } from '@/config';
 export const columns: TableColumn<StoreOrder>[] = [
   {
     id: '_id',
-    name: 'ID',
+    name: 'Mã đơn',
     selector: (row) => row.orderId,
+    cell(row, rowIndex, column, id) {
+      return <Typography.Text className='font-bold'>{row.orderId}</Typography.Text>
+    },
   },
   {
     id: 'date',
-    name: 'DATE',
-    width: '35%',
+    name: 'Ngày tạo đơn',
     selector: (row) => row.createdAt,
     cell: (row, index, column, id) => {
       return (
         <div className="flex gap-4 items-center">
           <div className="flex-1 items-center">
-            <Typography className="line-clamp-1 font-semibold">
-              {moment(row.canceledAt).format(FORMAT_DATE)}
+            <Typography className="">
+              {moment(row.createdAt).format(FORMAT_DATE)}
             </Typography>
           </div>
         </div>
@@ -32,22 +34,66 @@ export const columns: TableColumn<StoreOrder>[] = [
     },
   },
   {
-    id: 'customer',
-    name: 'CUSTOMER',
-    selector: (row) => row.deliveryInformation.firstName,
+    id: '',
+    name: 'Sản phẩm',
+    width: '25%',
+    selector: (row) => row.orderItems[0]._id,
     cell: (row, index, column, id) => {
       return (
-        <div>
-          <Typography>
-            {row.deliveryInformation.lastName + ' ' + row.deliveryInformation.firstName}
-          </Typography>
+        <div className="flex gap-4 items-center">
+          <div className="w-28">
+            <Image
+              className="rounded-lg"
+              src={process.env.REACT_APP_API_URL + row.orderItems[0].image}
+            />
+          </div>
+          <div className="flex-1 items-center">
+            <Typography className="line-clamp-1 font-semibold">{row.orderItems[0].brandName} - {row.orderItems[0].name}</Typography>
+            <div className='flex items-center gap-4 flex-wrap'>
+              <Typography className="" >Màu sắc: {row.orderItems[0].color}</Typography>
+              <Typography className="" >Kích cỡ: {row.orderItems[0].size}</Typography>
+              <Typography className="" >Số lượng: {row.orderItems[0].quantity}</Typography>
+            </div>
+            {row.orderItems.length > 1 &&
+              <div>
+                <Typography.Text>+{row.orderItems.length - 1} sản phẩm khác</Typography.Text>
+              </div>
+            }
+          </div>
         </div>
       );
     },
   },
   {
-    id: 'payment',
-    name: 'PAYMENT',
+    id: 'customer',
+    name: 'Khách hàng',
+    selector: (row) => row.deliveryInformation.firstName,
+    cell: (row, index, column, id) => {
+      return (
+        <div className='flex gap-4 items-center'>
+          <Avatar style={{ backgroundColor: randomBgAvatar() }} size="large" >
+            {getFirstLetter(row.deliveryInformation.firstName + ' ' + row.deliveryInformation.lastName)}
+          </Avatar>
+          <Typography>{row.deliveryInformation.firstName + ' ' + row.deliveryInformation.lastName}</Typography>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'totalPrice',
+    name: 'Tổng tiền',
+    selector: (row) => row.totalPrice,
+    cell: (row, index, column, id) => {
+      return (
+        <div className='flex gap-4 items-center'>
+          <Typography.Text className='font-bold'>{row.totalPrice.toLocaleString("VN")} đ</Typography.Text>
+        </div>
+      );
+    },
+  },
+  {
+    id: 'orderStatus',
+    name: 'Trạng thái',
     selector: (row) => row.orderStatus,
     cell: (row, index, column, id) => {
       const colorStatus = colorStatusOrder[row?.orderStatus as OrderStatus];

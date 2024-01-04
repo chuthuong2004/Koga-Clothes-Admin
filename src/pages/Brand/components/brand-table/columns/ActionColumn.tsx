@@ -17,7 +17,7 @@ const ActionColumn = ({ id, brand }: ActionColumnProps) => {
   const { isOpen, onClose, toggle } = useToggle(false)
   const showDeleteConfirm = () => {
     Modal.confirm({
-      title: 'Bạn có chắc chắn muốn xoá thương hiệu ?',
+      title: `Bạn có chắc chắn muốn xoá thương hiệu [${brand.name}] ?`,
       icon: <ExclamationCircleFilled rev />,
       content: 'Bạn sẽ không thể khôi phục lại thương hiệu này.',
       okText: 'Yes',

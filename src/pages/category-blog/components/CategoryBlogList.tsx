@@ -1,20 +1,20 @@
 import { usePagination } from '@/hooks/helpers';
-import { categoryService } from '@/services';
-import { StoreCategory } from '@/types/entities';
-import { Breadcrumb, BreadcrumbProps, Typography } from 'antd';
-import { useCallback, useState } from 'react';
-import { mutate } from 'swr';
-import { CategoryItem, FormCategory } from './components';
+import { categoryBlogService } from '@/services';
 import { Nullable } from '@/types/commons';
+import { StoreCategoryBlog } from '@/types/entities';
+import { Breadcrumb, BreadcrumbProps, Typography } from 'antd';
 import { motion } from 'framer-motion';
+import { memo, useCallback, useState } from 'react';
+import { mutate } from 'swr';
+import { CategoryItemBlog, FormCategoryBlog } from '.';
 
-const CategoryList = () => {
+const CategoryBlogList = () => {
   const [itemsBreadcrumb, setItemsBreadcrumb] = useState<BreadcrumbProps['items']>([
     {
       title: (
         <Typography.Text
           onClick={() => {
-            mutate('ListCategory');
+            mutate('ListCategoryBlog');
           }}
           className='cursor-pointer'
         >
@@ -24,20 +24,20 @@ const CategoryList = () => {
       path: '',
     },
   ]);
-  const [selectedCategory, setSelectedCategory] = useState<Nullable<StoreCategory>>(null);
+  const [selectedCategory, setSelectedCategory] = useState<Nullable<StoreCategoryBlog>>(null);
   const { data, isLoading, isValidating } = usePagination(
-    `ListCategory${itemsBreadcrumb?.[itemsBreadcrumb.length - 1].path}`,
+    `ListCategoryBlog${itemsBreadcrumb?.[itemsBreadcrumb.length - 1].path}`,
     {
       page: 1,
       limit: 10,
       offset: 0,
       parent: itemsBreadcrumb?.[itemsBreadcrumb.length - 1].path || '',
     },
-    categoryService.getAll,
+    categoryBlogService.getAll,
   );
 
   const handleAddItemsBreadcrumb = useCallback(
-    (newCategory: StoreCategory) => {
+    (newCategory: StoreCategoryBlog) => {
       setItemsBreadcrumb((prev) => {
         if (prev)
           return [
@@ -60,8 +60,11 @@ const CategoryList = () => {
     },
     [itemsBreadcrumb],
   );
-  const handleChoiceCategory = useCallback((category: StoreCategory) => {
+  const handleChoiceCategory = useCallback((category: StoreCategoryBlog) => {
     setSelectedCategory(category);
+  }, []);
+  const handleClearCategory = useCallback(() => {
+    setSelectedCategory(null);
   }, []);
   return (
     <div className="flex flex-col gap-4">
@@ -90,7 +93,7 @@ const CategoryList = () => {
         <div className="flex flex-col gap-4 relative flex-6">
           {isLoading || isValidating ? <Typography.Text>Đang tải...</Typography.Text> :
 
-            data?.docs.map((category, index) => (
+            data && data.docs.length > 0 ? data?.docs.map((category, index) => (
               <motion.div
                 key={category._id}
                 // initial={{ y: 10 }}
@@ -98,20 +101,22 @@ const CategoryList = () => {
                 // transition={{delay: index * 200}}
                 layout
               >
-                <CategoryItem
+                <CategoryItemBlog
                   category={category}
                   handleAddItemsBreadcrumb={handleAddItemsBreadcrumb}
                   handleChoiceCategory={handleChoiceCategory}
                 />
               </motion.div>
-            ))}
+            )) : <div>
+              <Typography.Text className='text-slate-400'>Không có danh mục nào !</Typography.Text>
+            </div>}
         </div>
         <div className="flex-4">
-          <FormCategory category={selectedCategory} />
+          <FormCategoryBlog category={selectedCategory} onClearCategorySelected={handleClearCategory} />
         </div>
       </div>
     </div>
   );
 };
 
-export default CategoryList;
+export default memo(CategoryBlogList);

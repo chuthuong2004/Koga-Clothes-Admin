@@ -1,6 +1,7 @@
 import { StoredProduct } from '@/types/commons';
 import {
   StoreCategory,
+  StoreCategoryBlog,
   StoreMessage,
   StoreProvinceAddress,
   StoreUserAddress,
@@ -166,8 +167,11 @@ export type ParamCreateRepository = {
 };
 
 export type ParamsCreateCategory = Pick<StoreCategory, 'name'> & {
-  parent: string;
+  parent?: string;
   gender: string[];
+};
+export type ParamsCreateCategoryBlog = Pick<StoreCategoryBlog, 'name'> & {
+  parent?: string;
 };
 
 export type ParamCreateRole = {

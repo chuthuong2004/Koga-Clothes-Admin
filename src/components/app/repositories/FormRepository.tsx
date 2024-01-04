@@ -1,27 +1,27 @@
+import { BASE_URL } from '@/config';
+import { useAddress } from '@/hooks/helpers';
 import { useRepository } from '@/hooks/services';
 import { ParamCreateRepository } from '@/services/types';
-import { StoreRepository, StoreProvinceAddress } from '@/types/entities';
+import { StoreProvinceAddress, StoreRepository } from '@/types/entities';
 import { cn, convertContent, getBase64, uploadMultipleImage } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Select, Typography, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import { ContentState, EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useCallback, useEffect, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import htmlToDraft from 'html-to-draftjs';
-import { useAddress } from '@/hooks/helpers';
 
-type FormCreateBrand = {
+type FormCreateRepository = {
     name: string;
     code: string;
     images: UploadFile<File>[];
     description: EditorState;
     address: StoreProvinceAddress;
 };
-const defaultValues: FormCreateBrand = {
+const defaultValues: FormCreateRepository = {
     name: '',
     images: [],
     description: EditorState.createEmpty(),
@@ -49,7 +49,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
         formState: { errors },
         reset,
         setValue
-    } = useForm<FormCreateBrand>({
+    } = useForm<FormCreateRepository>({
         defaultValues,
     });
     const [previewOpen, setPreviewOpen] = useState<boolean>(false);
@@ -63,7 +63,14 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
                 description: convertContent(repository.description),
                 code: repository.code,
                 address: repository.address,
-                // images: repository.images
+                images: repository.images.map((item, index) => ({
+                    uid: `${index + 1}`,
+                    name: 'image.webp',
+                    status: 'done',
+                    url: BASE_URL + item,
+                }
+                ))
+
             });
         }
     }, [open, repository, type, reset]);
@@ -79,7 +86,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
         setPreviewTitle(file.name || file.url!.substring(file.url!.lastIndexOf('/') + 1));
     }, []);
 
-    const onSubmit = async (data: FormCreateBrand) => {
+    const onSubmit = async (data: FormCreateRepository) => {
         console.log(data);
         const descriptionContentState = convertToRaw(data.description.getCurrentContent());
         const newData: ParamCreateRepository = {
@@ -88,13 +95,21 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
             images: repository ? repository.images : [],
         };
         if (data.images.length > 0) {
-            const uploadedImage = await uploadMultipleImage(
-                data.images.map((item) => item.originFileObj),
-                'stores',
-            );
-            console.log('image: ', uploadedImage);
-            if (uploadedImage && uploadedImage.length > 0) {
-                newData.images = [...uploadedImage];
+            const filterImages = data.images.filter(item => {
+                if (repository) {
+                    return !repository.images.includes(item.url?.replace(BASE_URL, '') || "")
+                }
+                return true
+            })
+            if (filterImages.length > 0) {
+                const uploadedImage = await uploadMultipleImage(
+                    data.images.map((item) => item.originFileObj),
+                    'stores',
+                );
+                console.log('image: ', uploadedImage);
+                if (uploadedImage && uploadedImage.length > 0) {
+                    newData.images = [...uploadedImage];
+                }
             }
         }
         if (type === 'Add') {
@@ -136,7 +151,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
     return (
         <Modal
             open={open}
-            title="Thêm mới thương hiệu"
+            title={`${type === 'Add' ? 'Thêm mới' : 'Cập nhật'} kho`}
             onOk={handleSubmit(onSubmit)}
             centered
             width={'50vw'}

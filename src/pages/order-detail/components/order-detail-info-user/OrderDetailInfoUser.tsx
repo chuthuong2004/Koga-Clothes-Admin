@@ -1,6 +1,6 @@
 import { StoreOrder } from '@/types/entities/order.entity';
-import { Avatar, Button, Card } from 'antd';
-import React from 'react';
+import { Avatar, Button, Card, Typography } from 'antd';
+import React, { memo } from 'react';
 import { IoCartOutline } from 'react-icons/io5';
 
 type Props = {
@@ -14,11 +14,16 @@ const OrderDetailInfoUser: React.FC<Props> = ({ order }) => {
         <>
           <Card title="Customer Detail">
             <div className="flex flex-col gap-10">
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-center">
                 <Avatar size={'large'} src={process.env.REACT_APP_API_URL + order.user.avatar} />
-                <span className=" text-text-color text-2xl font-medium">
-                  {order.deliveryInformation.lastName + ' ' + order.deliveryInformation.firstName}
-                </span>
+                <div className='flex flex-col'>
+                  <Typography.Text className="font-medium">
+                    {order.deliveryInformation.lastName + ' ' + order.deliveryInformation.firstName}
+                  </Typography.Text>
+                  <Typography.Text className="text-slate-400 text-xl">
+                    {order.user.email}
+                  </Typography.Text>
+                </div>
               </div>
               <div className=" flex gap-3 items-center">
                 <Avatar
@@ -38,7 +43,9 @@ const OrderDetailInfoUser: React.FC<Props> = ({ order }) => {
                   </Button>
                 </div>
                 <div>
+
                   <span className="text-text-color-secondary text-2xl ">
+
                     Mobile: {order?.deliveryInformation.phone}
                   </span>
                 </div>
@@ -69,4 +76,4 @@ const OrderDetailInfoUser: React.FC<Props> = ({ order }) => {
   );
 };
 
-export default OrderDetailInfoUser;
+export default memo(OrderDetailInfoUser);

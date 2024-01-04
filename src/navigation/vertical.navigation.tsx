@@ -6,81 +6,81 @@ import { MdLogout, MdOutlineReviews, MdPostAdd } from 'react-icons/md';
 import { FaTrademark } from 'react-icons/fa';
 import { IoSettingsOutline } from 'react-icons/io5';
 import { routes } from "@/config";
-import { RxDot } from "react-icons/rx";
+import { RxDot } from "react-icons/rx";import { LuWarehouse } from "react-icons/lu";
 
 export const NAVIGATION_VERTICAL = [
   {
     to: routes.dashboard,
-    icon: <BsBarChart />
+    icon: <BsBarChart size={20}/>
     ,
     title: 'Dashboard',
   },
   {
     to: routes.order,
-    icon: <BsReceipt />,
+    icon: <BsReceipt size={20}/>,
     title: 'Đơn hàng',
   },
   {
     to: routes.brand,
-    icon: <FaTrademark />,
+    icon: <FaTrademark size={20}/>,
     title: 'Thương hiệu',
   },
   {
     to: routes.category,
-    icon: <BiCategory />,
+    icon: <BiCategory size={20}/>,
     title: 'Danh mục',
   },
   {
     to: routes.repository,
-    icon: <BiCategory />,
+    icon: <LuWarehouse size={20}/>,
     title: 'Kho lưu trữ',
   },
   {
     to: routes.product,
-    icon: <BsTruck />,
+    icon: <BsTruck size={20}/>,
     title: 'Sản phẩm',
   },
 
   {
     to: routes.customer,
-    icon: <BsPersonBadge />,
+    icon: <BsPersonBadge size={20}/>,
     title: 'Khách hàng',
   },
   {
     to: routes.chat,
-    icon: <BsChatSquare />,
+    icon: <BsChatSquare size={20}/>,
     title: 'Tin nhắn',
   },
   {
     to: routes.review,
-    icon: <MdOutlineReviews />,
+    icon: <MdOutlineReviews size={20}/>,
     title: 'Đánh giá',
   },
   {
     to: routes.role,
-    icon: <IoSettingsOutline />,
+    icon: <IoSettingsOutline size={20}/>,
     title: 'Role',
   },
   {
     to: routes.blog,
-    icon: <MdPostAdd />,
-    title: 'Blog',
+    icon: <MdPostAdd size={20}/>,
+    title: 'Bài viết',
     children: [
       {
         to: routes.blog,
-        title: 'List',
-        icon: <RxDot />,
+        title: 'Danh sách bài viết',
+        icon: <RxDot size={20}/>,
       },
       {
         to: routes.categoryBlog,
-        title: 'Category',
-        icon: <RxDot />,
+        title: 'Danh mục bài viết',
+        icon: <RxDot size={20}/>,
       }
     ]
   },
   {
     to: '#',
-    icon: <MdLogout />,
+    icon: <MdLogout size={20}/>,
     title: 'Đăng xuất',
   },
 ];

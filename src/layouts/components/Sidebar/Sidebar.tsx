@@ -1,11 +1,12 @@
 import { useAuth } from '@/hooks/services';
 import { NAVIGATION_VERTICAL } from '@/navigation';
 import { cn } from '@/utils';
-import { Collapse, Typography } from 'antd';
+import { Typography } from 'antd';
 import useMediaQuery from 'beautiful-react-hooks/useMediaQuery';
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom'; import { SlArrowDown } from "react-icons/sl";
 import { Fragment } from 'react';
+import { SlArrowDown } from "react-icons/sl";
+import { NavLink } from 'react-router-dom';
 
 type SidebarProps = {
   openSidebar: boolean;
@@ -38,10 +39,11 @@ const Sidebar = ({ openSidebar, closeSidebar }: SidebarProps) => {
         <div className=" overflow-y-scroll">
           <div className="flex flex-col gap-2">
             {NAVIGATION_VERTICAL.map((link, i) => (
-              <Fragment>
+              <Fragment
+                key={i}>
                 <NavLink
                   key={i}
-                  to={link.to} 
+                  to={link.to}
                   end
                   onClick={() => handleLogout(link)}
                   className={(nav) =>

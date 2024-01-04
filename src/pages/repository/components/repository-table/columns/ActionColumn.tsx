@@ -17,7 +17,7 @@ const ActionColumn = ({ id, repository }: ActionColumnProps) => {
   const { isOpen, onClose, toggle } = useToggle(false);
   const showDeleteConfirm = () => {
     Modal.confirm({
-      title: 'Bạn có chắc chắn muốn xoá kho ?',
+      title: `Bạn có chắc chắn muốn xoá kho [${repository.name}] ?`,
       icon: <ExclamationCircleFilled rev />,
       content: 'Bạn sẽ không thể khôi phục lại kho này.',
       okText: 'Yes',

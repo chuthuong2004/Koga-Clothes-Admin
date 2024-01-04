@@ -1,29 +1,28 @@
 import { Button, Space, Steps, Typography, UploadFile } from 'antd';
 
-import { FormProvider, useForm } from 'react-hook-form';
-import {
-  FormPricing,
-  FormOrganization,
-  FormInfoBasic,
-  FormVariants,
-  FormQuantity,
-  FormMedias,
-  FormInventory,
-} from './forms';
-import { ContentState, EditorState, convertToRaw } from 'draft-js';
+import { BASE_URL, routes } from '@/config';
+import { useProduct } from '@/hooks/services';
+import { productService } from '@/services';
 import { ParamCreateProduct } from '@/services/types';
+import { StoreColor, StoredProduct } from '@/types/commons';
+import { convertContent, uploadImageProduct } from '@/utils';
+import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { useEffect, useState } from 'react';
-import { StoreColor, StoredProduct } from '@/types/commons';
-import FormSize from './components/FormSize';
-import { convertContent, uploadImageProduct } from '@/utils';
-import { useProduct } from '@/hooks/services';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { BASE_URL, routes } from '@/config';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useSWR from 'swr';
-import { productService } from '@/services';
-import htmlToDraft from 'html-to-draftjs';
+import FormSize from './components/FormSize';
+import {
+  FormInfoBasic,
+  FormInventory,
+  FormMedias,
+  FormOrganization,
+  FormPricing,
+  FormQuantity,
+  FormVariants,
+} from './forms';
 export type FormCreateProduct = {
   name: string;
   code: string;
@@ -372,7 +371,7 @@ const FormProduct = () => {
               Previous
             </Button>
             <Button size="large" type="primary" onClick={methods.handleSubmit(onSubmit, onError)}>
-              Next
+              {current === 4 ? 'Submit' : 'Next'}
             </Button>
           </div>
         </Space>

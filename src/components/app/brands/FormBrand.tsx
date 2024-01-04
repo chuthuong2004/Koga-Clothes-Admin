@@ -59,14 +59,14 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
     image: '',
     logo: '',
   });
-    useEffect(() => {
-        if (type === 'Edit' && brand && open) {
-            reset({
-                name: brand?.name,
-                history: convertContent(brand.history)
-            })
-        }
-    }, [brand, type, reset, open])
+  useEffect(() => {
+    if (type === 'Edit' && brand && open) {
+      reset({
+        name: brand?.name,
+        history: convertContent(brand.history)
+      })
+    }
+  }, [brand, type, reset, open])
 
   const handleCancel = useCallback(() => setPreviewOpen(defaultPreview), []);
 
@@ -147,7 +147,7 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
   return (
     <Modal
       open={open}
-      title="Thêm mới thương hiệu"
+      title={`${brand ? 'Cập nhật' : 'Thêm mới'} thương hiệu`}
       onOk={handleSubmit(onSubmit)}
       centered
       width={'50vw'}
@@ -208,8 +208,7 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
                 <Editor
                   editorState={field.value}
                   wrapperClassName={cn(
-                    `border rounded-md transition-all ${
-                      errors.history?.message ? 'border-error' : ''
+                    `border rounded-md transition-all ${errors.history?.message ? 'border-error' : ''
                     }`,
                   )}
                   editorClassName="p-4"

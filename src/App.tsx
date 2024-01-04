@@ -16,11 +16,14 @@ import DefaultLayout from './layouts';
 import { selectAuth } from './store/selectors';
 import { ConfigProvider } from 'antd';
 
+import locale from 'antd/es/locale/vi_VN';
+import 'moment/locale/vi';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
+import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 const App: React.FC = () => {
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: '#eb3d63' }, }}>
+    <ConfigProvider theme={{ token: { colorPrimary: '#eb3d63' }, }} locale={locale}>
       <Router>
         <ToastContainer autoClose={3000} />
         <Routes>

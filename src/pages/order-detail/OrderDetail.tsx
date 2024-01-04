@@ -9,7 +9,7 @@ import {
 import { cn } from '@/utils/helpers';
 import { Button, Steps, StepsProps } from 'antd';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useSWR from 'swr';
 import './_order-detail.scss';
@@ -55,7 +55,7 @@ const OrderDetail = () => {
       },
     );
     setItemSteps(itemsStep);
-  }, []);
+  }, [order?.orderStatus]);
 
   return (
     <div className="h-full ">
@@ -126,4 +126,4 @@ const OrderDetail = () => {
   );
 };
 
-export default OrderDetail;
+export default memo(OrderDetail);

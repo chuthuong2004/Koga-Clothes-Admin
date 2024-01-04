@@ -3,15 +3,17 @@ import { StoreToken, useAppDispatch, useAppSelector } from '@/types/commons';
 import { useCallback, useState } from 'react';
 import { ErrCallbackType } from '../types';
 import { authService } from '@/services';
-import { logout, saveAccount, setCredentials, setToken } from '@/store/actions';
+import { logout, saveAccount, setCredentials, setSelectedConversation, setToken } from '@/store/actions';
 import { handleErrorHooks } from '@/utils';
 import { selectAuth } from '@/store/selectors';
 import { ForgotPasswordParams } from './types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { routes } from '@/config';
 import { toast } from 'react-toastify';
+import { useSWRConfig } from 'swr';
 
 export function useAuth() {
+  const { mutate } = useSWRConfig()
   // ** Selectors
   const { user } = useAppSelector(selectAuth);
   // ** Dispatch
@@ -75,9 +77,11 @@ export function useAuth() {
     } catch (error) {
     } finally {
       dispatch(logout());
+      dispatch(setSelectedConversation(null))
+      mutate(key => typeof key === 'string', undefined)
       toast.success('Đăng xuất thành công !');
     }
-  }, [dispatch]);
+  }, [dispatch,mutate]);
 
   // ** Handle register
   const handleRegister = useCallback(

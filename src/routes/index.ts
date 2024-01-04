@@ -4,12 +4,11 @@
 import * as config from '@/config';
 import OrderDetail from '@/pages/order-detail';
 import React, { ReactNode } from 'react';
-import Category from '../pages/Category';
+import Category from '../pages/category-product';
 import Dashboard from '../pages/Dashboard';
 import Login from '../pages/Login/Login';
 import Order from '../pages/Order';
 import Review from '../pages/Review';
-// import NotPageFound from '../pages/NotPageFound';
 import Brand from '@/pages/brand';
 import Chat from '@/pages/chat';
 import Customer from '@/pages/customer';
@@ -19,6 +18,7 @@ import Repository from '@/pages/repository';
 import Role from '@/pages/role/Role';
 import NotPageFound from '../pages/NotPageFound';
 import Blog from '@/pages/blogs/Blog';
+import CategoryBlog from '@/pages/category-blog';
 
 type routeType = {
   path: string;
@@ -93,10 +93,10 @@ const routes: Array<routeType> = [
     path: config.routes.blog,
     component: Blog,
   },
-  // {
-  //   path: config.routes.categoryBlog,
-  //   component: CategoryBlog,
-  // },
+  {
+    path: config.routes.categoryBlog,
+    component: CategoryBlog,
+  },
   {
     path: '*',
     component: NotPageFound,
