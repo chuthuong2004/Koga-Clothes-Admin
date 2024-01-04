@@ -82,7 +82,7 @@ export type ParamCreateMessage = {
   conversation?: string;
   sender?: string;
   text: string;
-  image?: string;
+  images?: string[];
 };
 
 export type ParamCreateOrder = {
@@ -149,6 +149,7 @@ export type FolderUpload =
   | 'stores'
   | 'products'
   | 'reviews'
+  | 'messages'
   | 'blogs';
 
 export type ParamCreateBrand = {

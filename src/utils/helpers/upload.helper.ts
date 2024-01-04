@@ -37,7 +37,7 @@ export async function uploadSingleImage(image: RcFile | undefined, folder: Folde
 }
 
 
-export async function uploadMultipleImage(images: (RcFile | undefined)[], folder: FolderUpload) {
+export async function uploadMultipleImage(images: (RcFile | undefined | File)[], folder: FolderUpload) {
   const formData = new FormData();
   Object.values(images).forEach((file) => {
     file && formData.append('files', file);
