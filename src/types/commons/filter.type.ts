@@ -6,10 +6,8 @@ export type ActionFilter = {
 };
 
 export type FilterProduct = {
-  gender: GenderCategory[];
+  gender: string;
   brand: string[];
   category: string[];
-  color: string[];
-  size: string[];
-  price: string[];
+  limit: number;
 };

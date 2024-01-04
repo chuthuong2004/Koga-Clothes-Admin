@@ -1,4 +1,4 @@
-import { Button, Space, Steps, UploadFile } from 'antd';
+import { Button, Space, Steps, Typography, UploadFile } from 'antd';
 
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -206,7 +206,7 @@ const FormProduct = () => {
     // ** Submit variants
     if (data.colors.length > 0 && current === 2) {
       console.log('VOO');
-      if(!slug) {
+      if (!slug) {
         const medias = data.colors.reduce(
           (acc, item) => ({
             ...acc,
@@ -220,8 +220,8 @@ const FormProduct = () => {
         );
         methods.setValue('medias', medias);
       }
-      if(slug) {
-        if(product && data.sizes.length !== product?.storedProducts[0].colors[0].sizes.length) {
+      if (slug) {
+        if (product && data.sizes.length !== product?.storedProducts[0].colors[0].sizes.length) {
 
         }
       }
@@ -279,7 +279,7 @@ const FormProduct = () => {
       newData.storedProducts = storedProducts;
 
       console.log('Data submit: ', newData);
-      if(!product) {
+      if (!product) {
         // ** Handle create product
         onCreateProduct(newData, () => {
           console.log("Tạo thành công !");
@@ -287,7 +287,7 @@ const FormProduct = () => {
           navigate(routes.product)
         }, ({ message }) => {
           console.log({ message });
-  
+
         })
       } else {
         onUpdateProduct(product._id, newData, () => {
@@ -296,10 +296,10 @@ const FormProduct = () => {
           navigate(routes.product)
         }, ({ message }) => {
           console.log({ message });
-  
+
         })
       }
-      
+
       return;
     }
     setCurrent((prev) => prev + 1);
@@ -321,6 +321,7 @@ const FormProduct = () => {
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit, onError)} className="flex flex-col flex-gap12">
         <Space direction="vertical">
+          <Typography.Title level={3}>Thêm mới sản phẩm</Typography.Title>
           <Steps
             current={current}
             onChange={onChange}

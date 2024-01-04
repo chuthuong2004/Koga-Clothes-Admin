@@ -1,11 +1,13 @@
 import { brandService, categoryService } from '@/services';
-import { cn } from '@/utils';
+import { cn, recursiveOptionTree } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
-import { Card, Input, InputRef, Select, Space, Tag, Typography, theme } from 'antd';
-import React, { memo, useEffect, useRef, useState } from 'react';
+import { Card, Input, InputRef, Select, Space, Tag, TreeSelect, Typography, theme } from 'antd';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import useSWR from 'swr';
 import { FormCreateProduct } from '../FormProduct';
+import { usePagination } from '@/hooks/helpers';
+import { DefaultOptionType } from 'antd/es/select';
 
 const FormOrganization = () => {
   const { data } = useSWR('GetAllBrandsInFormProduct', () =>
@@ -15,12 +17,14 @@ const FormOrganization = () => {
       offset: 0,
     }),
   );
-  const { data: categories } = useSWR('GetAllCategoriesInFormProduct', () =>
-    categoryService.getAll({
-      page: 1,
-      limit: 100000,
+  const { data: listTreeCategories } = usePagination(
+    'ListAllCategories',
+    {
+      limit: 100,
       offset: 0,
-    }),
+      page: 1,
+    },
+    categoryService.getTree,
   );
   const {
     control,
@@ -62,6 +66,10 @@ const FormOrganization = () => {
     }
     setInputValue('');
   };
+
+  const categoriesTree = useMemo<DefaultOptionType[]>(() => {
+    return listTreeCategories ? recursiveOptionTree(listTreeCategories.docs) : []
+  }, [listTreeCategories])
   const tagPlusStyle: React.CSSProperties = {
     background: token.colorBgContainer,
   };
@@ -81,30 +89,42 @@ const FormOrganization = () => {
               },
             }}
             render={({ field }) => (
-              <Select
-                size="large"
-                {...field}
-                value={field.value ? field.value : undefined}
-                status={errors.category && 'error'}
-                placeholder="Chọn danh mục"
-                options={
-                  categories
-                    ? categories?.docs.map((cat) => ({
-                        value: cat._id,
-                        label: cat.name,
-                      }))
-                    : []
-                }
-                showSearch
-                optionFilterProp="children"
-                onSearch={onSearch}
-                filterOption={filterOption}
-                filterSort={(optionA, optionB) =>
-                  (optionA?.label ?? '')
-                    .toLowerCase()
-                    .localeCompare((optionB?.label ?? '').toLowerCase())
-                }
-              />
+              <TreeSelect
+              style={{ width: '100%' }}
+              {...field}
+              value={field.value ? field.value : undefined}
+              // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              treeData={categoriesTree}
+              placeholder="Chọn danh mục"
+              showSearch
+              size="large"
+
+              treeDefaultExpandAll
+
+            />
+              // <Select
+              //   {...field}
+              //   value={field.value ? field.value : undefined}
+              //   status={errors.category && 'error'}
+              //   placeholder="Chọn danh mục"
+              //   options={
+              //     categories
+              //       ? categories?.docs.map((cat) => ({
+              //           value: cat._id,
+              //           label: cat.name,
+              //         }))
+              //       : []
+              //   }
+              //   showSearch
+              //   optionFilterProp="children"
+              //   onSearch={onSearch}
+              //   filterOption={filterOption}
+              //   filterSort={(optionA, optionB) =>
+              //     (optionA?.label ?? '')
+              //       .toLowerCase()
+              //       .localeCompare((optionB?.label ?? '').toLowerCase())
+              //   }
+              // />
             )}
           />
           {errors.category && (

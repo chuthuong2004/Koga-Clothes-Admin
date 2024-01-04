@@ -62,6 +62,7 @@ export type QueryOptions = {
   parent?: string; // with category
   brand?: string;
   category?: string;
+  gender?: string;
   creator?: string;
   role?: string;
   sort?: string;

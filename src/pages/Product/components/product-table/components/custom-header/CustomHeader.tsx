@@ -1,12 +1,19 @@
 import { routes } from '@/config';
 import { brandService, categoryService } from '@/services';
+import { FilterProduct } from '@/types/commons';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 import { Input, Space, Select, Button, Typography, SelectProps, Divider } from 'antd'
 import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
-const CustomHeader = () => {
+
+type ProductHeaderProps = {
+    search: string;
+    onChangeSearch: (value: string) => void;
+    onChangeFilter: (value: string[] | string, field: keyof FilterProduct) => void;
+}
+const ProductHeader = ({ search, onChangeSearch, onChangeFilter }: ProductHeaderProps) => {
     const navigate = useNavigate()
 
     const { data: brands } = useSWR("ListBrandsInProducts", () => {
@@ -23,13 +30,7 @@ const CustomHeader = () => {
             offset: 0
         })
     })
-    const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
 
-    const handleChangeCategory = (value: string[]) => {
-        console.log(`selected ${value}`);
-    };
     const brandOptions = useMemo<SelectProps['options']>(() => {
         return brands ? brands.docs.map(brand => ({
             label: brand.name,
@@ -55,7 +56,7 @@ const CustomHeader = () => {
                         size="large"
                         className='flex-1'
                         placeholder="Chọn thương hiệu"
-                        onChange={handleChangeCategory}
+                        onChange={(value) => onChangeFilter(value, 'brand')}
                         optionLabelProp="label"
                         options={brandOptions}
                         optionRender={(option) => (
@@ -64,13 +65,26 @@ const CustomHeader = () => {
                             </Space>
                         )}
                     />
+                    {/* <TreeSelect
+              style={{ width: '100%' }}
+              {...field}
+              value={field.value ? field.value : undefined}
+              // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              treeData={categoriesTree}
+              placeholder="Chọn danh mục"
+              showSearch
+              size="large"
+
+              treeDefaultExpandAll
+
+            /> */}
                     <Select
                         mode="multiple"
                         size="large"
                         className='flex-1'
 
                         placeholder="Chọn danh mục"
-                        onChange={handleChangeCategory}
+                        onChange={(value) => onChangeFilter(value, 'category')}
                         optionLabelProp="label"
                         options={categoryOptions}
                         optionRender={(option) => (
@@ -81,10 +95,9 @@ const CustomHeader = () => {
                     />
                     <Select
 
-                        mode="multiple"
                         size="large"
                         className='flex-1'
-                        onChange={handleChangeCategory}
+                        onChange={(value) => onChangeFilter(value, 'gender')}
                         optionLabelProp="label"
                         placeholder="Chọn collection"
                         options={[
@@ -102,14 +115,16 @@ const CustomHeader = () => {
             <div className='flex w-full justify-between items-center'>
                 <div>
 
-                    <Input size='large' placeholder='Search' />
+                    <Input size='large' placeholder='Search' value={search} onChange={(e) => onChangeSearch(e.target.value)} />
                 </div>
                 <Space>
                     <Select
                         size='large'
                         defaultValue="10"
                         style={{ width: 80 }}
-                        onChange={handleChange}
+                        onChange={(value) => onChangeFilter(value, 'limit')}
+                        optionLabelProp="label"
+                        placeholder="Limit"
                         options={[
                             { value: '5', label: '5' },
                             { value: '10', label: '10' },
@@ -130,4 +145,4 @@ const CustomHeader = () => {
     )
 }
 
-export default CustomHeader
+export default ProductHeader
