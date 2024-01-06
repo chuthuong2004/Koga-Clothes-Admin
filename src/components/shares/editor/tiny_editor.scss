@@ -1,0 +1,8 @@
+.tox-tinymce {
+  border: none !important;
+  border-radius: 8px !important;
+}
+.tox:not(.tox-tinymce-inline) .tox-editor-header {
+  box-shadow: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
