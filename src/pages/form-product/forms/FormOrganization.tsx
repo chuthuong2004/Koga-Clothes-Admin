@@ -128,7 +128,7 @@ const FormOrganization = () => {
             )}
           />
           {errors.category && (
-            <Typography.Text type="danger">{errors.category?.message}</Typography.Text>
+            <Typography.Text type="danger" className="text-lg">{errors.category?.message}</Typography.Text>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -161,7 +161,7 @@ const FormOrganization = () => {
             )}
           />
           {errors.gender && (
-            <Typography.Text type="danger">{errors.gender?.message}</Typography.Text>
+            <Typography.Text type="danger" className="text-lg">{errors.gender?.message}</Typography.Text>
           )}
         </div>
         <div className="flex flex-col gap-2">
@@ -193,7 +193,7 @@ const FormOrganization = () => {
               />
             )}
           />
-          {errors.brand && <Typography.Text type="danger">{errors.brand?.message}</Typography.Text>}
+          {errors.brand && <Typography.Text type="danger" className="text-lg">{errors.brand?.message}</Typography.Text>}
         </div>
         <div className="flex flex-col gap-2">
           <Typography.Text>Thẻ</Typography.Text>
@@ -256,7 +256,7 @@ const FormOrganization = () => {
             )}
           />
           {errors.keywords && (
-            <Typography.Text type="danger">{errors.keywords?.message}</Typography.Text>
+            <Typography.Text type="danger" className="text-lg">{errors.keywords?.message}</Typography.Text>
           )}
         </div>
       </Space>

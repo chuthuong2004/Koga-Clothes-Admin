@@ -33,7 +33,7 @@ const FormVariants = () => {
                             />
                             <Button size="large" danger onClick={() => remove(index)}>Delete</Button>
                         </div>
-                        {errors.colors?.[index]?.colorName && <Typography.Text type="danger">{errors.colors?.[index]?.colorName?.message}</Typography.Text>}
+                        {errors.colors?.[index]?.colorName && <Typography.Text type="danger" className="text-lg">{errors.colors?.[index]?.colorName?.message}</Typography.Text>}
                     </div>
                 ))}
                 <Button type="primary" size="large" onClick={() => append({

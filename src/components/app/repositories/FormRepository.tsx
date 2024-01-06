@@ -1,16 +1,14 @@
+import { TinyEditor } from '@/components/shares';
 import { BASE_URL } from '@/config';
 import { useAddress } from '@/hooks/helpers';
 import { useRepository } from '@/hooks/services';
 import { ParamCreateRepository } from '@/services/types';
 import { StoreProvinceAddress, StoreRepository } from '@/types/entities';
-import { cn, convertContent, getBase64, uploadMultipleImage } from '@/utils';
+import { cn, getBase64, uploadMultipleImage } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Select, Typography, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import { EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 import { useCallback, useEffect, useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
@@ -18,13 +16,13 @@ type FormCreateRepository = {
     name: string;
     code: string;
     images: UploadFile<File>[];
-    description: EditorState;
+    description: string;
     address: StoreProvinceAddress;
 };
 const defaultValues: FormCreateRepository = {
     name: '',
     images: [],
-    description: EditorState.createEmpty(),
+    description: '',
     code: '',
     address: {
         district: '',
@@ -60,7 +58,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
         if (type === 'Edit' && repository && open) {
             reset({
                 name: repository?.name,
-                description: convertContent(repository.description),
+                description: repository.description,
                 code: repository.code,
                 address: repository.address,
                 images: repository.images.map((item, index) => ({
@@ -87,11 +85,8 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
     }, []);
 
     const onSubmit = async (data: FormCreateRepository) => {
-        console.log(data);
-        const descriptionContentState = convertToRaw(data.description.getCurrentContent());
         const newData: ParamCreateRepository = {
             ...data,
-            description: draftToHtml(descriptionContentState),
             images: repository ? repository.images : [],
         };
         if (data.images.length > 0) {
@@ -229,23 +224,15 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
                                     value: true,
                                     message: 'Vui lòng nhập mô tả kho !',
                                 },
-                                validate: (val) => {
-                                    const html = convertToRaw(val.getCurrentContent());
-                                    return html.blocks[0].text ? true : 'Vui lòng nhập mô tả kho !';
-                                },
                             }}
                             render={({ field }) => (
-                                <Editor
-                                    editorState={field.value}
-                                    wrapperClassName={cn(
-                                        `border rounded-md transition-all ${errors.description?.message ? 'border-error' : ''
-                                        }`,
-                                    )}
-                                    editorClassName="p-4"
-                                    editorStyle={{ maxHeight: '40vh' }}
-                                    toolbarClassName="bg-primary border-none"
-                                    onEditorStateChange={field.onChange}
-                                    placeholder="Nhập mô tả sản phẩm"
+                                <TinyEditor
+                                    value={field.value}
+                                    onEditorChange={(a) => field.onChange(a)}
+                                    init={{
+                                        placeholder: 'Nhập mô tả kho'
+                                    }}
+                                    error={!!errors.description}
                                 />
                             )}
                         />
@@ -302,7 +289,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
                                     )}
                                 />
                                 {errors.address?.province && (
-                                    <Typography.Text type="danger">{errors.address?.province?.message}</Typography.Text>
+                                    <Typography.Text type="danger" className="text-lg">{errors.address?.province?.message}</Typography.Text>
                                 )}
                             </div>
                             <div className="flex flex-col flex-1 ">
@@ -346,7 +333,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
                                     )}
                                 />
                                 {errors.address?.district && (
-                                    <Typography.Text type="danger">{errors.address?.district?.message}</Typography.Text>
+                                    <Typography.Text type="danger" className="text-lg">{errors.address?.district?.message}</Typography.Text>
                                 )}
                             </div>
                         </div>
@@ -389,7 +376,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
                                 )}
                             />
                             {errors.address?.ward && (
-                                <Typography.Text type="danger">{errors.address?.ward?.message}</Typography.Text>
+                                <Typography.Text type="danger" className="text-lg">{errors.address?.ward?.message}</Typography.Text>
                             )}
                         </div>
                         <div className="flex flex-col flex-1">
@@ -463,7 +450,7 @@ const FormRepository = ({ open, onClose, repository, type = 'Add' }: FormReposit
                                 )}
                             />
                             {errors.images && (
-                                <Typography.Text type="danger">{errors.images?.message}</Typography.Text>
+                                <Typography.Text type="danger" className="text-lg">{errors.images?.message}</Typography.Text>
                             )}
                         </div>
                     </div>

@@ -68,7 +68,7 @@ const FormInventory = () => {
                             />
                             <Button danger size="large" onClick={() => remove(index)}>Delete</Button>
                         </div>
-                        {errors.repositories?.[index]?.repository && <Typography.Text type="danger">{errors.repositories?.[index]?.repository?.message}</Typography.Text>}
+                        {errors.repositories?.[index]?.repository && <Typography.Text type="danger" className="text-lg">{errors.repositories?.[index]?.repository?.message}</Typography.Text>}
                     </div>
 
                 ))}

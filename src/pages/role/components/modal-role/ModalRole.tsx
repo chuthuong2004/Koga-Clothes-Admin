@@ -92,7 +92,7 @@ const ModalRole = ({ role, onClose, ...passProps }: ModalRoleProps) => {
             />
           )}
         />
-        {errors.name && <Typography.Text type="danger">{errors.name?.message}</Typography.Text>}
+        {errors.name && <Typography.Text type="danger" className="text-lg">{errors.name?.message}</Typography.Text>}
       </div>
       <div className="flex flex-col gap-4 mt-8">
         <Typography.Text className="text-2xl  font-medium">Role permissions</Typography.Text>

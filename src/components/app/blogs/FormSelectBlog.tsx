@@ -5,6 +5,7 @@ import { EModeBlog } from '@/types/enums';
 import { Typography, Select, Space, DatePicker } from 'antd';
 import { usePagination } from '@/hooks/helpers';
 import { categoryBlogService } from '@/services';
+import { Editor } from '@tinymce/tinymce-react';
 import moment from 'moment';
 
 const FormSelectBlog = () => {
@@ -61,7 +62,7 @@ const FormSelectBlog = () => {
                     )}
                 />
                 {errors.category && (
-                    <Typography.Text type="danger">{errors.category?.message}</Typography.Text>
+                    <Typography.Text type="danger" className="text-lg">{errors.category?.message}</Typography.Text>
                 )}
             </div>
             <div className="flex flex-1 flex-col gap-2">
@@ -90,7 +91,7 @@ const FormSelectBlog = () => {
                         />
                     )}
                 />
-                {errors.mode && <Typography.Text type="danger">{errors.mode?.message}</Typography.Text>}
+                {errors.mode && <Typography.Text type="danger" className="text-lg">{errors.mode?.message}</Typography.Text>}
             </div>
             <div className="flex flex-1 flex-col gap-2">
                 <Typography.Text>Thời gian công khai</Typography.Text>
@@ -117,7 +118,7 @@ const FormSelectBlog = () => {
                     )}
                 />
                 {errors.time_public && (
-                    <Typography.Text type="danger">{errors.time_public?.message}</Typography.Text>
+                    <Typography.Text type="danger" className="text-lg">{errors.time_public?.message}</Typography.Text>
                 )}
             </div>
         </div>

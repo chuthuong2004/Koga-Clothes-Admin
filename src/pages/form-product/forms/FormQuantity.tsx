@@ -136,7 +136,7 @@ const FormQuantity = () => {
                                                                     {errors.storedProducts?.[index]?.colors?.[indexColor]?.sizes?.[
                                                                         indexSize
                                                                     ]?.quantity && (
-                                                                            <Typography.Text type="danger">
+                                                                            <Typography.Text type="danger" className="text-lg">
                                                                                 {
                                                                                     errors.storedProducts?.[index]?.colors?.[indexColor]
                                                                                         ?.sizes?.[indexSize]?.quantity?.message

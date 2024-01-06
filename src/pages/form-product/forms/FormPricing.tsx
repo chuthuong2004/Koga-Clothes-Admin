@@ -45,7 +45,7 @@ const FormPricing = () => {
                             />
                         )}
                     />
-                    {errors.price && <Typography.Text type="danger">{errors.price?.message}</Typography.Text>}
+                    {errors.price && <Typography.Text type="danger" className="text-lg">{errors.price?.message}</Typography.Text>}
                 </div>
                 <div className="flex flex-col gap-2">
                     <Typography.Text>Giảm giá</Typography.Text>
@@ -82,7 +82,7 @@ const FormPricing = () => {
                         )}
                     />
                     {errors.discount && (
-                        <Typography.Text type="danger">{errors.discount?.message}</Typography.Text>
+                        <Typography.Text type="danger" className="text-lg">{errors.discount?.message}</Typography.Text>
                     )}
                 </div>
             </Space>

@@ -32,7 +32,7 @@ const FormSize = () => {
                             />
                             <Button size="large" danger onClick={() => remove(index)}>Delete</Button>
                         </div>
-                        {errors.sizes?.[index]?.sizeName && <Typography.Text type="danger">{errors.sizes?.[index]?.sizeName?.message}</Typography.Text>}
+                        {errors.sizes?.[index]?.sizeName && <Typography.Text type="danger" className="text-lg">{errors.sizes?.[index]?.sizeName?.message}</Typography.Text>}
                     </div>
                 ))}
                 <Button type="primary" size="large" onClick={() => append({

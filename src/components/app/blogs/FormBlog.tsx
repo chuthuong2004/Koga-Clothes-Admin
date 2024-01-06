@@ -4,9 +4,9 @@ import { ParamCreateBlog } from '@/services/types';
 import { ResponseMessage } from '@/types/commons';
 import { StoreBlog } from '@/types/entities';
 import { EModeBlog } from '@/types/enums';
-import { convertContent, draftContent, uploadSingleImage } from '@/utils';
+import { draftContent, uploadSingleImage } from '@/utils';
 import { Button, Modal, UploadFile } from 'antd';
-import { EditorState } from 'draft-js';
+import dayjs from 'dayjs';
 import { memo, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -14,12 +14,11 @@ import FormContentBlog from './FormContentBlog';
 import FormImageBlog from './FormImageBlog';
 import FormSelectBlog from './FormSelectBlog';
 import FormTagsBlog from './FormTagsBlog';
-import dayjs from 'dayjs';
 
 export type FormCreateBlog = {
   title: string;
-  summary: EditorState;
-  content: EditorState;
+  summary: string;
+  content: string;
   category: string;
   mode: EModeBlog;
   tags: string[]
@@ -29,8 +28,8 @@ export type FormCreateBlog = {
 const defaultValues: FormCreateBlog = {
   title: '',
   image: [],
-  summary: EditorState.createEmpty(),
-  content: EditorState.createEmpty(),
+  summary: '',
+  content: '',
   category: '',
   mode: EModeBlog.Public,
   tags: [],
@@ -56,8 +55,8 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
     if (type === 'Edit' && blog && open) {
       methods.reset({
         title: blog.title,
-        summary: convertContent(blog.summary),
-        content: convertContent(blog.content),
+        summary: blog.summary,
+        content: blog.content,
         category: blog.category._id,
         mode: blog.mode,
         tags: blog.tags,
@@ -79,9 +78,9 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
     const newData: ParamCreateBlog = {
       title: data.title,
       category: data.category,
-      content: draftContent(data.content),
+      content: data.content,
       mode: data.mode,
-      summary: draftContent(data.summary),
+      summary: data.summary,
       tags: data.tags,
       time_public: new Date(dayjs(data.time_public).format("YYYY-MM-DD HH:mm:ss")),
       image: blog && data.image.find(item => item.url?.includes(blog?.image)) ? blog.image : ''
@@ -146,7 +145,9 @@ const FormBlog = ({ open, onClose, blog, type = 'Add' }: FormBlogProps) => {
             <FormContentBlog />
             <FormSelectBlog />
             <FormTagsBlog />
+
             <FormImageBlog type={type} />
+
           </div>
         </form>
       </FormProvider>

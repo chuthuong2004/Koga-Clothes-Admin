@@ -114,7 +114,7 @@ const FormCategoryBlog: React.FC<FormCategoryBlogProps> = ({ category, onClearCa
               />
             )}
           />
-          {errors.name && <Typography.Text type="danger">{errors.name.message}</Typography.Text>}
+          {errors.name && <Typography.Text type="danger" className="text-lg">{errors.name.message}</Typography.Text>}
         </div>
 
         <div className="gap-2 flex flex-col">
@@ -139,7 +139,7 @@ const FormCategoryBlog: React.FC<FormCategoryBlogProps> = ({ category, onClearCa
             )}
           />
           {errors.parent && (
-            <Typography.Text type="danger">{errors.parent.message}</Typography.Text>
+            <Typography.Text type="danger" className="text-lg">{errors.parent.message}</Typography.Text>
           )}
         </div>
         <div className='flex gap-4'>

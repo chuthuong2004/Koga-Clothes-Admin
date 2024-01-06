@@ -1,11 +1,9 @@
-import { Card, Space, Typography, Input } from 'antd'
-import React, { memo } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { FormCreateProduct } from '../FormProduct'
+import { Card, Input, Space, Typography } from 'antd';
+import { memo } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { FormCreateProduct } from '../FormProduct';
 
-import { Editor } from 'react-draft-wysiwyg';
-import { convertToRaw } from 'draft-js';
-import { cn } from '@/utils';
+import { TinyEditor } from '@/components/shares';
 const FormInfoBasic = () => {
     const { control, formState: { errors } } = useFormContext<FormCreateProduct>()
     return (
@@ -28,7 +26,7 @@ const FormInfoBasic = () => {
 
                         )}
                     />
-                    {errors.name && <Typography.Text type='danger'>{errors.name?.message}</Typography.Text>}
+                    {errors.name && <Typography.Text type='danger' className="text-lg">{errors.name?.message}</Typography.Text>}
                 </div>
                 <div className='flex flex-col'>
                     <Typography.Text>Mã sản phẩm</Typography.Text>
@@ -46,7 +44,7 @@ const FormInfoBasic = () => {
 
                         )}
                     />
-                    {errors.code && <Typography.Text type='danger'>{errors.code?.message}</Typography.Text>}
+                    {errors.code && <Typography.Text type='danger' className="text-lg">{errors.code?.message}</Typography.Text>}
                 </div>
                 <div className='flex flex-col'>
                     <Typography.Text>Mô tả</Typography.Text>
@@ -58,25 +56,20 @@ const FormInfoBasic = () => {
                                 value: true,
                                 message: 'Vui lòng nhập mô tả sản phẩm !'
                             },
-                            validate: val => {
-                                const html = convertToRaw(val.getCurrentContent());
-                                return html.blocks[0].text ? true : 'Vui lòng nhập thông tin bảo quản !'
-                            },
 
                         }}
                         render={({ field }) => (
-                            <Editor
-                                editorState={field.value}
-                                wrapperClassName={cn(`border rounded-md transition-all ${errors.description?.message ? 'border-error' : ''}`)}
-                                editorClassName="p-4"
-                                editorStyle={{ maxHeight: '40vh' }}
-                                toolbarClassName='bg-primary border-none'
-                                onEditorStateChange={field.onChange}
-                                placeholder='Nhập mô tả sản phẩm'
+                            <TinyEditor
+                                value={field.value}
+                                onEditorChange={a => field.onChange(a)}
+                                init={{
+                                    placeholder: 'Nhập mô tả sản phẩm'
+                                }}
+                                error={!!errors.description}
                             />
                         )}
                     />
-                    {errors.description && <Typography.Text type='danger' >{errors.description?.message}</Typography.Text>}
+                    {errors.description && <Typography.Text type='danger' className="text-lg" >{errors.description?.message}</Typography.Text>}
                 </div>
 
                 <div className='flex flex-col'>
@@ -89,24 +82,19 @@ const FormInfoBasic = () => {
                                 value: true,
                                 message: 'Vui lòng nhập thông tin bảo quản !'
                             },
-                            validate: val => {
-                                const html = convertToRaw(val.getCurrentContent());
-                                return html.blocks[0].text ? true : 'Vui lòng nhập thông tin bảo quản !'
-                            },
                         }}
                         render={({ field }) => (
-                            <Editor
-                                editorState={field.value}
-                                wrapperClassName={cn(`border rounded-md transition-all ${errors.preserveInformation?.message ? 'border-error' : ''}`)}
-                                editorClassName="p-4"
-                                editorStyle={{ maxHeight: '40vh' }}
-                                toolbarClassName='bg-primary border-none'
-                                onEditorStateChange={field.onChange}
-                                placeholder='Nhập thông tin bảo quản'
+                            <TinyEditor
+                                value={field.value}
+                                onEditorChange={(a) => field.onChange(a)}
+                                init={{
+                                    placeholder: 'Nhập thông tin bảo quản'
+                                }}
+                                error={!!errors.preserveInformation}
                             />
                         )}
                     />
-                    {errors.preserveInformation && <Typography.Text type='danger'>{errors.preserveInformation?.message}</Typography.Text>}
+                    {errors.preserveInformation && <Typography.Text type='danger' className="text-lg">{errors.preserveInformation?.message}</Typography.Text>}
                 </div>
 
                 <div className='flex flex-col'>
@@ -119,25 +107,20 @@ const FormInfoBasic = () => {
                                 value: true,
                                 message: 'Vui lòng nhập chính sách đổi trả !'
                             },
-                            validate: val => {
-                                const html = convertToRaw(val.getCurrentContent());
-                                return html.blocks[0].text ? true : 'Vui lòng nhập chính sách đổi trả !'
-                            },
                         }}
                         render={({ field }) => (
-                            <Editor
-                                editorState={field.value}
-                                wrapperClassName={cn(`border rounded-md transition-all ${errors.deliveryReturnPolicy?.message ? 'border-error' : ''}`)}
-                                editorClassName="p-4"
-                                editorStyle={{ maxHeight: '40vh' }}
-                                toolbarClassName='bg-primary border-none'
-                                onEditorStateChange={field.onChange}
-                                placeholder='Nhập chính sách đổi trả'
+                            <TinyEditor
+                                value={field.value}
+                                onEditorChange={(a) => field.onChange(a)}
+                                init={{
+                                    placeholder: 'Nhập chính sách đổi trả'
+                                }}
+                                error={!!errors.deliveryReturnPolicy}
                             />
 
                         )}
                     />
-                    {errors.deliveryReturnPolicy && <Typography.Text type='danger'>{errors.deliveryReturnPolicy?.message}</Typography.Text>}
+                    {errors.deliveryReturnPolicy && <Typography.Text type='danger' className="text-lg">{errors.deliveryReturnPolicy?.message}</Typography.Text>}
                 </div>
                 {/* <Editor editorState={editorState} onChange={setEditorState} /> */}
             </Space>

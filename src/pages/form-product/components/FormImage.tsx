@@ -67,7 +67,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                 message: `Vui lòng chọn hình ảnh cho màu [${colorName}] !`
                             }
                         }}
-                        render={({field: {value, onChange}}) => (
+                        render={({ field: { value, onChange } }) => (
                             <div className={cn('border border-dashed p-4 rounded-md', errors.medias?.[colorName]?.images && 'border-error')}>
                                 <Upload
                                     action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
@@ -75,7 +75,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                     multiple
                                     accept='image/*'
                                     fileList={value}
-                                    
+
                                     onPreview={(file) => handlePreviewImages(file, 'images')}
                                     onChange={(info) => onChange(info.fileList)}
 
@@ -94,9 +94,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                             </div>
                         )}
                     />
-                        {errors.medias?.[colorName]?.images && <Typography.Text type="danger" >{errors.medias[colorName]?.images?.message}</Typography.Text>}
-
-
+                    {errors.medias?.[colorName]?.images && <Typography.Text type="danger" className="text-lg">{errors.medias[colorName]?.images?.message}</Typography.Text>}
                 </div>
                 <div className='flex gap-4'>
                     {/* Handle choose image small */}
@@ -111,7 +109,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                     message: `Vui lòng chọn hình ảnh nhỏ cho màu [${colorName}] !`
                                 }
                             }}
-                            render={({field: {value, onChange}}) => {
+                            render={({ field: { value, onChange } }) => {
                                 return (
                                     <div className={cn('border border-dashed p-4 rounded-md', errors.medias?.[colorName]?.imageSmall && 'border-error')}>
                                         <Upload
@@ -135,7 +133,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                 )
                             }}
                         />
-                        {errors.medias?.[colorName]?.imageSmall && <Typography.Text type="danger" >{errors.medias[colorName]?.imageSmall?.message}</Typography.Text>}
+                        {errors.medias?.[colorName]?.imageSmall && <Typography.Text type="danger" className="text-lg">{errors.medias[colorName]?.imageSmall?.message}</Typography.Text>}
 
                     </div>
                     {/* Handle choose image medium */}
@@ -150,7 +148,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                     message: `Vui lòng chọn hình ảnh vừa cho màu [${colorName}] !`
                                 }
                             }}
-                            render={({field: {value, onChange}}) => <div className={cn('border border-dashed p-4 rounded-md', errors.medias?.[colorName]?.imageMedium && 'border-error')}>
+                            render={({ field: { value, onChange } }) => <div className={cn('border border-dashed p-4 rounded-md', errors.medias?.[colorName]?.imageMedium && 'border-error')}>
                                 <Upload
                                     listType="picture-card"
                                     accept='image/*'
@@ -170,7 +168,7 @@ const FormImage = ({ colorName, media }: FormImageProps) => {
                                 </Modal>
                             </div>}
                         />
-                        {errors.medias?.[colorName]?.imageMedium && <Typography.Text type="danger" >{errors.medias[colorName]?.imageMedium?.message}</Typography.Text>}
+                        {errors.medias?.[colorName]?.imageMedium && <Typography.Text type="danger" className="text-lg" >{errors.medias[colorName]?.imageMedium?.message}</Typography.Text>}
 
                     </div>
                 </div>

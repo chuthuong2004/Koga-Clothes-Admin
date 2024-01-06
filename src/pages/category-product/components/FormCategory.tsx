@@ -121,7 +121,7 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category, onClearCategorySe
               />
             )}
           />
-          {errors.name && <Typography.Text type="danger">{errors.name.message}</Typography.Text>}
+          {errors.name && <Typography.Text type="danger" className="text-lg">{errors.name.message}</Typography.Text>}
         </div>
         {/* <div className="gap-2 flex flex-col">
           <Typography.Text>Danh mục cha</Typography.Text>
@@ -180,7 +180,7 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category, onClearCategorySe
             )}
           />
           {errors.parent && (
-            <Typography.Text type="danger">{errors.parent.message}</Typography.Text>
+            <Typography.Text type="danger" className="text-lg">{errors.parent.message}</Typography.Text>
           )}
         </div>
 
@@ -212,7 +212,7 @@ const FormCategory: React.FC<FormCategoryProps> = ({ category, onClearCategorySe
             )}
           />
           {errors.gender && (
-            <Typography.Text type="danger">{errors.gender?.message}</Typography.Text>
+            <Typography.Text type="danger" className="text-lg">{errors.gender?.message}</Typography.Text>
           )}
         </div>
         <div className='flex gap-4'>

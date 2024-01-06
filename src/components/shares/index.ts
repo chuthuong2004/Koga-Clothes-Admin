@@ -12,3 +12,4 @@ export * from './helmet';
 export * from './tabs';
 
 export * from './dialogs';
+export * from './editor';

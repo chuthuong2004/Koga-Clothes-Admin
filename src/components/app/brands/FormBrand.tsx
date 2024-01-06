@@ -1,30 +1,27 @@
+import { TinyEditor } from '@/components/shares';
 import { useBrand } from '@/hooks/services';
 import { ParamCreateBrand } from '@/services/types';
-import { Nullable } from '@/types/commons';
+import { ResponseMessage } from '@/types/commons';
 import { StoreBrand } from '@/types/entities';
-import { cn, convertContent, getBase64, uploadSingleImage } from '@/utils';
+import { cn, getBase64, uploadSingleImage } from '@/utils';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Modal, Typography, Upload, UploadFile } from 'antd';
+import { Button, Input, Modal, Typography, Upload, UploadFile, message } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import { ContentState, EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import React, { memo, useCallback, useEffect, useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import htmlToDraft from 'html-to-draftjs';
 
 type FormCreateBrand = {
   name: string;
   logo: UploadFile<File>[];
   image: UploadFile<File>[];
-  history: EditorState;
+  history: string;
 };
 const defaultValues: FormCreateBrand = {
   name: '',
   logo: [],
   image: [],
-  history: EditorState.createEmpty(),
+  history: '',
 };
 
 type KeyImageBrand = 'logo' | 'image';
@@ -63,7 +60,7 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
     if (type === 'Edit' && brand && open) {
       reset({
         name: brand?.name,
-        history: convertContent(brand.history)
+        history: brand.history
       })
     }
   }, [brand, type, reset, open])
@@ -90,11 +87,9 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
   }, []);
 
   const onSubmit = async (data: FormCreateBrand) => {
-    console.log(data);
-    const historyContentState = convertToRaw(data.history.getCurrentContent());
     const newData: ParamCreateBrand = {
       name: data.name,
-      history: draftToHtml(historyContentState),
+      history: data.history,
       image: brand ? brand.image : '',
       logo: brand ? brand.logo : '',
     };
@@ -115,31 +110,25 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
       }
     }
 
+    const onSuccess = () => {
+      onClose();
+      reset(defaultValues);
+      toast.success(`${type === 'Add' ? 'Thêm mới' : 'Cập nhật'} thương hiệu thành công !`);
+    }
+    const onError = ({ message: msg }: ResponseMessage) => {
+      message.error(msg)
+    }
     if (type === 'Add') {
       onCreateBrand(
         newData,
-        () => {
-          onClose();
-          reset(defaultValues);
-          toast.success('Thêm mới thương hiệu thành công !');
-        },
-        ({ message }) => {
-          console.log(message);
-        },
+        onSuccess,
+        onError
       );
     } else {
       onUpdateBrand(
         brand?._id || '',
-        newData,
-        () => {
-          onClose();
-          reset(defaultValues);
-          toast.success('Cập nhật thương hiệu thành công !');
-        },
-        ({ message }) => {
-          console.log(message);
-          toast.error(message);
-        },
+        newData, onSuccess,
+        onError,
       );
     }
   };
@@ -197,25 +186,17 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
               rules={{
                 required: {
                   value: true,
-                  message: 'Vui lòng nhập mô tả sản phẩm !',
-                },
-                validate: (val) => {
-                  const html = convertToRaw(val.getCurrentContent());
-                  return html.blocks[0].text ? true : 'Vui lòng nhập lich sử thương hiệu !';
-                },
+                  message: 'Vui lòng nhập lịch sử thương hiệu !',
+                }
               }}
               render={({ field }) => (
-                <Editor
-                  editorState={field.value}
-                  wrapperClassName={cn(
-                    `border rounded-md transition-all ${errors.history?.message ? 'border-error' : ''
-                    }`,
-                  )}
-                  editorClassName="p-4"
-                  editorStyle={{ maxHeight: '40vh' }}
-                  toolbarClassName="bg-primary border-none"
-                  onEditorStateChange={field.onChange}
-                  placeholder="Nhập mô tả sản phẩm"
+                <TinyEditor
+                  value={field.value}
+                  init={{
+                    placeholder: 'Nhập lịch sử thương hiệu'
+                  }}
+                  onEditorChange={(a) => field.onChange(a)}
+                  error={!!errors.history}
                 />
               )}
             />
@@ -270,7 +251,7 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
                 )}
               />
               {errors.logo && (
-                <Typography.Text type="danger">{errors.logo?.message}</Typography.Text>
+                <Typography.Text type="danger" className="text-lg">{errors.logo?.message}</Typography.Text>
               )}
             </div>
 
@@ -317,7 +298,7 @@ const FormBrand = ({ open, onClose, brand, type = 'Add' }: FormBrandProps) => {
                 )}
               />
               {errors.image && (
-                <Typography.Text type="danger">{errors.image?.message}</Typography.Text>
+                <Typography.Text type="danger" className="text-lg">{errors.image?.message}</Typography.Text>
               )}
             </div>
           </div>

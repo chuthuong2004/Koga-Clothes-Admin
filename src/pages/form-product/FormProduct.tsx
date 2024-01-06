@@ -5,9 +5,7 @@ import { useProduct } from '@/hooks/services';
 import { productService } from '@/services';
 import { ParamCreateProduct } from '@/services/types';
 import { StoreColor, StoredProduct } from '@/types/commons';
-import { convertContent, uploadImageProduct } from '@/utils';
-import { EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
+import { uploadImageProduct } from '@/utils';
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -26,12 +24,12 @@ import {
 export type FormCreateProduct = {
   name: string;
   code: string;
-  description: EditorState;
+  description: string;
   category: string;
   gender: string[];
   brand: string;
-  preserveInformation: EditorState;
-  deliveryReturnPolicy: EditorState;
+  preserveInformation: string;
+  deliveryReturnPolicy: string;
   price: string;
   discount: string;
   keywords: string[];
@@ -53,19 +51,19 @@ const FormProduct = () => {
   const { onCreateProduct, onUpdateProduct } = useProduct()
   const params = useParams()
   const slug = params.productId
-  const { data: product } = useSWR("GetProductDetails", () => slug ? productService.getById(slug) : undefined);
+  const { data: product, mutate } = useSWR("GetProductDetails", () => slug ? productService.getById(slug) : undefined);
   console.log("slug: " + slug);
 
   const methods = useForm<FormCreateProduct>({
     defaultValues: {
       name: '',
-      description: EditorState.createEmpty(),
+      description: '',
       category: '',
       gender: [],
       brand: '',
-      deliveryReturnPolicy: EditorState.createEmpty(),
+      deliveryReturnPolicy: '',
       discount: '0',
-      preserveInformation: EditorState.createEmpty(),
+      preserveInformation: '',
       price: '',
       keywords: [],
       storedProducts: [
@@ -127,9 +125,9 @@ const FormProduct = () => {
       methods.reset({
         name: product.name,
         code: product.code,
-        description: convertContent(product.description),
-        preserveInformation: convertContent(product.preserveInformation || ''),
-        deliveryReturnPolicy: convertContent(product.deliveryReturnPolicy || ''),
+        description: product.description,
+        preserveInformation: product.preserveInformation || '',
+        deliveryReturnPolicy: product.deliveryReturnPolicy || '',
         category: product.category._id,
         gender: product.gender,
         brand: product.brand._id,
@@ -178,13 +176,13 @@ const FormProduct = () => {
 
       })
     }
-  }, [product, methods])
+    return () => {
+      mutate(undefined)
+    }
+  }, [product, methods,mutate])
   console.log("product: ", product);
 
   const onSubmit = async (data: FormCreateProduct) => {
-    const descContentState = convertToRaw(data.description.getCurrentContent());
-    const preserveContentState = convertToRaw(data.preserveInformation.getCurrentContent());
-    const deliveryContentState = convertToRaw(data.deliveryReturnPolicy.getCurrentContent());
 
     const newData: ParamCreateProduct = {
       brand: data.brand,
@@ -194,14 +192,12 @@ const FormProduct = () => {
       keywords: data.keywords,
       name: data.name,
       storedProducts: data.storedProducts,
-      description: draftToHtml(descContentState),
-      deliveryReturnPolicy: draftToHtml(deliveryContentState),
-      preserveInformation: draftToHtml(preserveContentState),
+      description: data.description,
+      deliveryReturnPolicy: data.preserveInformation,
+      preserveInformation: data.deliveryReturnPolicy,
       price: parseInt(data.price, 10),
       discount: parseInt(data.discount, 10),
     };
-    console.log('Current: ', current);
-
     // ** Submit variants
     if (data.colors.length > 0 && current === 2) {
       console.log('VOO');

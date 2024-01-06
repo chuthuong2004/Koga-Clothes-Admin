@@ -102,7 +102,7 @@ const FormTagsBlog = () => {
                 )}
             />
             {errors.tags && (
-                <Typography.Text type="danger">{errors.tags?.message}</Typography.Text>
+                <Typography.Text type="danger" className="text-lg">{errors.tags?.message}</Typography.Text>
             )}
         </div>
     )

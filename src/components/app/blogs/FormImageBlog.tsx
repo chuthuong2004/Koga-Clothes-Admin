@@ -91,7 +91,7 @@ const FormImageBlog = ({type}: FormImageBlogProps) => {
                     )}
                 />
                 {errors.image && (
-                    <Typography.Text type="danger">{errors.image?.message}</Typography.Text>
+                    <Typography.Text type="danger" className="text-lg">{errors.image?.message}</Typography.Text>
                 )}
             </div>
         </div>

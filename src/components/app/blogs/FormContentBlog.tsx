@@ -1,10 +1,8 @@
-import React, { memo } from 'react'
+import { TinyEditor } from '@/components/shares';
+import { Input, Typography } from 'antd';
+import { memo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormCreateBlog } from './FormBlog';
-import { cn, customToolbar, handlePastedFiles, mediaBlockRenderer } from '@/utils';
-import { Typography, Input } from 'antd';
-import { convertToRaw } from 'draft-js';
-import { Editor } from 'react-draft-wysiwyg';
 
 const FormContentBlog = () => {
     const { control, formState: { errors } } = useFormContext<FormCreateBlog>()
@@ -46,24 +44,17 @@ const FormContentBlog = () => {
                             value: true,
                             message: 'Vui lòng nhập nội dung tóm tắt !',
                         },
-                        validate: (val) => {
-                            const html = convertToRaw(val.getCurrentContent());
-                            return html.blocks[0].text ? true : 'Vui lòng nhập tóm tắt bài viết !';
-                        },
                     }}
                     render={({ field }) => (
-                        <Editor
-                            editorState={field.value}
-                            wrapperClassName={cn(
-                                `border rounded-md transition-all ${errors.summary?.message ? 'border-error' : ''
-                                }`,
-                            )}
-                            toolbar={customToolbar}
-                            editorClassName="p-4"
-                            editorStyle={{ maxHeight: '40vh' }}
-                            toolbarClassName="bg-primary border-none"
-                            onEditorStateChange={field.onChange}
-                            placeholder="Nhập tóm tắt bài viết"
+                        <TinyEditor
+                            value={field.value}
+                            onEditorChange={(a, editor) => {
+                                field.onChange(a)
+                            }}
+                            init={{
+                                placeholder: 'Vui lòng nhập nội dung tóm tắt'
+                            }}
+                            error={!!errors.summary}
                         />
                     )}
                 />
@@ -83,31 +74,17 @@ const FormContentBlog = () => {
                             value: true,
                             message: 'Vui lòng nhập nội dung tóm tắt !',
                         },
-                        validate: (val) => {
-                            const html = convertToRaw(val.getCurrentContent());
-                            return html.blocks[0].text ? true : 'Vui lòng nhập tóm tắt bài viết !';
-                        },
                     }}
                     render={({ field }) => (
-                        <Editor
-                            editorState={field.value}
-                            wrapperClassName={cn(
-                                `border rounded-md transition-all ${errors.content?.message ? 'border-error' : ''
-                                }`,
-                            )}
-                            editorClassName="p-4"
-                            editorStyle={{
-                                maxHeight: "60vh",
+                        <TinyEditor
+                            value={field.value}
+                            onEditorChange={(a, editor) => {
+                                field.onChange(a)
                             }}
-                            toolbarClassName="bg-primary border-none"
-                            onEditorStateChange={field.onChange}
-                            placeholder="Nhập nội dung bài viết"
-
-                            toolbar={customToolbar}
-                            spellCheck
-                            stripPastedStyles
-                            uploadCallback={handlePastedFiles}
-                            customBlockRenderFunc={mediaBlockRenderer}
+                            init={{
+                                placeholder: 'Vui lòng nhập nội dung'
+                            }}
+                            error={!!errors.content}
                         />
                     )}
                 />

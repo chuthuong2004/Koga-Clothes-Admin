@@ -15,6 +15,7 @@ import useSWR from 'swr';
 import './_order-detail.scss';
 import { OrderDetailInfoUser } from './components/order-detail-info-user';
 import OrderDetailModify from './components/order-detail-modify';
+import { toast } from 'react-toastify';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
@@ -92,7 +93,7 @@ const OrderDetail = () => {
         </div>
       </div>
       <div className="content flex flex-col w-full h-full gap-3  mt-10">
-      <div className="flex flex-col">
+        <div className="flex flex-col">
           <Steps
             current={currentStep}
             items={itemSteps}
@@ -103,24 +104,25 @@ const OrderDetail = () => {
               if (itemStepNext?.title !== statusNext.value) return;
               setCurrentStep(current);
               try {
-                const newOrder = await orderService.updateOrder(order?._id || '', {
+                const updated = await orderService.updateOrder(order?._id || '', {
                   orderStatus: itemStepNext?.title as OrderStatus,
                 });
-                mutate({ ...newOrder });
+                toast.success("Cập nhật trạng thái đơn hàng thành công !")
+                mutate();
               } catch (error) {
                 console.log(error);
               }
             }}
           />
         </div>
-      <div className='flex gap-8'>
+        <div className='flex gap-8'>
           <div className="info-detail-order flex-2">
             <OrderDetailModify order={order} />
           </div>
           <div className="info-detail-user flex-1 ">
             <OrderDetailInfoUser order={order} />
           </div>
-      </div>
+        </div>
       </div>
     </div>
   );
