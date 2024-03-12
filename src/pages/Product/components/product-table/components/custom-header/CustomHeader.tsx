@@ -1,44 +1,49 @@
 import { routes } from '@/config';
+import { brandService, categoryService } from '@/services';
+import { FilterProduct } from '@/types/commons';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons'
 import { Input, Space, Select, Button, Typography, SelectProps, Divider } from 'antd'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom';
+import useSWR from 'swr';
 
-const CustomHeader = () => {
+
+type ProductHeaderProps = {
+    search: string;
+    onChangeSearch: (value: string) => void;
+    onChangeFilter: (value: string[] | string, field: keyof FilterProduct) => void;
+}
+const ProductHeader = ({ search, onChangeSearch, onChangeFilter }: ProductHeaderProps) => {
     const navigate = useNavigate()
-    const handleChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
 
-    const handleChangeCategory = (value: string[]) => {
-        console.log(`selected ${value}`);
-    };
-    const options: SelectProps['options'] = [
-        {
-            label: 'China',
-            value: 'china',
-            emoji: '🇨🇳',
-            desc: 'China (中国)',
-        },
-        {
-            label: 'USA',
-            value: 'usa',
-            emoji: '🇺🇸',
-            desc: 'USA (美国)',
-        },
-        {
-            label: 'Japan',
-            value: 'japan',
-            emoji: '🇯🇵',
-            desc: 'Japan (日本)',
-        },
-        {
-            label: 'Korea',
-            value: 'korea',
-            emoji: '🇰🇷',
-            desc: 'Korea (韩国)',
-        },
-    ];
+    const { data: brands } = useSWR("ListBrandsInProducts", () => {
+        return brandService.getAll({
+            page: 1,
+            limit: 99999,
+            offset: 0
+        })
+    })
+    const { data: categories } = useSWR("ListCategoriesInProducts", () => {
+        return categoryService.getAll({
+            page: 1,
+            limit: 999999,
+            offset: 0
+        })
+    })
+
+    const brandOptions = useMemo<SelectProps['options']>(() => {
+        return brands ? brands.docs.map(brand => ({
+            label: brand.name,
+            value: brand._id
+        })) : []
+    }, [brands])
+
+    const categoryOptions = useMemo<SelectProps['options']>(() => {
+        return categories ? categories.docs.map(brand => ({
+            label: brand.name,
+            value: brand._id
+        })) : []
+    }, [categories])
     return (
         <div className='w-full flex flex-col'>
             <div className='w-full flex flex-col border-b-slate-100'>
@@ -50,55 +55,58 @@ const CustomHeader = () => {
                         mode="multiple"
                         size="large"
                         className='flex-1'
-                        placeholder="select one country"
-                        defaultValue={['china']}
-                        onChange={handleChangeCategory}
+                        placeholder="Chọn thương hiệu"
+                        onChange={(value) => onChangeFilter(value, 'brand')}
                         optionLabelProp="label"
-                        options={options}
+                        options={brandOptions}
                         optionRender={(option) => (
                             <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
-                                </span>
-                                {option.data.desc}
+                                {option.label}
                             </Space>
                         )}
                     />
+                    {/* <TreeSelect
+              style={{ width: '100%' }}
+              {...field}
+              value={field.value ? field.value : undefined}
+              // dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+              treeData={categoriesTree}
+              placeholder="Chọn danh mục"
+              showSearch
+              size="large"
+
+              treeDefaultExpandAll
+
+            /> */}
                     <Select
                         mode="multiple"
                         size="large"
                         className='flex-1'
-                        placeholder="select one country"
-                        defaultValue={['china']}
-                        onChange={handleChangeCategory}
+
+                        placeholder="Chọn danh mục"
+                        onChange={(value) => onChangeFilter(value, 'category')}
                         optionLabelProp="label"
-                        options={options}
+                        options={categoryOptions}
                         optionRender={(option) => (
                             <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
-                                </span>
-                                {option.data.desc}
+                                {option.label}
                             </Space>
                         )}
                     />
                     <Select
-                        mode="multiple"
+
                         size="large"
                         className='flex-1'
-                        placeholder="select one country"
-                        defaultValue={['china']}
-                        onChange={handleChangeCategory}
+                        onChange={(value) => onChangeFilter(value, 'gender')}
                         optionLabelProp="label"
-                        options={options}
-                        optionRender={(option) => (
-                            <Space>
-                                <span role="img" aria-label={option.data.label}>
-                                    {option.data.emoji}
-                                </span>
-                                {option.data.desc}
-                            </Space>
-                        )}
+                        placeholder="Chọn collection"
+                        options={[
+                            // { value: '', label: 'Chọn collection' },
+                            { value: 'man', label: "Man's Clothing" },
+                            { value: 'woman', label: "Women's Clothing" },
+                            { value: 'kid', label: "Kid's Clothing" },
+                            { value: 'unisex', label: "Unisex's Clothing" },
+                        ]}
                     />
                 </div>
 
@@ -107,14 +115,16 @@ const CustomHeader = () => {
             <div className='flex w-full justify-between items-center'>
                 <div>
 
-                    <Input size='large' placeholder='Search' />
+                    <Input size='large' placeholder='Search' value={search} onChange={(e) => onChangeSearch(e.target.value)} />
                 </div>
                 <Space>
                     <Select
                         size='large'
                         defaultValue="10"
                         style={{ width: 80 }}
-                        onChange={handleChange}
+                        onChange={(value) => onChangeFilter(value, 'limit')}
+                        optionLabelProp="label"
+                        placeholder="Limit"
                         options={[
                             { value: '5', label: '5' },
                             { value: '10', label: '10' },
@@ -135,4 +145,4 @@ const CustomHeader = () => {
     )
 }
 
-export default CustomHeader
+export default ProductHeader

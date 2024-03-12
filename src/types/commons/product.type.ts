@@ -11,13 +11,13 @@ export type StoreColor = {
 };
 export type StoreSize = {
   size: string;
-  quantity: number;
+  quantity: string;
   _id: string;
 };
 
 export type StoredProduct = {
   colors: StoreColor[];
-  repository: StoreRepository;
+  repository: StoreRepository | string;
 };
 export type StoreTabContent = {
   _id: string;

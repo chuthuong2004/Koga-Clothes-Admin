@@ -12,6 +12,10 @@ import reviewService from './review.service';
 import socketServices from './socket.service';
 import uploadService from './upload.service';
 import userService from './user.service';
+import repositoryService from './repository.service';
+import staffService from './staff.service';
+import blogService from './blog.service';
+import categoryBlogService from './category-blog.service';
 
 export {
   addressService,
@@ -27,5 +31,9 @@ export {
   reviewService,
   socketServices,
   uploadService,
-  userService
+  userService,
+  repositoryService,
+  staffService,
+  blogService,
+  categoryBlogService
 };

@@ -1,108 +1,93 @@
-import classNames from 'classnames/bind';
-import styles from './Sidebar.module.scss';
-import { NavLink } from 'react-router-dom';
-import * as config from '@/config';
-import { BsBarChart, BsChatSquare, BsPersonBadge, BsReceipt, BsTruck } from 'react-icons/bs';
-import { BiCategory } from 'react-icons/bi';
-import { MdLogout, MdOutlineCategory, MdOutlineReviews } from 'react-icons/md';
-import { FaTrademark } from 'react-icons/fa';
-import { useAppSelector } from '@/types/commons';
 import { useAuth } from '@/hooks/services';
-import { selectAuth } from '@/store/selectors';
-const cx = classNames.bind(styles);
-const links = [
-  {
-    to: config.routes.dashboard,
-    icon: <BsBarChart />,
-    title: 'Dashboard',
-  },
-  {
-    to: config.routes.order,
-    icon: <BsReceipt />,
-    title: 'Đơn hàng',
-  },
-  {
-    to: config.routes.brand,
-    icon: <FaTrademark />,
-    title: 'Thương hiệu',
-  },
-  {
-    to: config.routes.category,
-    icon: <BiCategory />,
-    title: 'Danh mục',
-  },
-  {
-    to: config.routes.product,
-    icon: <BsTruck />,
-    title: 'Sản phẩm',
-  },
+import { NAVIGATION_VERTICAL } from '@/navigation';
+import { cn } from '@/utils';
+import { Typography } from 'antd';
+import useMediaQuery from 'beautiful-react-hooks/useMediaQuery';
+import { motion } from 'framer-motion';
+import { Fragment } from 'react';
+import { SlArrowDown } from "react-icons/sl";
+import { NavLink } from 'react-router-dom';
 
-  {
-    to: config.routes.customer,
-    icon: <BsPersonBadge />,
-    title: 'Khách hàng',
-  },
-  {
-    to: config.routes.chat,
-    icon: <BsChatSquare />,
-    title: 'Tin nhắn',
-  },
-  {
-    to: config.routes.review,
-    icon: <MdOutlineReviews />,
-    title: 'Đánh giá',
-  },
-  {
-    to: '#',
-    icon: <MdLogout />,
-    title: 'Đăng xuất',
-  },
-];
-
-const Sidebar = () => {
-  const { user } = useAppSelector(selectAuth);
-  const {handleLogout: onLogout} = useAuth()
+type SidebarProps = {
+  openSidebar: boolean;
+  closeSidebar: () => void;
+};
+const Sidebar = ({ openSidebar, closeSidebar }: SidebarProps) => {
+  const isTablet = useMediaQuery('(max-width: 68rem)');
+  const { handleLogout: onLogout } = useAuth();
   const handleLogout = async (link: any) => {
+    isTablet && closeSidebar();
     if (link.to === '#') {
-      await onLogout()
+      await onLogout();
     }
   };
   return (
-    <div className={cx('container', 'h-screen')}>
-      <div className={cx('logo')}>Admin Koga</div>
-      <div className={cx('menu')}>
-        <div className={cx('menu__account')}>
-          <img
-            src={
-              user?.avatar
-                ? process.env.REACT_APP_API_URL + user.avatar
-                : 'https://vetra.laborasyon.com/assets/images/user/man_avatar3.jpg'
-            }
-            className={cx('menu__account__img')}
-            alt=""
-          />
-          <div className={cx('menu__account__info')}>
-            <h3>{user?.firstName ? user.firstName + ' ' + user?.lastName : user?.username}</h3>
-            <span>Quản lý bán hàng</span>
+    <motion.div
+      animate={{
+        x: isTablet ? (openSidebar ? 0 : -250) : 0,
+        opacity: isTablet ? (openSidebar ? 1 : 0) : 1,
+        animation: 'linear',
+      }}
+      transition={{ ease: 'linear', duration: 0.2 }}
+      // exit={{ x: -500 }}
+      className="fixed top-0 bottom-0 left-0 z-10 w-[25rem] bg-card shadow-card px-4 py-8"
+    >
+      <div className="flex flex-col w-full h-full mb-12">
+        <div>
+          <Typography.Title level={2}>Admin Koga</Typography.Title>
+        </div>
+        <div className=" overflow-y-scroll">
+          <div className="flex flex-col gap-2">
+            {NAVIGATION_VERTICAL.map((link, i) => (
+              <Fragment
+                key={i}>
+                <NavLink
+                  key={i}
+                  to={link.to}
+                  end
+                  onClick={() => handleLogout(link)}
+                  className={(nav) =>
+                    cn(
+                      'flex gap-4 p-4 rounded-lg py-4 items-center justify-between',
+                      nav.isActive && link.to !== '#' && 'bg-primary-gradient text-white',
+                    )
+                  }
+                >
+                  <div className='flex items-center gap-4'>
+
+                    <div className="">{link.icon}</div>
+                    <Typography.Text className={cn('text-current')}>{link.title}</Typography.Text>
+                  </div>
+                  {link.children && <div>
+                    <SlArrowDown />
+                  </div>}
+                </NavLink>
+                {link.children && link.children.map(item => (
+                  <NavLink
+                    key={i}
+                    to={item.to}
+                    end
+                    onClick={() => handleLogout(item)}
+                    className={(nav) =>
+                      cn(
+                        'flex gap-4 p-4 rounded-lg py-4 items-center justify-between',
+                        nav.isActive && item.to !== '#' && 'bg-primary-gradient text-white',
+                      )
+                    }
+                  >
+                    <div className='flex items-center gap-4'>
+
+                      <div className="">{item.icon}</div>
+                      <Typography.Text className={cn('text-current')}>{item.title}</Typography.Text>
+                    </div>
+                  </NavLink>
+                ))}
+              </Fragment>
+            ))}
           </div>
         </div>
-        <div className={cx('menu__links')}>
-          {links.map((link, i) => (
-            <NavLink
-              key={i}
-              to={link.to}
-              onClick={() => handleLogout(link)}
-              className={(nav) =>
-                cx('menu__links--item', { active: nav.isActive && link.to !== '#' })
-              }
-            >
-              <span className={cx('icon')}>{link.icon}</span>
-              <span>{link.title}</span>
-            </NavLink>
-          ))}
-        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

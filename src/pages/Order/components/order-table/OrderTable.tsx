@@ -1,19 +1,19 @@
-import React from 'react';
-import DataTable, { TableColumn } from 'react-data-table-component';
+import DataTable, { Alignment, Direction } from 'react-data-table-component';
 import { usePagination } from '@/hooks/helpers';
-import { productService } from '@/services';
-import { StoreProduct } from '@/types/entities';
-import { Button, Card, Image, Typography } from 'antd';
+import { orderService, productService } from '@/services';
 import { columns } from './columns';
-const OrderTable = () => {
+import { CustomHeader } from './components';
+
+const ProductTable = () => {
   const { data } = usePagination(
-    'ListProducts',
+    'ListOrders',
     {
       page: 1,
       limit: 10,
       offset: 0,
+      sort: '-createdAt'
     },
-    productService.getAll,
+    orderService.getAll,
   );
 
   const paginationComponentOptions = {
@@ -53,35 +53,40 @@ const OrderTable = () => {
   //         }
   //     },
   // ];
+
+  console.log(data);
+
   return (
-    <div className="flex flex-col gap-4">
-      <Card className="flex justify-between items-center">
-        <Typography.Title level={3}>Danh sách sản phẩm</Typography.Title>
-        <Button type="primary" size="large">
-          Thêm mới sản phẩm
-        </Button>
-      </Card>
+    <div className="flex flex-col">
       <DataTable
-        title="Danh sách sản phẩm"
         columns={columns}
         selectableRows
         data={data?.docs || []}
         pagination
-        actions={<div></div>}
         responsive
-        subHeader={
-          <Card>
-            <Button type="primary">Hi</Button>
-            <Button type="primary">Hi</Button>
-            <Button type="primary">Hi</Button>
-            <Button type="primary">Hi</Button>
-          </Card>
-        }
-        className="rounded-l-full"
+        noHeader
+        subHeaderWrap
+        subHeaderAlign={Alignment.CENTER}
+        subHeader
+        subHeaderComponent={<CustomHeader />}
+        direction={Direction.LTR}
+        customStyles={{
+          cells: {
+            style: {
+              paddingTop: 10,
+              paddingBottom: 10,
+            },
+          },
+          subHeader: {
+            style: {
+              // borderRadius: 20,
+            },
+          },
+        }}
         paginationComponentOptions={paginationComponentOptions}
       />
     </div>
   );
 };
 
-export default OrderTable;
+export default ProductTable;

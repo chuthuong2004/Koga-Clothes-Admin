@@ -2,16 +2,19 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '@/store/store';
 import { Nullable, StoreToken } from '@/types/commons';
 import { StoreUser } from '@/types/entities';
+import { randomBgAvatar } from '@/utils';
 
 type AuthState = {
   user: Nullable<StoreUser>;
   token: Nullable<StoreToken>;
   account: Nullable<Pick<StoreUser, 'username' | 'password'>>;
+  colorUser: string
 };
 const initialState: AuthState = {
   user: null,
   token: null,
   account: null,
+  colorUser: randomBgAvatar()
 };
 export const authSlice = createSlice({
   name: 'auth',

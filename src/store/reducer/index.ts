@@ -1,8 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import { authReducer } from '../slices';
+import { authSlice, chatSlice, productSlice } from '../slices';
 
 const rootReducer = combineReducers({
-  authKoga: authReducer,
+  authKoga: authSlice,
+  productKoga: productSlice,
+  chatKoga: chatSlice
 });
 
 export default rootReducer;

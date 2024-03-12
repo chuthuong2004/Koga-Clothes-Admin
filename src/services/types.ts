@@ -1,5 +1,14 @@
-import { StoreMessage, StoreProvinceAddress, StoreUserAddress } from '@/types/entities';
+import { StoredProduct } from '@/types/commons';
+import {
+  StoreCategory,
+  StoreCategoryBlog,
+  StoreMessage,
+  StoreProvinceAddress,
+  StoreUserAddress,
+} from '@/types/entities';
+import { EModeBlog } from '@/types/enums';
 import { GenderUser } from '@/types/unions';
+import { OrderStatus } from '@/types/unions/order.union';
 
 import { Socket } from 'socket.io-client';
 import { DisconnectDescription } from 'socket.io-client/build/esm/socket';
@@ -54,6 +63,10 @@ export type QueryOptions = {
   parent?: string; // with category
   brand?: string;
   category?: string;
+  gender?: string;
+  creator?: string;
+  role?: string;
+  sort?: string;
 };
 
 export type ParamAddToCart = {
@@ -69,7 +82,7 @@ export type ParamCreateMessage = {
   conversation?: string;
   sender?: string;
   text: string;
-  image?: string;
+  images?: string[];
 };
 
 export type ParamCreateOrder = {
@@ -78,6 +91,9 @@ export type ParamCreateOrder = {
   isPaid?: boolean;
   shippingPrice?: number;
 };
+export type ParamUpdateOrder = {
+  orderStatus: OrderStatus;
+} & Partial<ParamCreateOrder>;
 
 export type ParamCancelOrder = {
   canceledReason: string;
@@ -111,3 +127,66 @@ export type OTPParams = {
   code: string;
 };
 export type ParamCreateAddress = Omit<StoreUserAddress, '_id'>;
+
+export type ParamCreateProduct = {
+  name: string;
+  code: string;
+  description: string;
+  category: string;
+  gender: string[];
+  brand: string;
+  preserveInformation: string;
+  deliveryReturnPolicy: string;
+  price: number;
+  discount: number;
+  keywords: string[];
+  storedProducts: StoredProduct[];
+};
+export type FolderUpload =
+  | 'avatars'
+  | 'brands'
+  | 'categories'
+  | 'stores'
+  | 'products'
+  | 'reviews'
+  | 'messages'
+  | 'blogs';
+
+export type ParamCreateBrand = {
+  name: string;
+  history: string;
+  image: string;
+  logo: string;
+};
+
+export type ParamCreateRepository = {
+  name: string;
+  description: string;
+  code: string;
+  images: string[];
+  address: StoreProvinceAddress;
+};
+
+export type ParamsCreateCategory = Pick<StoreCategory, 'name'> & {
+  parent?: string;
+  gender: string[];
+};
+export type ParamsCreateCategoryBlog = Pick<StoreCategoryBlog, 'name'> & {
+  parent?: string;
+};
+
+export type ParamCreateRole = {
+  name: string;
+  permissions: string[];
+};
+
+export type ParamCreateBlog = {
+  title: string;
+  summary: string;
+  content: string;
+  image: string;
+  category: string;
+  mode: EModeBlog;
+  tags: string[];
+  time_public: Date;
+};

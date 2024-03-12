@@ -1,6 +1,8 @@
-import { StoreAccount } from "./account.entity";
-import { StoreRole } from "./role.entity";
+import { ERoleDefault } from '../enums/role.enum';
+import { StoreAccount } from './account.entity';
+import { StoreRole } from './role.entity';
 
 export type StoreAdmin = StoreAccount & {
-    roles: StoreRole[]
-}
+  roles: StoreRole[];
+  type: ERoleDefault;
+};

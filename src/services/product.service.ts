@@ -1,17 +1,17 @@
 import axiosClient from '@/lib/axios';
-import { QueryOptions } from './types';
+import { ParamCreateProduct, QueryOptions } from './types';
 import { ResponsePaginate } from '@/types/commons';
 import { StoreProduct } from '@/types/entities';
 
 const URL = 'products';
 const productService = {
-  getAll: (params: QueryOptions): Promise<ResponsePaginate<StoreProduct>> =>
+  getAll: async (params: QueryOptions): Promise<ResponsePaginate<StoreProduct>> =>
     axiosClient.get(URL, { params }),
-  getById: (id: StoreProduct['_id'] | string): Promise<StoreProduct> => axiosClient.get(`${URL}/${id}`),
-  favorite: (
-    productId: string,
-    action: 'add' | 'remove',
-  ): Promise<ResponsePaginate<StoreProduct>> =>
-    axiosClient.patch(`${URL}/favorite/${action}/${productId}`),
+  getById: async (id: StoreProduct['_id'] | string): Promise<StoreProduct> =>
+    axiosClient.get(`${URL}/${id}`),
+  create: async (body: ParamCreateProduct): Promise<StoreProduct> => axiosClient.post(URL, body),
+  update: async (id: string, body: Partial<ParamCreateProduct>): Promise<StoreProduct> =>
+    axiosClient.patch(`${URL}/${id}`, body),
+  delete: async (id: StoreProduct['_id']): Promise<void> => axiosClient.delete(`${URL}/${id}`),
 };
 export default productService;

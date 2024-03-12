@@ -1,7 +1,7 @@
 import axiosClient from '@/lib/axios';
-import { ParamLogin, ParamRegister, ParamResetPassword } from './types';
-import { StoreUser } from '@/types/entities';
-import { StoreToken } from '@/types/commons';
+import { ParamLogin, ParamRegister, ParamResetPassword, QueryOptions } from './types';
+import { StoreAdmin, StoreUser } from '@/types/entities';
+import { ResponsePaginate, StoreToken } from '@/types/commons';
 const URL = 'admin';
 const authService = {
   login: async (body: ParamLogin): Promise<StoreUser & StoreToken> =>
@@ -11,5 +11,8 @@ const authService = {
   logout: async () => axiosClient.delete(`${URL}/logout`),
   resetPassword: async (params: ParamResetPassword): Promise<void> =>
     axiosClient.post(`${URL}/forgot-password`, params),
+  getAllStaffs: async (params: QueryOptions): Promise<ResponsePaginate<StoreAdmin>> =>
+    axiosClient.get(`${URL}/staff`, { params }),
 };
 export default authService;
+  

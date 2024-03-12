@@ -1,10 +1,10 @@
 import { OrderStatus, StoreOrder } from '@/types/entities';
 import { Button, Card } from 'antd';
-import React from 'react';
+import React, { memo } from 'react';
 import DataTable, { Alignment, Direction } from 'react-data-table-component';
-import { columns } from './column';
-import { StatusOrderItem } from '../status-order-item';
 import { statusCombineTime } from '../../constrants';
+import { StatusOrderItem } from '../status-order-item';
+import { columns } from './column';
 
 type OrderProps = {
   order?: StoreOrder;
@@ -21,6 +21,7 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
     selectAllRowsItemText: 'Todos',
   };
 
+  console.log(order);
   const timesStatusOrder: TimeStatusOrder[] = Object.keys(statusCombineTime).map((key) => {
     const fieldTime = statusCombineTime[key as OrderStatus];
     return {
@@ -30,6 +31,7 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
   });
 
   console.log(timesStatusOrder);
+
   return (
     <div className="flex flex-col gap-10">
       <Card
@@ -76,7 +78,7 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
               <div className="item-info-price">
                 <span className="text-[#2f2b3d] text-2xl mr-2">Subtotal:</span>
                 <span className="text-[#2f2b3d] text-2xl mr-2">
-                  {order?.totalPrice.toLocaleString('vi-VN', {
+                  {order?.provisionalPrice.toLocaleString('vi-VN', {
                     style: 'currency',
                     currency: 'VND',
                   })}
@@ -102,12 +104,17 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
               </div>
               <div className="item-info-price">
                 <span className="text-[#2f2b3d] text-2xl mr-2">Total:</span>
-                <span className="text-[#2f2b3d] text-2xl mr-2">
-                  {order?.totalPrice.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND',
-                  })}
-                </span>
+                {order ? (
+                  <span className="text-[#2f2b3d] text-2xl mr-2">
+                    {(order?.totalPrice)?.toLocaleString(
+                      'vi-VN',
+                      {
+                        style: 'currency',
+                        currency: 'VND',
+                      },
+                    )}
+                  </span>
+                ) : null}
               </div>
             </div>
           </div>
@@ -126,4 +133,4 @@ const OrderDetailModify: React.FC<OrderProps> = ({ order }) => {
   );
 };
 
-export default OrderDetailModify;
+export default memo(OrderDetailModify);

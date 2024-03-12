@@ -1,91 +1,134 @@
-import { StoreProduct } from '@/types/entities';
-import { Button, Image, Typography } from 'antd';
+import { OrderStatus, StoreOrder, StoreProduct } from '@/types/entities';
+import { FORMAT_DATE, cn, getFirstLetter, randomBgAvatar } from '@/utils';
+import { colorStatusOrder } from '@/utils/constants/color.constant';
+import { Avatar, Button, Image, Typography } from 'antd';
+import moment from 'moment';
 import { TableColumn } from 'react-data-table-component';
+import { FaRegEdit, FaTrashAlt } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import { routes } from '@/config';
 
-export const columns: TableColumn<StoreProduct>[] = [
+export const columns: TableColumn<StoreOrder>[] = [
   {
     id: '_id',
-    name: 'ID',
-    selector: (row) => row.code,
+    name: 'Mã đơn',
+    selector: (row) => row.orderId,
+    cell(row, rowIndex, column, id) {
+      return <Typography.Text className='font-bold'>{row.orderId}</Typography.Text>
+    },
   },
   {
-    id: 'name',
-    name: 'PRODUCT',
-    width: '35%',
-    selector: (row) => row.name,
+    id: 'date',
+    name: 'Ngày tạo đơn',
+    selector: (row) => row.createdAt,
+    cell: (row, index, column, id) => {
+      return (
+        <div className="flex gap-4 items-center">
+          <div className="flex-1 items-center">
+            <Typography className="">
+              {moment(row.createdAt).format(FORMAT_DATE)}
+            </Typography>
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    id: '',
+    name: 'Sản phẩm',
+    width: '25%',
+    selector: (row) => row.orderItems[0]._id,
     cell: (row, index, column, id) => {
       return (
         <div className="flex gap-4 items-center">
           <div className="w-28">
             <Image
               className="rounded-lg"
-              src={process.env.REACT_APP_API_URL + row.storedProducts[0].colors[0].images[0]}
+              src={process.env.REACT_APP_API_URL + row.orderItems[0].image}
             />
           </div>
           <div className="flex-1 items-center">
-            <Typography className="line-clamp-1 font-semibold">{row.name}</Typography>
-            <Typography className="line-clamp-2">{row.description}</Typography>
+            <Typography className="line-clamp-1 font-semibold">{row.orderItems[0].brandName} - {row.orderItems[0].name}</Typography>
+            <div className='flex items-center gap-4 flex-wrap'>
+              <Typography className="" >Màu sắc: {row.orderItems[0].color}</Typography>
+              <Typography className="" >Kích cỡ: {row.orderItems[0].size}</Typography>
+              <Typography className="" >Số lượng: {row.orderItems[0].quantity}</Typography>
+            </div>
+            {row.orderItems.length > 1 &&
+              <div>
+                <Typography.Text>+{row.orderItems.length - 1} sản phẩm khác</Typography.Text>
+              </div>
+            }
           </div>
         </div>
       );
     },
   },
   {
-    id: 'category',
-    name: 'CATEGORY',
-    selector: (row) => row.category.name,
+    id: 'customer',
+    name: 'Khách hàng',
+    selector: (row) => row.deliveryInformation.firstName,
     cell: (row, index, column, id) => {
       return (
-        <div>
-          <Typography>{row.category.name}</Typography>
+        <div className='flex gap-4 items-center'>
+          <Avatar style={{ backgroundColor: randomBgAvatar() }} size="large" >
+            {getFirstLetter(row.deliveryInformation.firstName + ' ' + row.deliveryInformation.lastName)}
+          </Avatar>
+          <Typography>{row.deliveryInformation.firstName + ' ' + row.deliveryInformation.lastName}</Typography>
         </div>
       );
     },
   },
   {
-    id: 'price',
-    name: 'PRICE',
-    selector: (row) => row.price,
+    id: 'totalPrice',
+    name: 'Tổng tiền',
+    selector: (row) => row.totalPrice,
     cell: (row, index, column, id) => {
       return (
-        <div>
-          <Typography className="font-bold">{row.price.toLocaleString('VN')} đ</Typography>
+        <div className='flex gap-4 items-center'>
+          <Typography.Text className='font-bold'>{row.totalPrice.toLocaleString("VN")} đ</Typography.Text>
         </div>
       );
     },
   },
   {
-    id: 'brand',
-    name: 'BRAND',
-    selector: (row) => row.brand.name,
+    id: 'orderStatus',
+    name: 'Trạng thái',
+    selector: (row) => row.orderStatus,
     cell: (row, index, column, id) => {
-      return (
-        <div className="flex gap-2">
-          <Image
-            width={100}
-            className="object-contain"
-            src={
-              'https://file.hstatic.net/1000284478/file/birkenstock_ff8c7d7b36e14c668d761dc268c82763.webp'
-            }
-          />
+      const colorStatus = colorStatusOrder[row?.orderStatus as OrderStatus];
 
-          <Typography className="text-error">{row.brand.name}</Typography>
+      return (
+        <div
+          className="px-3 py-2 w-max rounded-lg flex items-center"
+          style={{
+            backgroundColor: colorStatus?.backgroundColor || 'transparent',
+          }}
+        >
+          <Typography
+            className={cn('text-xl font-medium')}
+            style={{
+              color: colorStatus?.color || 'transparent',
+            }}
+          >
+            {row?.orderStatus}
+          </Typography>
         </div>
       );
     },
   },
+
   {
     id: 'actions',
     name: 'ACTIONS',
-    selector: (row) => row.brand.name,
+    selector: (row) => row.orderId,
     cell: (row, index, column, id) => {
       return (
-        <div>
-          <Button type="primary" size="large">
-            Xoá
-          </Button>
-          <Button>Sửa</Button>
-          <Button>Xem</Button>
+        <div className="flex gap-2 items-center">
+          <Link to={'/order-detail/' + row.orderId}>
+            <FaRegEdit size={20} className="text-primary cursor-pointer" />
+          </Link>
+          <FaTrashAlt size={20} className="text-primary cursor-pointer" />
         </div>
       );
     },
